@@ -1,0 +1,50 @@
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <i class="bi bi-list toggle-sidebar-btn me-3" (click)="toggleActive()" *ngIf="getSideBarState()==false" title="Ouvrir menu"></i>
+        <i class="bi bi-x toggle-sidebar-btn me-3" (click)="toggleActive()" *ngIf="getSideBarState()==true" title="Fermer menu"></i>
+        <a (click)="navigate('/')" class="logo d-flex align-items-center">
+            <img src="img/logo.png" alt="LOGO">
+            <span class="d-none d-lg-block">
+                <h4 style="margin-left: 10px; padding-top: 10px;" class="fw-bold">m1p12mean-jonathan-koloina</h4>
+            </span>
+        </a>
+    </div>
+
+   <nav class="header-nav ms-auto" title="Profil">
+        <ul class="d-flex align-items-center">
+
+            <li class="nav-item dropdown pe-3">
+
+                <a class="nav-link nav-profile d-flex align-items-center pe-0"
+                    data-bs-toggle="dropdown" style="cursor:pointer;">
+                    <img src="img/avatar.png" alt="Profil"
+                        class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2">
+
+                    </span>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6>
+                        </h6>
+                        <span>PROFIL</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li title="Se déconnecter" style="cursor:pointer;">
+                      <a class="dropdown-item d-flex align-items-center" (click)="logout()">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Deconnexion</span>
+                      </a>
+                    </li>
+
+                </ul>
+            </li>
+
+        </ul>
+    </nav>
+
+</header>
