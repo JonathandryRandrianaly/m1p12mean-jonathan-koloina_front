@@ -22,7 +22,7 @@ export const authGuard: CanActivateFn = (route, state) => {
         }
       }
   }else{
-    router.navigate(['connexion']);
+    router.navigate(['connexion-client']);
   }
   return statu;
 };

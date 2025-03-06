@@ -12,7 +12,7 @@ export class AuthService {
     localStorage.removeItem('username');
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
-    this.router.navigate(['/connexion']);
+    this.router.navigate(['/connexion-client']);
   }
 
   isLoggedIn() {
@@ -20,7 +20,7 @@ export class AuthService {
     if (localStorage.getItem('token')) {
       stt =  true;
     }else{
-      this.router.navigate(['connexion']);
+      this.router.navigate(['connexion-client']);
     }
     return stt;
   }
@@ -55,5 +55,5 @@ export class AuthService {
     }
     return null;
   }
-    
+
 }
