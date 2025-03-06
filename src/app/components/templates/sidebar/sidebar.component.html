@@ -1,0 +1,16 @@
+<aside id="sidebar" class="sidebar" [ngClass]="{'active': isActive, 'inactive': !isActive}">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item">
+        <a class="nav-link collapsed" (click)="navigate('/')">
+          <i class="bi bi-house"></i>
+          <span></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed"  (click)="navigate('/')">
+          <i class="bi bi-house"></i>
+          <span>Accueil</span>
+        </a>
+      </li>
+    </ul>
+  </aside>

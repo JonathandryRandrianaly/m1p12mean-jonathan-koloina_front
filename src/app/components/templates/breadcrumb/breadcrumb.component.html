@@ -1,0 +1,21 @@
+<div class="container-flex col-12">
+  <nav 
+    aria-label="breadcrumb" 
+    class="first d-md-flex col-12"
+    [ngClass]="{ 'mobile-breadcrumb': isMobile, 'desktop-breadcrumb': !isMobile }"
+  >
+    <ol class="breadcrumb indigo lighten-6 shadow-lg mb-5 col-12 d-flex align-items-center">
+      <li *ngFor="let breadcrumb of data; let last = last" class="breadcrumb-item" [ngClass]="{ 'mobile-item': isMobile }">
+        <a  
+          class="black-text active-2" 
+          [routerLink]="breadcrumb.url"
+        >
+          {{ breadcrumb.label }}
+        </a>
+        <ng-container *ngIf="!last">
+          <img src="img/chevron-right.png" class="ml-md-3 ml-1" width="20" height="20" />
+        </ng-container>
+      </li>
+    </ol>
+  </nav>
+</div>
