@@ -28,7 +28,6 @@ export class ClientLoginComponent implements OnInit {
     private apiService: ApiService
   ) {
     localStorage.removeItem('token');
-    localStorage.removeItem('refresh_token');
   }
 
   ngOnInit() {
@@ -56,11 +55,10 @@ export class ClientLoginComponent implements OnInit {
     };
 
     try {
-      const response = await this.apiService.login('api/login_check', data);
-      if (response.status === 200) {
-        const { token, refresh_token } = response.data;
-        localStorage.setItem('token', token);
-        localStorage.setItem('refresh_token', refresh_token);
+      const response = await this.apiService.login('api/login', data);
+      if (response.status >= 200 && response.status <= 202) {
+        const token = response.data;
+        localStorage.setItem('token', token.token);
         sessionStorage.setItem(this.SESSION_KEY, 'true');
         this.router.navigate(['/']);
       }
