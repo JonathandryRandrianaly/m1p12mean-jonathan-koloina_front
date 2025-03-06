@@ -1,16 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonModule, NgIf} from "@angular/common";
+import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from '@angular/router';
 import {ApiService} from '../../../../services/api/api.service';
-import {CommonModule} from '@angular/common';
 
 @Component({
-  selector: 'app-client-register',
+  selector: 'app-mecanicien-register',
   imports: [ReactiveFormsModule, FormsModule, CommonModule],
-  templateUrl: './client-register.component.html',
-  styleUrl: './client-register.component.css'
+  templateUrl: './mecanicien-register.component.html',
+  styleUrl: './mecanicien-register.component.css'
 })
-export class ClientRegisterComponent implements OnInit {
+export class MecanicienRegisterComponent implements OnInit {
   loading: boolean = false;
   error: boolean = false;
   usr_form: any;
@@ -42,7 +42,7 @@ export class ClientRegisterComponent implements OnInit {
     this.apiService.login('api/register', user).then(
       (response) => {
         if (response.status === 200) {
-          this.router.navigate(['/connexion-client']);
+          this.router.navigate(['/connexion-mecanicien']);
         }
       },
       (error) => {

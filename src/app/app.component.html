@@ -1,12 +1,12 @@
-<app-navbar *ngIf="currentRoute!=='/connexion-client' && currentRoute!=='/inscription-client'">
+<app-navbar *ngIf="!currentRoute.includes('connexion') && !currentRoute.includes('inscription')">
 </app-navbar>
 
-<app-breadcrumb *ngIf="currentRoute!=='/connexion-client' && currentRoute!=='/inscription-client'" [data]="breadcrumbData">
+<app-breadcrumb *ngIf="!currentRoute.includes('connexion') && !currentRoute.includes('inscription')" [data]="breadcrumbData">
 </app-breadcrumb>
 
-<app-sidebar *ngIf="currentRoute!=='/connexion-client' && currentRoute!=='/inscription-client'">
+<app-sidebar *ngIf="!currentRoute.includes('connexion') && !currentRoute.includes('inscription')">
 </app-sidebar>
 
-<app-footer *ngIf="currentRoute!=='/connexion-client' && currentRoute!=='/inscription-client'"></app-footer>
+<app-footer *ngIf="!currentRoute.includes('connexion') && !currentRoute.includes('inscription')"></app-footer>
 
 <router-outlet></router-outlet>
