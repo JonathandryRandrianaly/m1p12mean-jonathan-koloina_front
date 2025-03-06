@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import {ApiService} from '../api/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private apiService: ApiService) { }
 
   logout() {
-    localStorage.removeItem('username');
     localStorage.removeItem('token');
-    localStorage.removeItem('refresh_token');
     this.router.navigate(['/connexion-client']);
   }
 
@@ -24,36 +23,28 @@ export class AuthService {
     }
     return stt;
   }
-  hasRole(vary: string): boolean {
+  decodeToken(): Promise<any> {
+    return this.apiService.getAll('api/decodeToken')
+      .then(
+        (response) => {
+          return response;
+        },
+        (error) => {
+          console.log(error);
+          return null;
+        }
+      );
+  }
+
+  async hasRole(vary: string): Promise<boolean> {
     const token = localStorage.getItem('token');
     if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const payload = await this.decodeToken();
       if (payload && payload.roles) {
         return payload.roles.includes(vary);
       }
     }
     return false;
-  }
-  getRole(): string | null {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      if (payload && payload.roles) {
-        return payload.roles;
-      }
-    }
-    return null;
-  }
-  getUsername(): string | null {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      if (payload && payload.username) {
-        localStorage.setItem('username', payload.username);
-        return payload.username;
-      }
-    }
-    return null;
   }
 
 }
