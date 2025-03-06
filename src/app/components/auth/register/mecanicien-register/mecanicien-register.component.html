@@ -1,0 +1,114 @@
+<main>
+  <div class="container">
+    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-5 col-md-7 d-flex flex-column align-items-center justify-content-center">
+
+            <div class="card shadow-lg p-5 py-5" style="width: 100%; max-width: 600px;">
+              <div class="card-body">
+                <div class="text-center mb-4">
+                  <h5 class="fw-bold text-dark">Inscription mecano</h5>
+                </div>
+
+                <form [formGroup]="usr_form" (ngSubmit)="onSubmit()" novalidate>
+                  <div class="mb-3">
+                    <label for="nom" class="form-label">Nom</label>
+                    <input
+                      id="nom"
+                      type="text"
+                      formControlName="nom"
+                      class="form-control"
+                      [ngClass]="{'is-invalid': usr_form.get('nom')?.invalid && usr_form.get('nom')?.touched}"
+                      placeholder="Votre nom"
+                      required>
+                    <div class="invalid-feedback" *ngIf="usr_form.get('nom')?.invalid && usr_form.get('nom')?.touched">
+                      Le nom est requis.
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      id="email"
+                      type="email"
+                      formControlName="email"
+                      class="form-control"
+                      [ngClass]="{'is-invalid': usr_form.get('email')?.invalid && usr_form.get('email')?.touched}"
+                      placeholder="exemple@email.com"
+                      required>
+                    <div class="invalid-feedback" *ngIf="usr_form.get('email')?.invalid && usr_form.get('email')?.touched">
+                      Email invalide.
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="dateNaissance" class="form-label">Date de naissance</label>
+                    <input
+                      id="dateNaissance"
+                      type="date"
+                      formControlName="dateNaissance"
+                      class="form-control"
+                      [ngClass]="{'is-invalid': usr_form.get('dateNaissance')?.invalid && usr_form.get('dateNaissance')?.touched}"
+                      required>
+                    <div class="invalid-feedback" *ngIf="usr_form.get('dateNaissance')?.invalid && usr_form.get('dateNaissance')?.touched">
+                      La date de naissance est requise.
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="telephone" class="form-label">Numéro de téléphone</label>
+                    <input
+                      id="telephone"
+                      type="text"
+                      formControlName="telephone"
+                      class="form-control"
+                      [ngClass]="{'is-invalid': usr_form.get('telephone')?.invalid && usr_form.get('telephone')?.touched}"
+                      placeholder="Votre numéro de téléphone"
+                      required>
+                    <div class="invalid-feedback" *ngIf="usr_form.get('telephone')?.invalid && usr_form.get('telephone')?.touched">
+                      Le numéro de téléphone est invalide.
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input
+                      id="password"
+                      type="password"
+                      formControlName="password"
+                      class="form-control"
+                      [ngClass]="{'is-invalid': usr_form.get('password')?.invalid && usr_form.get('password')?.touched}"
+                      placeholder="Mot de passe"
+                      required>
+                    <div class="invalid-feedback" *ngIf="usr_form.get('password')?.invalid && usr_form.get('password')?.touched">
+                      Longueur minimal: 6
+                    </div>
+                  </div>
+
+                  <div class="d-grid">
+                    <button class="btn btn-secondary" type="submit" [disabled]="usr_form.invalid || loading">
+                      <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                      S'inscrire
+                    </button>
+                  </div>
+                </form>
+
+                <div class="text-center mt-3">
+                  <p>Vous avez déjà un compte?
+                    <a style="cursor: pointer; color: #3d0063" (click)="navigate('/connexion-mecanicien')">
+                      Se connecter
+                    </a>
+                  </p>
+                </div>
+
+                <div class="alert alert-danger text-center" *ngIf="error">Erreur lors de l'inscription.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

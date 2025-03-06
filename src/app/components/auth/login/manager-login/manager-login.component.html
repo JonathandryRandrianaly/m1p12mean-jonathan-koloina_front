@@ -1,0 +1,62 @@
+<main>
+  <div class="container">
+    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-5 col-md-7 d-flex flex-column align-items-center justify-content-center">
+
+            <div class="card shadow-lg p-5 py-5" style="width: 100%; max-width: 600px;">
+              <div class="card-body">
+                <div class="text-center mb-4">
+                  <h5 class="fw-bold text-dark">Connexion manager</h5>
+                </div>
+
+                <form [formGroup]="usr_form" (ngSubmit)="onSubmit()">
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      id="email"
+                      type="email"
+                      formControlName="email"
+                      class="form-control"
+                      [ngClass]="{'is-invalid': usr_form.get('email')?.invalid && usr_form.get('email')?.touched}"
+                      placeholder="exemple@email.com"
+                      required>
+                    <div class="invalid-feedback" *ngIf="usr_form.get('email')?.invalid && usr_form.get('email')?.touched">
+                      Email invalide.
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input
+                      id="password"
+                      type="password"
+                      formControlName="password"
+                      class="form-control"
+                      [ngClass]="{'is-invalid': usr_form.get('password')?.invalid && usr_form.get('password')?.touched}"
+                      placeholder="Mot de passe"
+                      required>
+                    <div class="invalid-feedback" *ngIf="usr_form.get('password')?.invalid && usr_form.get('password')?.touched">
+                      Mot de passe requis.
+                    </div>
+                  </div>
+
+                  <div class="d-grid">
+                    <button class="btn btn-secondary" type="submit" [disabled]="usr_form.invalid || loading">
+                      <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                      Se connecter
+                    </button>
+                  </div>
+                </form>
+
+                <div class="alert alert-danger text-center" *ngIf="error">Email ou mot de passe incorrect</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
