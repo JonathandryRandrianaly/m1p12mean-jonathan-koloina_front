@@ -16,7 +16,7 @@ export class NavbarComponent {
   username: string = '';
 
   constructor(private navbarService: NavbarService, private authService: AuthService,private router: Router) {
-    const username = this.authService.getUsername();
+    const username = "";
     this.username = username ?? 'Invité';
   }
 

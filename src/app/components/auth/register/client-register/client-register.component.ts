@@ -38,10 +38,12 @@ export class ClientRegisterComponent implements OnInit {
 
     this.loading = true;
     const user = this.usr_form.value;
+    user.roleLibelles = ['client'];
 
+    console.log("user"+user);
     this.apiService.login('api/register', user).then(
       (response) => {
-        if (response.status === 200) {
+        if (response.status >= 200 && response.status <= 202) {
           this.router.navigate(['/connexion-client']);
         }
       },

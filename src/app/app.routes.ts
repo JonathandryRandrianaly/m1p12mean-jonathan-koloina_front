@@ -9,8 +9,16 @@ import {ManagerLoginComponent} from './components/auth/login/manager-login/manag
 import {
   MecanicienRegisterComponent
 } from './components/auth/register/mecanicien-register/mecanicien-register.component';
+import {AccueilComponent} from './components/accueil/accueil.component';
 
 export const routes: Routes = [
+  {   path:"",component:AccueilComponent, canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '' }
+      ]
+    }
+  },
   {
     path:"loader",component:LoaderComponent
   },

@@ -1,28 +1,32 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import {AuthService} from './services/auth/auth-service.service';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  var statu = false;
+export const authGuard: CanActivateFn = async (route, state) => {
+  var status = false;
   const router = inject(Router);
+  const authService = inject(AuthService);
   const token = localStorage.getItem('token');
   if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const decoded = await authService.decodeToken();
       const requiredRoles = route.data?.['roles'] as Array<string>;
 
-      if (payload && payload.roles) {
+      if (decoded && decoded.roles) {
         if(requiredRoles){
-          const hasAllRoles = requiredRoles.some(role => payload.roles.includes(role));
+          const hasAllRoles = requiredRoles.some(role => decoded.roles.includes(role));
           if (hasAllRoles) {
-            statu = true;
+            status = true;
           } else {
             router.navigate(['access-denied']);
           }
         }else{
-          statu = true;
+          status = true;
         }
+      }else{
+        router.navigate(['connexion-client']);
       }
   }else{
     router.navigate(['connexion-client']);
   }
-  return statu;
+  return status;
 };
