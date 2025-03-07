@@ -10,9 +10,11 @@ import {
   MecanicienRegisterComponent
 } from './components/auth/register/mecanicien-register/mecanicien-register.component';
 import {AccueilComponent} from './components/accueil/accueil.component';
+import {PageNotFoundComponent} from './components/templates/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
-  {   path:"",component:AccueilComponent, canActivate:[authGuard],
+  {
+    path:"",component:AccueilComponent, canActivate:[authGuard],
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '' }
@@ -47,5 +49,14 @@ export const routes: Routes = [
   },
   {
     path:"inscription-mecanicien",component:MecanicienRegisterComponent
+  },
+  {
+    path: '**', component: PageNotFoundComponent,
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Page introuvable', url: '' }
+      ]
+    }
   }
 ];

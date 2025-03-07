@@ -16,8 +16,8 @@ export class ClientLoginComponent implements OnInit {
   error: boolean = false;
   loading: boolean = false;
   usr: UserDto = {
-    email: '',
-    password: '',
+    email: 'jonathanrandrianaly@gmail.com',
+    password: '123456',
   };
   usr_form: any;
   private readonly SESSION_KEY = 'sessionActive';
