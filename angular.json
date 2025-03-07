@@ -24,18 +24,6 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              {
-                "glob": "web.config",
-                "input": "src"
-              },
-              {
-                "glob": "nginx.conf",
-                "input": "src"
-              },
-              {
-                "glob": ".htaccess",
-                "input": "src"
               }
             ],
             "styles": [
