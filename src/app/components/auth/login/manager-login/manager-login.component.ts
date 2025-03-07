@@ -16,8 +16,8 @@ export class ManagerLoginComponent implements OnInit {
   error: boolean = false;
   loading: boolean = false;
   usr: UserDto = {
-    email: '',
-    password: '',
+    email: 'manager@gmail.com',
+    password: 'manager',
   };
   usr_form: any;
   private readonly SESSION_KEY = 'sessionActive';
