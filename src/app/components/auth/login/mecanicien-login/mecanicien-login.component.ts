@@ -16,8 +16,8 @@ export class MecanicienLoginComponent implements OnInit {
   error: boolean = false;
   loading: boolean = false;
   usr: UserDto = {
-    email: '',
-    password: '',
+    email: 'mecanicien@gmail.com',
+    password: 'mecanicien',
   };
   usr_form: any;
   private readonly SESSION_KEY = 'sessionActive';
