@@ -12,5 +12,24 @@
           <span>Accueil</span>
         </a>
       </li>
+      <li class="nav-heading">Mécanicien</li>
+      <li class="nav-heading">Manager</li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#parametre" data-bs-toggle="collapse">
+          <i class="bi bi-gear"></i><span>Paramètre</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="parametre" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/users')">
+              <i class="bi bi-circle"></i><span>Utilisateurs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/marques')">
+              <i class="bi bi-circle"></i><span>Marques</span>
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </aside>

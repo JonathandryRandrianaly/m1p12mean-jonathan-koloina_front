@@ -41,7 +41,6 @@ export class ClientRegisterComponent implements OnInit {
     const user = this.usr_form.value;
     user.roleLibelles = ['client'];
 
-    console.log("user"+user);
     this.apiService.login('api/register', user).then(
       (response) => {
         if (response.status >= 200 && response.status <= 202) {

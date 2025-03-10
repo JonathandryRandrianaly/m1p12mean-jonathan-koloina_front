@@ -1,0 +1,105 @@
+<main>
+  <section class="section">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="card-title m-0">Gestion des utilisateurs:</h5>
+                <div class="d-flex gap-2 mt-2 mt-sm-0">
+                  <button class="btn btn-outline-dark" type="button">Exporter</button>
+                  <button class="btn btn-dark" type="button" (click)="openEmployerDialog()">Ajouter Employer</button>
+                </div>
+              </div>
+              <hr>
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                  <tr>
+                    <th scope="col" class="text-nowrap">Nom</th>
+                    <th scope="col" class="text-nowrap">Id</th>
+                    <th scope="col" class="text-nowrap">Status</th>
+                    <th scope="col" class="text-nowrap text-center">Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td class="text-nowrap">Randy Rhiel Madsen</td>
+                    <td class="text-nowrap"><a href="#">A01DSGN193</a></td>
+                    <td><span class="badge bg-success">Active</span></td>
+                    <td class="text-center">
+                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                          <mat-icon>edit</mat-icon>
+                          <span>Modifier</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>delete</mat-icon>
+                          <span>Désactiver</span>
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-nowrap">Maria Rosser</td>
+                    <td class="text-nowrap"><a href="#">A02DSGN196</a></td>
+                    <td><span class="badge bg-danger">Inactive</span></td>
+                    <td class="text-center">
+                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                          <mat-icon>edit</mat-icon>
+                          <span>Modifier</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>delete</mat-icon>
+                          <span>Supprimer</span>
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-nowrap">Cheyenne Bothman</td>
+                    <td class="text-nowrap"><a href="#">A05DVP381</a></td>
+                    <td><span class="badge bg-warning text-dark">Onboarding</span></td>
+                    <td class="text-center">
+                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                          <mat-icon>edit</mat-icon>
+                          <span>Modifier</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>delete</mat-icon>
+                          <span>Supprimer</span>
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <mat-paginator [length]="100"
+                             [pageSize]="10"
+                             [pageSizeOptions]="[5, 10, 25, 100]"
+                             aria-label="Select page">
+              </mat-paginator>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-loader *ngIf="loader"></app-loader>
