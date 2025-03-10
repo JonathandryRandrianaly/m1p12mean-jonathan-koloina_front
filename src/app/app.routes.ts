@@ -28,10 +28,8 @@ export const routes: Routes = [
     path:"access-denied",component:AccessDeniedComponent,
     data:{
       breadcrumb : [
-        {
-          label: 'Accès refusé',
-          url: ''
-        }
+        { label: 'Accueil', url: '/' },
+        { label: 'Accès refusé', url: '' }
       ]
     }
   },
