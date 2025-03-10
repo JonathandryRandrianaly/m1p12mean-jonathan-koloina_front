@@ -21,6 +21,7 @@ export class ClientRegisterComponent implements OnInit {
     this.usr_form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      genre: ['', Validators.required],
       nom: ['', Validators.required],
       dateNaissance: ['', Validators.required],
       telephone: ['', [Validators.required, Validators.pattern('^[0-9]{10,12}$')]]
