@@ -126,35 +126,34 @@ a:active {
     text-align: center;
     padding: 10px;
   }
-  
+
   .mobile-item {
     font-size: 14px;
     padding: 5px 0;
   }
-  
+
   /* Styles pour desktop */
   .desktop-breadcrumb {
     flex-direction: row;
   }
-  
+
   .breadcrumb {
     background-color: #fff; /* Exemple de couleur pour le fond */
     border-radius: 5px;
   }
-  
+
   .breadcrumb a {
     color: white; /* Texte en blanc par défaut */
   }
-  
+
   .breadcrumb a:hover {
     color: #3d0063; /* Texte jaune au survol */
   }
-  
+
   /* Media query pour limiter les styles aux petits écrans */
   @media (max-width: 768px) {
     .breadcrumb {
       font-size: 12px;
     }
   }
-  
-  
+

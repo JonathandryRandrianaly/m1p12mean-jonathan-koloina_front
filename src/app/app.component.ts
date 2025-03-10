@@ -6,11 +6,13 @@ import {BreadcrumbComponent} from './components/templates/breadcrumb/breadcrumb.
 import {BreadcrumbService} from './services/breadcrumb/breadcrumb-service.service';
 import {SidebarComponent} from './components/templates/sidebar/sidebar.component';
 import {FooterComponent} from './components/templates/footer/footer.component';
+import {initFlowbite} from 'flowbite';
+import {LoaderComponent} from './components/templates/loader/loader.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,NavbarComponent,SidebarComponent,BreadcrumbComponent,CommonModule,FooterComponent],
+  imports: [RouterOutlet, NavbarComponent, SidebarComponent, BreadcrumbComponent, CommonModule, FooterComponent, LoaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -36,6 +38,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.checkForClosedTabs();
+    initFlowbite();
   }
 
   constructor(private route : Router, private breadcrumbService: BreadcrumbService){
