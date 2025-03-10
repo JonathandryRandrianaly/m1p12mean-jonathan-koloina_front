@@ -11,6 +11,7 @@ import {
 } from './components/auth/register/mecanicien-register/mecanicien-register.component';
 import {AccueilComponent} from './components/accueil/accueil.component';
 import {PageNotFoundComponent} from './components/templates/page-not-found/page-not-found.component';
+import {UserParametreComponent} from './components/parametre/user-parametre/user-parametre.component';
 
 export const routes: Routes = [
   {
@@ -49,11 +50,21 @@ export const routes: Routes = [
     path:"inscription-mecanicien",component:MecanicienRegisterComponent
   },
   {
+    path:"parametre/users",component:UserParametreComponent,
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Paramètres', url: '' },
+        { label: 'Utilisateurs', url: '' }
+      ]
+    }
+  },
+  {
     path: '**', component: PageNotFoundComponent,
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
-        { label: 'Page introuvable', url: '' }
+        { label: '404', url: '' }
       ]
     }
   }
