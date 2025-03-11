@@ -7,33 +7,67 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center flex-wrap">
                 <h5 class="card-title m-0">Gestion des utilisateurs:</h5>
-                <div class="d-flex gap-2 mt-2 mt-sm-0">
-                  <button class="btn btn-outline-dark" type="button">Exporter</button>
-                  <button class="btn btn-dark" type="button" (click)="openEmployerDialog()">Ajouter Employer</button>
+
+                <button class="btn btn-dark d-none d-sm-block" type="button" (click)="openEmployerDialog()">Ajouter Employer</button>
+
+                <button class="btn btn-dark d-block d-sm-none" type="button" (click)="openEmployerDialog()">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+
+              <hr>
+
+              <div class="d-flex justify-content-end gap-2 mt-2 mb-3">
+                <input matInput placeholder="Rechercher un employé..." [(ngModel)]="searchKey" (keyup)="applyFilter()" class="form-control w-auto">
+
+                <div class="dropdown">
+                  <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-filter"></i> Filtrer
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                    <li><label class="dropdown-item"><input type="checkbox"> Manager</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox"> Mécanicien</label></li>
+                    <li><label class="dropdown-item"><input type="checkbox"> Client</label></li>
+                  </ul>
                 </div>
               </div>
-              <hr>
 
               <div class="table-responsive">
                 <table class="table table-hover">
                   <thead class="table-light">
                   <tr>
-                    <th scope="col" class="text-nowrap">Nom</th>
                     <th scope="col" class="text-nowrap">Id</th>
+                    <th  (click)="sortData('id')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                      Nom
+                      <mat-icon *ngIf="isSorted('id', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('id', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                    </th>
+                    <th scope="col" class="text-nowrap">Rôle</th>
                     <th scope="col" class="text-nowrap">Status</th>
                     <th scope="col" class="text-nowrap text-center">Actions</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td class="text-nowrap">Randy Rhiel Madsen</td>
-                    <td class="text-nowrap"><a href="#">A01DSGN193</a></td>
-                    <td><span class="badge bg-success">Active</span></td>
+                  <tr *ngFor="let user of users">
+                    <td class="text-nowrap">{{ user._id }}</td>
+                    <td class="text-nowrap">{{ user.nom }}</td>
+                    <td class="text-nowrap">{{ user.roles }}</td>
+                    <td>
+                      <span class="badge" [ngClass]="{
+                        'bg-success': user.etat.libelle === 'Actif',
+                        'bg-danger': user.etat.libelle === 'Inactive',
+                        'bg-warning text-dark': user.etat.libelle === 'En attente'
+                      }">{{ user.etat.libelle }}</span>
+                    </td>
                     <td class="text-center">
                       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
                         <mat-icon>more_vert</mat-icon>
                       </button>
                       <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                          <mat-icon>mail_outline</mat-icon>
+                          <span>Reenvoyer invitation</span>
+                        </button>
                         <button mat-menu-item>
                           <mat-icon>edit</mat-icon>
                           <span>Modifier</span>
@@ -45,51 +79,11 @@
                       </mat-menu>
                     </td>
                   </tr>
-                  <tr>
-                    <td class="text-nowrap">Maria Rosser</td>
-                    <td class="text-nowrap"><a href="#">A02DSGN196</a></td>
-                    <td><span class="badge bg-danger">Inactive</span></td>
-                    <td class="text-center">
-                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
-                        <mat-icon>more_vert</mat-icon>
-                      </button>
-                      <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
-                          <mat-icon>edit</mat-icon>
-                          <span>Modifier</span>
-                        </button>
-                        <button mat-menu-item>
-                          <mat-icon>delete</mat-icon>
-                          <span>Supprimer</span>
-                        </button>
-                      </mat-menu>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-nowrap">Cheyenne Bothman</td>
-                    <td class="text-nowrap"><a href="#">A05DVP381</a></td>
-                    <td><span class="badge bg-warning text-dark">Onboarding</span></td>
-                    <td class="text-center">
-                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
-                        <mat-icon>more_vert</mat-icon>
-                      </button>
-                      <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
-                          <mat-icon>edit</mat-icon>
-                          <span>Modifier</span>
-                        </button>
-                        <button mat-menu-item>
-                          <mat-icon>delete</mat-icon>
-                          <span>Supprimer</span>
-                        </button>
-                      </mat-menu>
-                    </td>
-                  </tr>
                   </tbody>
                 </table>
               </div>
 
-              <mat-paginator [length]="100"
+              <mat-paginator [length]="users.length"
                              [pageSize]="10"
                              [pageSizeOptions]="[5, 10, 25, 100]"
                              aria-label="Select page">
