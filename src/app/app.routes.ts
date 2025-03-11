@@ -88,7 +88,7 @@ export const routes: Routes = [
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
-        { label: '404', url: '' }
+        { label: 'Page introuvable', url: '' }
       ]
     }
   }
