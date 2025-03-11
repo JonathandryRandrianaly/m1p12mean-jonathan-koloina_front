@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../../../../services/api/api.service';
 import { UserDto } from '../../../../dto/UserDto';
 import axios from 'axios';
+import {AuthService} from '../../../../services/auth/auth-service.service';
 
 @Component({
   selector: 'app-client-login',
@@ -28,6 +29,7 @@ export class ClientLoginComponent implements OnInit {
     private apiService: ApiService
   ) {
     localStorage.removeItem('token');
+    localStorage.removeItem('decodedToken');
   }
 
   ngOnInit() {

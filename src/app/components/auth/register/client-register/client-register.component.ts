@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {Router} from '@angular/router';
 import {ApiService} from '../../../../services/api/api.service';
 import {CommonModule} from '@angular/common';
+import {Genre} from '../../../../models/Genre';
 
 @Component({
   selector: 'app-client-register',
@@ -14,14 +15,16 @@ export class ClientRegisterComponent implements OnInit {
   loading: boolean = false;
   error: boolean = false;
   usr_form: any;
+  genres: Genre[] = [];
 
   constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) { }
 
   ngOnInit() {
+    this.loadGenre();
     this.usr_form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      genre: ['', Validators.required],
+      idGenre: ['', Validators.required],
       nom: ['', Validators.required],
       dateNaissance: ['', Validators.required],
       telephone: ['', [Validators.required, Validators.pattern('^[0-9]{10,12}$')]]
@@ -30,6 +33,19 @@ export class ClientRegisterComponent implements OnInit {
 
   navigate(nav: string) {
     this.router.navigate([nav]);
+  }
+
+  loadGenre(){
+    this.genres = [
+      {
+        idGenre: 0,
+        libelle: 'Homme'
+      },
+      {
+        idGenre: 0,
+        libelle: 'Femme'
+      }
+    ]
   }
 
   onSubmit() {

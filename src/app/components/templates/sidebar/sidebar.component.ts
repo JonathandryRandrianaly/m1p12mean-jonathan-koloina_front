@@ -15,12 +15,10 @@ import {AuthService} from '../../../services/auth/auth-service.service';
 export class SidebarComponent implements OnInit, OnDestroy {
   isActive: boolean = false;
   private subscription: Subscription;
+  isManager$!: Promise<boolean>;
 
   constructor(private navbarService: NavbarService,private authService: AuthService,private router: Router) {
     this.subscription = new Subscription();
-  }
-  hasRole(role: string){
-    return this.authService.hasRole(role);
   }
 
   navigate(nav : string){
@@ -29,6 +27,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isManager$ = this.authService.hasRole('manager');
     this.subscription.add(this.navbarService.isActive$.subscribe(isActive => {
       this.isActive = isActive;
     }));

@@ -2,28 +2,13 @@
     text-align: center;
     margin-top: 100px;
   }
-  
+
   .access-denied-container h1 {
     font-size: 3em;
     color: #ff0000;
   }
-  
+
   .access-denied-container p {
     font-size: 1.5em;
     margin-bottom: 20px;
   }
-  
-  .access-denied-container button {
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  .access-denied-container button:hover {
-    background-color: #0056b3;
-  }
-  
