@@ -48,3 +48,9 @@
         width: 100%;
     }
 }
+span{
+  color : #6d7280;
+}
+span:hover{
+  color : #000000;
+}

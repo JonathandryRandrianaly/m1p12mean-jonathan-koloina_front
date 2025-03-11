@@ -94,6 +94,7 @@ export class UserParametreComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loader = true;
+        result.roleLibelles = ['mecanicien'];
         this.apiService.insert('api/addEmployees', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {

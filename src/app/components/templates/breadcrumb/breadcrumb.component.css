@@ -20,8 +20,11 @@
   background-color: white !important;
 }
 
-
 a {
+  text-decoration: none !important;
+  color: #6d7280 !important;
+}
+a:hover {
   text-decoration: none !important;
   color: #000000 !important;
 }
@@ -30,6 +33,7 @@ a:focus,
 a:active {
   outline: none !important;
   box-shadow: none !important;
+  color: #000000 !important;
 }
 
 .first span {
@@ -142,13 +146,6 @@ a:active {
   border-radius: 5px;
 }
 
-.breadcrumb a {
-  color: white; /* Texte en blanc par défaut */
-}
-
-.breadcrumb a:hover {
-  color: #696969; /* Texte jaune au survol */
-}
 
 /* Media query pour limiter les styles aux petits écrans */
 @media (max-width: 768px) {
