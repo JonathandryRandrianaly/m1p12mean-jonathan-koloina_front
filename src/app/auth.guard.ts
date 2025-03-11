@@ -10,7 +10,6 @@ export const authGuard: CanActivateFn = async (route, state) => {
   if (token) {
       const decoded = await authService.decodeToken();
       const requiredRoles = route.data?.['roles'] as Array<string>;
-
       if (decoded && decoded.roles) {
         if(requiredRoles){
           const hasAllRoles = requiredRoles.some(role => decoded.roles.includes(role));

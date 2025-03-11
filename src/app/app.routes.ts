@@ -20,6 +20,11 @@ export const routes: Routes = [
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '' }
+      ],
+      roles: [
+        'manager',
+        'mecanicien',
+        'client'
       ]
     }
   },
@@ -52,21 +57,29 @@ export const routes: Routes = [
   },
   {
     path:"parametre/users",component:UserParametreComponent,
+    canActivate:[authGuard],
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
         { label: 'Paramètres', url: '' },
         { label: 'Utilisateurs', url: '' }
+      ],
+      roles: [
+        'manager'
       ]
     }
   },
   {
     path:"parametre/marques",component:MarqueParametreComponent,
+    canActivate:[authGuard],
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
         { label: 'Paramètres', url: '' },
         { label: 'Marques', url: '' }
+      ],
+      roles: [
+        'manager'
       ]
     }
   },
