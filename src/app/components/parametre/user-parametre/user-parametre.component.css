@@ -5,4 +5,12 @@
 ::ng-deep mat-paginator {
   background-color: #fff !important;
 }
+.sort-icon {
+  font-size: 22px;
+  vertical-align: middle;
+  margin-left: 4px;
+}
 
+th:hover .sort-icon {
+  color: #000000;
+}

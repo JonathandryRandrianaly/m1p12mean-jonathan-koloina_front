@@ -54,8 +54,7 @@
         [ngClass]="{'is-invalid': usr_form.get('genre')?.invalid && usr_form.get('genre')?.touched}"
         required>
         <option value="" disabled selected>Choisissez le genre</option>
-        <option value="homme">Homme</option>
-        <option value="femme">Femme</option>
+        <option *ngFor="let genre of genres" [value]="genre.idGenre">{{genre.libelle}}</option>
       </select>
       <div class="invalid-feedback" *ngIf="usr_form.get('genre')?.invalid && usr_form.get('genre')?.touched">
         Le genre est requis.

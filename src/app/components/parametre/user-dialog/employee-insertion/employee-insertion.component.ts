@@ -6,6 +6,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {CommonModule, NgIf} from '@angular/common';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {Genre} from '../../../../models/Genre';
 
 @Component({
   selector: 'app-employee-insertion',
@@ -26,20 +27,34 @@ export class EmployeeInsertionComponent {
   loading: boolean = false;
   error: boolean = false;
   usr_form: FormGroup;
+  genres: Genre[] = [];
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EmployeeInsertionComponent>
   ) {
+      this.loadGenre();
       this.usr_form = this.fb.group({
         email: ['', [Validators.required, Validators.email]],
-        genre: ['', Validators.required],
+        idGenre: ['', Validators.required],
         nom: ['', Validators.required],
         dateNaissance: ['', Validators.required],
         telephone: ['', [Validators.required, Validators.pattern('^[0-9]{10,12}$')]]
       });
   }
 
+  loadGenre(){
+    this.genres = [
+      {
+        idGenre: 0,
+        libelle: 'Homme'
+      },
+      {
+        idGenre: 0,
+        libelle: 'Femme'
+      }
+    ]
+  }
 
   onSubmit() {
     if (this.usr_form.valid) {
