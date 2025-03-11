@@ -31,13 +31,11 @@ export class UserParametreComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   users : any[] = [];
+  roles : any[] = [];
+  selectedRoles: { [key: string]: boolean } = {};
   searchCriteria: any = {
-    id: '',
     nom: '',
-    email: '',
-    genre: '',
-    telephone: '',
-    dateNaissance: '',
+    roles: [],
     etat: '',
     page: 1,
     limit: 10,
@@ -46,11 +44,15 @@ export class UserParametreComponent implements OnInit {
   };
   sortedColumn: string = '';
   sortDirection: 'asc' | 'desc' | '' = '';
+  currentPage: number = 1;
+  totalPages: number = 0;
+  totalElement: number = 0;
   constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService) {
 
   }
   ngOnInit() {
     this.loadUsers();
+    this.loadRoles();
   }
 
   sortData(column : string) {
@@ -61,6 +63,24 @@ export class UserParametreComponent implements OnInit {
       this.sortedColumn = column;
       this.sortDirection = 'asc';
     }
+    this.loadUsers();
+  }
+
+  changeStatus(id: string) {
+    this.loader = true;
+    const data = {
+      userId: id
+    }
+    this.apiService.insert('api/user/'+id, data).then(
+      (response) => {
+        this.loadUsers();
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors de l\'insertion :', error);
+      }
+    );
   }
 
   isSorted(column: string, direction: 'asc' | 'desc') {
@@ -68,10 +88,30 @@ export class UserParametreComponent implements OnInit {
   }
   loadUsers() {
     this.loader = true;
-    this.apiService.getAll('api/users').then(
+    this.searchCriteria.page = this.currentPage;
+    this.searchCriteria.sortedColumn = this.sortedColumn;
+    this.searchCriteria.sortDirection = this.sortDirection;
+    this.apiService.getWithData('api/users/search',this.searchCriteria).then(
       (response) => {
-        this.users = response;
-        console.log(response);
+        this.totalPages = Math.ceil(response['totalItems'] / this.searchCriteria.limit);
+        this.totalElement = response['totalItems'];
+        this.users = response['items'];
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors de loadUsers :', error);
+      }
+    );
+  }
+  loadRoles() {
+    this.loader = true;
+    this.apiService.getAll('api/roles').then(
+      (response) => {
+        this.roles = response;
+        this.roles.forEach(role => {
+          this.selectedRoles[role._id] = true;
+        });
         this.loader = false;
       },
       (error) => {
@@ -81,8 +121,14 @@ export class UserParametreComponent implements OnInit {
     );
   }
 
-  applyFilter() {
-
+  updateRoles(): void {
+    this.searchCriteria.roles = [];
+    for (let role in this.selectedRoles) {
+      if (this.selectedRoles[role]) {
+        this.searchCriteria.roles.push(role);
+      }
+    }
+    this.loadUsers();
   }
 
   openEmployerDialog() {
@@ -109,6 +155,4 @@ export class UserParametreComponent implements OnInit {
       }
     });
   }
-
-
 }
