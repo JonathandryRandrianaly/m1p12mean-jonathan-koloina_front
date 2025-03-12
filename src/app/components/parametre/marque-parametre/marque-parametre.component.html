@@ -13,37 +13,45 @@
               </div>
               <hr>
 
+              <div class="d-flex justify-content-end gap-2 mt-2 mb-3">
+                <input matInput placeholder="Rechercher une marque..." [(ngModel)]="searchCriteria.nom" (ngModelChange)="loadMarques()"  class="form-control w-auto">
+
+                <div class="dropdown">
+                  <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-filter"></i> Filtrer
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                    <li *ngFor="let etat of etats">
+                      <label class="dropdown-item">
+                        <input type="checkbox" [(ngModel)]="selectedEtats[etat.id]" (ngModelChange)="updateEtats()">
+                        {{ etat.libelle }}
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
               <div class="table-responsive">
                 <table class="table table-hover">
                   <thead class="table-light">
                   <tr>
                     <th scope="col" class="text-nowrap">Id</th>
-                    <th scope="col" class="text-nowrap">Nom</th>
-                    <th scope="col" class="text-nowrap">Status</th>
+                    <th (click)="sortData('nom')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                      Nom
+                      <mat-icon *ngIf="isSorted('nom', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('nom', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                    </th>
+                    <th scope="col" class="text-nowrap">Statut</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td class="text-nowrap">Randy Rhiel Madsen</td>
-                    <td class="text-nowrap"><a href="#">A01DSGN193</a></td>
+                  <tr *ngFor="let marque of marques">
+                    <td class="text-nowrap">{{marque._id}}</td>
+                    <td class="text-nowrap">{{marque.nom}}</td>
                     <td>
-                      <mat-slide-toggle>
-                      </mat-slide-toggle>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-nowrap">Maria Rosser</td>
-                    <td class="text-nowrap"><a href="#">A02DSGN196</a></td>
-                    <td>
-                      <mat-slide-toggle>
-                      </mat-slide-toggle>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-nowrap">Cheyenne Bothman</td>
-                    <td class="text-nowrap"><a href="#">A05DVP381</a></td>
-                    <td>
-                      <mat-slide-toggle>
+                      <mat-slide-toggle 
+                          [checked]="marque.etat.code === 10" 
+                          (change)="changeStatut(marque._id, $event.checked)">
                       </mat-slide-toggle>
                     </td>
                   </tr>
@@ -51,9 +59,10 @@
                 </table>
               </div>
 
-              <mat-paginator [length]="100"
-                             [pageSize]="10"
+              <mat-paginator [length]="totalElement"
+                             [pageSize]="searchCriteria.limit"
                              [pageSizeOptions]="[5, 10, 25, 100]"
+                             (page)="onPageChange($event)"
                              aria-label="Select page">
               </mat-paginator>
 
