@@ -157,7 +157,7 @@ export class UserParametreComponent implements OnInit {
         this.apiService.insert('api/addEmployees', result).then(
           (response) => {
               const dataSpecialisation = {
-                user: response['userId'],
+                user: response.data.userId,
                 specialisations: result.specialisations,
               }
               this.apiService.insert('api/specialisations-personnel', dataSpecialisation).then(
