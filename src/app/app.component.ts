@@ -6,6 +6,7 @@ import {BreadcrumbComponent} from './components/templates/breadcrumb/breadcrumb.
 import {BreadcrumbService} from './services/breadcrumb/breadcrumb-service.service';
 import {SidebarComponent} from './components/templates/sidebar/sidebar.component';
 import {FooterComponent} from './components/templates/footer/footer.component';
+import {NavbarService} from './services/navbar/navbar-service.service';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +39,7 @@ export class AppComponent implements OnInit {
     this.checkForClosedTabs();
   }
 
-  constructor(private route : Router, private breadcrumbService: BreadcrumbService){
+  constructor(private navbarService: NavbarService,private route : Router, private breadcrumbService: BreadcrumbService){
     this.routes = this.route.events.subscribe(
       (event :any) => {
         if (event instanceof NavigationEnd) {
@@ -49,5 +50,19 @@ export class AppComponent implements OnInit {
         }
       }
     )
+  }
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const sidebar = document.querySelector('#sidebar');
+    const navbar = document.querySelector('#navbar');
+
+    if (
+      sidebar &&
+      !sidebar.contains(event.target as Node) &&
+      navbar &&
+      !navbar.contains(event.target as Node)
+    ) {
+      this.navbarService.setActive(false);
+    }
   }
 }

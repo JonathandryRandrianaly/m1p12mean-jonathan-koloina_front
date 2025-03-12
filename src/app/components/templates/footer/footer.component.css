@@ -2,3 +2,13 @@
 @import "flowbite/src/themes/default.css";
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
+
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 85px;
+}

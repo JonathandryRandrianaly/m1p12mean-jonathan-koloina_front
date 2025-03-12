@@ -21,8 +21,35 @@
                 <input matInput placeholder="Rechercher un employé..." [(ngModel)]="searchCriteria.nom" (ngModelChange)="loadUsers()"  class="form-control w-auto">
 
                 <div class="dropdown">
+                  <button class="btn btn-outline-dark" type="button" id="filterStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-filter"></i> Status
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="filterStatusDropdown">
+                    <li>
+                      <label class="dropdown-item">
+                        <input type="checkbox" [(ngModel)]="selectedEtats['10']" (ngModelChange)="updateEtats()">
+                        Actif
+                      </label>
+                    </li>
+                    <li>
+                      <label class="dropdown-item">
+                        <input type="checkbox" [(ngModel)]="selectedEtats['-10']" (ngModelChange)="updateEtats()">
+                        Inactif
+                      </label>
+                    </li>
+                    <li>
+                      <label class="dropdown-item">
+                        <input type="checkbox" [(ngModel)]="selectedEtats['0']" (ngModelChange)="updateEtats()">
+                        En attente
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+
+
+                <div class="dropdown">
                   <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-filter"></i> Filtrer
+                    <i class="bi bi-filter"></i> Rôles
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="filterDropdown">
                     <li *ngFor="let role of roles">

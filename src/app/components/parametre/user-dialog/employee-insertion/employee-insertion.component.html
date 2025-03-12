@@ -1,81 +1,103 @@
 <h2 mat-dialog-title>Ajouter un Employé</h2>
 <mat-dialog-content>
   <form [formGroup]="usr_form" (ngSubmit)="onSubmit()" novalidate>
-    <div class="mb-3">
-      <label for="nom" class="form-label">Nom</label>
-      <input
-        id="nom"
-        type="text"
-        formControlName="nom"
-        class="form-control"
-        [ngClass]="{'is-invalid': usr_form.get('nom')?.invalid && usr_form.get('nom')?.touched}"
-        placeholder="Nom complet"
-        required>
-      <div class="invalid-feedback" *ngIf="usr_form.get('nom')?.invalid && usr_form.get('nom')?.touched">
-        Le nom est requis.
-      </div>
-    </div>
+    <!-- Stepper -->
+    <mat-horizontal-stepper [linear]="true" #stepper>
+      <!-- Step 1: Personal Information -->
+      <mat-step label="Informations Personnelles">
+        <div class="mb-3">
+          <label for="nom" class="form-label">Nom</label>
+          <input
+            id="nom"
+            type="text"
+            formControlName="nom"
+            class="form-control"
+            [ngClass]="{'is-invalid': usr_form.get('nom')?.invalid && usr_form.get('nom')?.touched}"
+            placeholder="Nom complet"
+            required>
+          <div class="invalid-feedback" *ngIf="usr_form.get('nom')?.invalid && usr_form.get('nom')?.touched">
+            Le nom est requis.
+          </div>
+        </div>
 
-    <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input
-        id="email"
-        type="email"
-        formControlName="email"
-        class="form-control"
-        [ngClass]="{'is-invalid': usr_form.get('email')?.invalid && usr_form.get('email')?.touched}"
-        placeholder="exemple@email.com"
-        required>
-      <div class="invalid-feedback" *ngIf="usr_form.get('email')?.invalid && usr_form.get('email')?.touched">
-        Email invalide.
-      </div>
-    </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="form-control"
+            [ngClass]="{'is-invalid': usr_form.get('email')?.invalid && usr_form.get('email')?.touched}"
+            placeholder="exemple@email.com"
+            required>
+          <div class="invalid-feedback" *ngIf="usr_form.get('email')?.invalid && usr_form.get('email')?.touched">
+            Email invalide.
+          </div>
+        </div>
 
-    <div class="mb-3">
-      <label for="dateNaissance" class="form-label">Date de naissance</label>
-      <input
-        id="dateNaissance"
-        type="date"
-        formControlName="dateNaissance"
-        class="form-control"
-        [ngClass]="{'is-invalid': usr_form.get('dateNaissance')?.invalid && usr_form.get('dateNaissance')?.touched}"
-        required>
-      <div class="invalid-feedback" *ngIf="usr_form.get('dateNaissance')?.invalid && usr_form.get('dateNaissance')?.touched">
-        La date de naissance est requise.
-      </div>
-    </div>
+        <div class="mb-3">
+          <label for="dateNaissance" class="form-label">Date de naissance</label>
+          <input
+            id="dateNaissance"
+            type="date"
+            formControlName="dateNaissance"
+            class="form-control"
+            [ngClass]="{'is-invalid': usr_form.get('dateNaissance')?.invalid && usr_form.get('dateNaissance')?.touched}"
+            required>
+          <div class="invalid-feedback" *ngIf="usr_form.get('dateNaissance')?.invalid && usr_form.get('dateNaissance')?.touched">
+            La date de naissance est requise.
+          </div>
+        </div>
 
-    <div class="mb-3">
-      <label for="genre" class="form-label">Genre</label>
-      <select
-        id="genre"
-        formControlName="genre"
-        class="form-control"
-        [ngClass]="{'is-invalid': usr_form.get('genre')?.invalid && usr_form.get('genre')?.touched}"
-        required>
-        <option value="" disabled selected>Choisissez le genre</option>
-        <option *ngFor="let genre of genres" [value]="genre.idGenre">{{genre.libelle}}</option>
-      </select>
-      <div class="invalid-feedback" *ngIf="usr_form.get('genre')?.invalid && usr_form.get('genre')?.touched">
-        Le genre est requis.
-      </div>
-    </div>
+        <div class="mb-3">
+          <label for="idGenre" class="form-label">Genre</label>
+          <select
+            id="idGenre"
+            formControlName="idGenre"
+            class="form-control"
+            [ngClass]="{'is-invalid': usr_form.get('idGenre')?.invalid && usr_form.get('idGenre')?.touched}"
+            required>
+            <option value="" disabled selected>Choisissez le genre</option>
+            <option *ngFor="let genre of genres" [value]="genre.idGenre">{{ genre.libelle }}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="usr_form.get('idGenre')?.invalid && usr_form.get('idGenre')?.touched">
+            Le genre est requis.
+          </div>
+        </div>
 
-    <div class="mb-3">
-      <label for="telephone" class="form-label">Numéro de téléphone</label>
-      <input
-        id="telephone"
-        type="text"
-        formControlName="telephone"
-        class="form-control"
-        [ngClass]="{'is-invalid': usr_form.get('telephone')?.invalid && usr_form.get('telephone')?.touched}"
-        placeholder="Numéro de téléphone"
-        required>
-      <div class="invalid-feedback" *ngIf="usr_form.get('telephone')?.invalid && usr_form.get('telephone')?.touched">
-        Le numéro de téléphone est invalide.
-      </div>
-    </div>
+        <div class="mb-3">
+          <label for="telephone" class="form-label">Numéro de téléphone</label>
+          <input
+            id="telephone"
+            type="text"
+            formControlName="telephone"
+            class="form-control"
+            [ngClass]="{'is-invalid': usr_form.get('telephone')?.invalid && usr_form.get('telephone')?.touched}"
+            placeholder="Numéro de téléphone"
+            required>
+          <div class="invalid-feedback" *ngIf="usr_form.get('telephone')?.invalid && usr_form.get('telephone')?.touched">
+            Le numéro de téléphone est invalide.
+          </div>
+        </div>
+      </mat-step>
 
+      <mat-step label="Spécialisation">
+        <div class="mb-3">
+          <label for="specialisation" class="form-label">Choisissez la spécialisation</label>
+          <div *ngFor="let specialisation of specialisations">
+            <label>
+              <input
+                id="specialisation"
+                type="checkbox"
+                [value]="specialisation._id"
+                (change)="onSpecialisationChange($event, specialisation._id)"
+                [checked]="(usr_form.get('specialisations')?.value).includes(specialisation._id)">
+              {{ specialisation.nom }}
+            </label>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
   </form>
 </mat-dialog-content>
 
@@ -83,7 +105,7 @@
   <button mat-button (click)="closeDialog()">Annuler</button>
   <button
     #tooltip="matTooltip"
-    matTooltip="Une invitation sera envoyer par email pour que l'utilisateur spécifie son mot de passe"
+    matTooltip="Une invitation sera envoyée par email pour que l'utilisateur spécifie son mot de passe"
     mat-raised-button color="primary" (click)="onSubmit()" [disabled]="usr_form.invalid">
     Ajouter
   </button>
