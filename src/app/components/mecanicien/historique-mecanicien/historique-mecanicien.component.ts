@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {LoaderComponent} from "../../templates/loader/loader.component";
 import {MatIcon, MatIconModule} from "@angular/material/icon";
@@ -13,12 +13,14 @@ import {ApiService} from '../../../services/api/api.service';
 import {EmployeeInsertionComponent} from '../../parametre/user-dialog/employee-insertion/employee-insertion.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-historique-mecanicien',
     imports: [ReactiveFormsModule,FormsModule,LoaderComponent,
       MatPaginatorModule,CommonModule,MatButtonModule, MatMenuModule, MatIconModule
-      ,MatTableModule,MatChipsModule
+      ,MatTableModule,MatChipsModule,
+      MatTooltipModule
     ],
   templateUrl: './historique-mecanicien.component.html',
   styleUrl: './historique-mecanicien.component.css'
@@ -27,6 +29,8 @@ export class HistoriqueMecanicienComponent implements OnInit {
   loader : boolean = false;
   displayedColumns: string[] = ['name', 'id', 'status', 'actions'];
   searchKey: string = '';
+  showFilter: boolean = false;
+  @ViewChild('filterCard', { static: false }) filterCard: ElementRef | null = null;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   users : any[] = [];
@@ -52,6 +56,16 @@ export class HistoriqueMecanicienComponent implements OnInit {
   ngOnInit() {
     this.loadUsers();
     this.loadRoles();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (this.showFilter && this.filterCard) {
+      const filterElement = this.filterCard.nativeElement;
+      if (filterElement && !filterElement.contains(event.target)) {
+        this.showFilter = false;
+      }
+    }
   }
 
   sortData(column : string) {
@@ -128,6 +142,16 @@ export class HistoriqueMecanicienComponent implements OnInit {
       }
     }
     this.loadUsers();
+  }
+
+  toggleFilter() {
+    this.showFilter = !this.showFilter;
+  }
+
+  applyFilters() {
+    // Appliquez ici la logique pour filtrer les utilisateurs en fonction des critères
+    this.loadUsers();
+    this.toggleFilter(); // Fermer le filtre après application
   }
 
 }
