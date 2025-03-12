@@ -14,7 +14,7 @@ import {EmployeeInsertionComponent} from '../user-dialog/employee-insertion/empl
 import {ApiService} from '../../../services/api/api.service';
 import {Router} from '@angular/router';
 import {MatSort} from '@angular/material/sort';
-
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-user-parametre',
@@ -26,17 +26,18 @@ import {MatSort} from '@angular/material/sort';
 })
 export class UserParametreComponent implements OnInit {
   loader : boolean = false;
-  displayedColumns: string[] = ['name', 'id', 'status', 'actions'];
-  searchKey: string = '';
+  environmentApi : string = environment.appUrl;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   users : any[] = [];
   roles : any[] = [];
   selectedRoles: { [key: string]: boolean } = {};
+  selectedEtats: { [key: string]: boolean } =
+    { '10': true, '-10': true, '0': true };
   searchCriteria: any = {
     nom: '',
     roles: [],
-    etat: '',
+    etats: [],
     page: 1,
     limit: 10,
     sortedColumn : '',
@@ -48,6 +49,7 @@ export class UserParametreComponent implements OnInit {
   totalPages: number = 0;
   totalElement: number = 0;
   constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService) {
+
 
   }
   ngOnInit() {
@@ -131,6 +133,16 @@ export class UserParametreComponent implements OnInit {
     this.loadUsers();
   }
 
+  updateEtats(): void {
+    this.searchCriteria.etats = [];
+    for (let etat in this.selectedEtats) {
+      if (this.selectedEtats[etat]) {
+        this.searchCriteria.etats.push(etat);
+      }
+    }
+    this.loadUsers();
+  }
+
   openEmployerDialog() {
     const dialogRef = this.dialog.open(EmployeeInsertionComponent, {
       width: '800px',
@@ -141,11 +153,23 @@ export class UserParametreComponent implements OnInit {
       if (result) {
         this.loader = true;
         result.roleLibelles = ['mecanicien'];
+        result.lien = this.environmentApi+'/inscription-mecanicien';
         this.apiService.insert('api/addEmployees', result).then(
           (response) => {
-            if (response.status >= 200 && response.status <= 202) {
-              this.loadUsers();
-            }
+              const dataSpecialisation = {
+                user: response['userId'],
+                specialisations: result.specialisations,
+              }
+              this.apiService.insert('api/specialisations-personnel', dataSpecialisation).then(
+                () => {
+                    this.loadUsers();
+                    this.loader = false;
+                },
+                (error) => {
+                  this.loader = false;
+                  console.error('Erreur lors de l\'insertion :', error);
+                }
+              );
           },
           (error) => {
             this.loader = false;

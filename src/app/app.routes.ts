@@ -19,6 +19,10 @@ import { CategorieEntretienParametreComponent } from './components/parametre/cat
 import { UniteParametreComponent } from './components/parametre/unite-parametre/unite-parametre.component';
 import { MotriciteParametreComponent } from './components/parametre/motricite-parametre/motricite-parametre.component';
 import { SpecialisationParametreComponent } from './components/parametre/specialisation-parametre/specialisation-parametre.component';
+import {TacheMecanicienComponent} from './components/mecanicien/tache-mecanicien/tache-mecanicien.component';
+import {
+  HistoriqueMecanicienComponent
+} from './components/mecanicien/historique-mecanicien/historique-mecanicien.component';
 
 export const routes: Routes = [
   {
@@ -168,6 +172,36 @@ export const routes: Routes = [
         { label: 'Système', url: '' },
         { label: 'Spécialisations', url: '' }
       ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"mecanicien/tasks",component:TacheMecanicienComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Mécanicien', url: '' },
+        { label: 'Tâches', url: '' }
+      ],
+      // TODO: mécanicien
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"mecanicien/historiques",component:HistoriqueMecanicienComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Mécanicien', url: '/mecanicien/tasks' },
+        { label: 'Historiques', url: '' }
+      ],
+      // TODO: mécanicien
       roles: [
         'manager'
       ]

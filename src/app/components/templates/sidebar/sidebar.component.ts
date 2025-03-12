@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isActive: boolean = false;
   private subscription: Subscription;
   isManager$!: Promise<boolean>;
+  @ViewChild('sidebar', { static: true }) sidebar!: ElementRef;
 
   constructor(private navbarService: NavbarService,private authService: AuthService,private router: Router) {
     this.subscription = new Subscription();
@@ -35,6 +36,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.sidebar && !this.sidebar.nativeElement.contains(event.target as Node)) {
+      this.navbarService.setActive(false);
+    }
   }
 }
 
