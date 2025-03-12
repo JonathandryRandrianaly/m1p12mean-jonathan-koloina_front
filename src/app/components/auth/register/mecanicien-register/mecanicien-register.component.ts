@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { ApiService } from '../../../../services/api/api.service';
 
 @Component({
@@ -15,11 +15,24 @@ export class MecanicienRegisterComponent implements OnInit {
   loading: boolean = false;
   error: boolean = false;
   usr_form: any;
-  nom : string = 'Nom';
+  user: any = {};
+  token : string = '';
 
-  constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) { }
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private apiService: ApiService,
+    private route: ActivatedRoute
+  )
+  {
+
+  }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.token = params['token'] || '';
+      this.checkToken();
+    });
     this.usr_form = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
@@ -28,6 +41,22 @@ export class MecanicienRegisterComponent implements OnInit {
     });
   }
 
+  checkToken() {
+    if (!this.token||this.token=='') {
+      this.router.navigate(['/access-denied']);
+    }
+    return this.apiService.getWithData('api/checkPasswordLink',{token:this.token})
+      .then(
+        (response) => {
+          this.user = response.user;
+        },
+        (error) => {
+          console.log(error);
+          this.router.navigate(['/inscription-introuvable']);
+          return null;
+        }
+      );
+  }
   passwordMatchValidator(formGroup: FormGroup) {
     return formGroup.get('password')?.value === formGroup.get('confirmPassword')?.value
       ? null : { 'mismatch': true };
@@ -44,9 +73,11 @@ export class MecanicienRegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    const user = this.usr_form.value;
-
-    this.apiService.login('api/register', user).then(
+    const data = {
+      userId: this.user._id,
+      password: this.usr_form.value.password
+    }
+    this.apiService.login('api/updatePassword', data).then(
       (response) => {
         if (response.status >= 200 && response.status <= 202) {
           this.router.navigate(['/connexion-mecanicien']);
