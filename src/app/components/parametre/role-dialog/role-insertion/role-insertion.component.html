@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Ajouter un rôle</h2>
+<mat-dialog-content>
+  <form [formGroup]="role_form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+      <label for="nom" class="form-label">Nom</label>
+      <input
+        id="nom"
+        type="text"
+        formControlName="libelle"
+        class="form-control"
+        [ngClass]="{'is-invalid': role_form.get('libelle')?.invalid && role_form.get('libelle')?.touched}"
+        placeholder="ex: Comptable"
+        required>
+      <div class="invalid-feedback" *ngIf="role_form.get('libelle')?.invalid && role_form.get('libelle')?.touched">
+        Le nom est requis.
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    #tooltip="matTooltip"
+    matTooltip="Création d'un nouveau role"
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="role_form.invalid">
+    Ajouter
+  </button>
+</mat-dialog-actions>
