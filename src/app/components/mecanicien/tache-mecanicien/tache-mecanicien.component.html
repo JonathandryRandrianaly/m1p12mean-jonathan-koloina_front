@@ -1,0 +1,62 @@
+<main>
+  <section class="section">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="card mb-3">
+            <div class="card-body">
+
+              <div class="task-board" cdkDropListGroup>
+                <div class="task-column" *ngFor="let column of columns">
+                  <div class="example-container">
+                    <h2>{{ column.name }}</h2>
+
+                    <div *ngIf="column.tasks.length === 0" class="empty-column-message">
+                      Aucune tâche pour cette colonne.
+                    </div>
+
+                    <div cdkDropList
+                         [id]="column.id"
+                         [cdkDropListData]="column.tasks"
+                         [cdkDropListConnectedTo]="connectedDropLists"
+                         class="task-list"
+                         (cdkDropListDropped)="drop($event)">
+
+                      <div class="task-card" *ngFor="let task of column.tasks" cdkDrag>
+                        <!-- Carte représentant chaque tâche -->
+                        <div class="task-card-header">
+                          <h3>{{ task.name }}</h3>
+                        </div>
+                        <div class="task-card-body">
+                          <p>Véhicule: {{ task.vehicle }}</p>
+                          <p>Description: {{ task.description }}</p>
+                        </div>
+                        <div class="task-card-footer">
+                          <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="viewDetails(task)">Détails</button>
+                            <button mat-menu-item (click)="setAs(task)">Définir comme...</button>
+                          </mat-menu>
+                          <button mat-icon-button>
+                            <mat-icon style="color: white">info</mat-icon>
+                          </button>
+                          <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon style="color: white">more_horz</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-loader *ngIf="loader"></app-loader>

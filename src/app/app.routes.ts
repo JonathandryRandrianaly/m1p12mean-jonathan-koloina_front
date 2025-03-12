@@ -13,6 +13,7 @@ import {AccueilComponent} from './components/accueil/accueil.component';
 import {PageNotFoundComponent} from './components/templates/page-not-found/page-not-found.component';
 import {UserParametreComponent} from './components/parametre/user-parametre/user-parametre.component';
 import {MarqueParametreComponent} from './components/parametre/marque-parametre/marque-parametre.component';
+import {TacheMecanicienComponent} from './components/mecanicien/tache-mecanicien/tache-mecanicien.component';
 
 export const routes: Routes = [
   {
@@ -77,6 +78,20 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Paramètres', url: '' },
         { label: 'Marques', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"mecanicien/tasks",component:TacheMecanicienComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Mécanicien', url: '' },
+        { label: 'Tâches', url: '' }
       ],
       roles: [
         'manager'
