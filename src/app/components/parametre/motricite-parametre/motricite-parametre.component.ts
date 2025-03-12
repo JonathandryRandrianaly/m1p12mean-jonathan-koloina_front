@@ -5,15 +5,14 @@ import {ApiService} from '../../../services/api/api.service';
 import {LoaderComponent} from '../../templates/loader/loader.component';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MarqueInsertionComponent} from '../marque-dialog/marque-insertion/marque-insertion.component';
 import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-
+import { MotriciteInsertionComponent } from '../motricite-dialog/motricite-insertion/motricite-insertion.component';
 
 @Component({
-  selector: 'app-marque-parametre',
+  selector: 'app-motricite-parametre',
   imports: [
     LoaderComponent,
     MatPaginator,
@@ -22,12 +21,12 @@ import { PageEvent } from '@angular/material/paginator';
     MatIconModule,
     ReactiveFormsModule,FormsModule,
   ],
-  templateUrl: './marque-parametre.component.html',
-  styleUrl: './marque-parametre.component.css'
+  templateUrl: './motricite-parametre.component.html',
+  styleUrl: './motricite-parametre.component.css'
 })
-export class MarqueParametreComponent implements OnInit {
+export class MotriciteParametreComponent implements OnInit {
   loader : boolean = false;
-  marques : any[] = [];
+  motricites : any[] = [];
   etats = [
     { id: 10, libelle: 'Actif' },
     { id: -10, libelle: 'Inactif' }
@@ -51,7 +50,7 @@ export class MarqueParametreComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.loadMarques();
+    this.loadMotricites();
   }
 
   sortData(column : string) {
@@ -62,7 +61,7 @@ export class MarqueParametreComponent implements OnInit {
       this.sortedColumn = column;
       this.sortDirection = 'asc';
     }
-    this.loadMarques();
+    this.loadMotricites();
   }
 
   isSorted(column: string, direction: 'asc' | 'desc') {
@@ -72,24 +71,24 @@ export class MarqueParametreComponent implements OnInit {
   onPageChange(event: PageEvent) {
     this.currentPage = event.pageIndex + 1; 
     this.searchCriteria.limit = event.pageSize; 
-    this.loadMarques();
+    this.loadMotricites();
   }
 
-  loadMarques() {
+  loadMotricites() {
     this.loader = true;
     this.searchCriteria.page = this.currentPage;
     this.searchCriteria.sortedColumn = this.sortedColumn;
     this.searchCriteria.sortDirection = this.sortDirection;
-    this.apiService.getWithData('api/marques/search',this.searchCriteria).then(
+    this.apiService.getWithData('api/motricites/search',this.searchCriteria).then(
       (response) => {
         this.totalPages = Math.ceil(response['totalItems'] / this.searchCriteria.limit);
         this.totalElement = response['totalItems'];
-        this.marques = response['items'];
+        this.motricites = response['items'];
         this.loader = false;
       },
       (error) => {
         this.loader = false;
-        console.error('Erreur lors de loadMarques :', error);
+        console.error('Erreur lors de loadMotricites :', error);
       }
     );
   }
@@ -101,7 +100,7 @@ export class MarqueParametreComponent implements OnInit {
         this.searchCriteria.etats.push(etat);
       }
     }
-    this.loadMarques();
+    this.loadMotricites();
   }
 
   changeStatut(id: string, isChecked: boolean) {
@@ -110,9 +109,9 @@ export class MarqueParametreComponent implements OnInit {
       userId: id,
       statut: isChecked ? 10 : -10  
     };
-    this.apiService.insert('api/marque/' + id, data).then(
+    this.apiService.insert('api/motricite/' + id, data).then(
       (response) => {
-        this.loadMarques();
+        this.loadMotricites();
         this.loader = false;
       },
       (error) => {
@@ -123,8 +122,8 @@ export class MarqueParametreComponent implements OnInit {
   }
   
 
-  openMarqueDialog() {
-    const dialogRef = this.dialog.open(MarqueInsertionComponent, {
+  openMotriciteDialog() {
+    const dialogRef = this.dialog.open(MotriciteInsertionComponent, {
       width: '800px',
       disableClose: true
     });
@@ -132,10 +131,10 @@ export class MarqueParametreComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loader = true;
-        this.apiService.insert('api/marque', result).then(
+        this.apiService.insert('api/motricite', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
-              this.loadMarques();
+              this.loadMotricites();
             }
           },
           (error) => {
@@ -146,5 +145,4 @@ export class MarqueParametreComponent implements OnInit {
       }
     });
   }
-
 }

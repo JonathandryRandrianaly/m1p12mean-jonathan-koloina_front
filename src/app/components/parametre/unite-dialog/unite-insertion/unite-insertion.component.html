@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Ajouter une unité</h2>
+<mat-dialog-content>
+  <form [formGroup]="unite_form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+      <label for="nom" class="form-label">Nom</label>
+      <input
+        id="nom"
+        type="text"
+        formControlName="nom"
+        class="form-control"
+        [ngClass]="{'is-invalid': unite_form.get('nom')?.invalid && unite_form.get('nom')?.touched}"
+        placeholder="ex: Litre"
+        required>
+      <div class="invalid-feedback" *ngIf="unite_form.get('nom')?.invalid && unite_form.get('nom')?.touched">
+        Le nom est requis.
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    #tooltip="matTooltip"
+    matTooltip="Création d'une nouvelle unité"
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="unite_form.invalid">
+    Ajouter
+  </button>
+</mat-dialog-actions>

@@ -5,15 +5,15 @@ import {ApiService} from '../../../services/api/api.service';
 import {LoaderComponent} from '../../templates/loader/loader.component';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MarqueInsertionComponent} from '../marque-dialog/marque-insertion/marque-insertion.component';
 import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { TransmissionInsertionComponent } from '../transmission-dialog/transmission-insertion/transmission-insertion.component';
 
 
 @Component({
-  selector: 'app-marque-parametre',
+  selector: 'app-transmission-parametre',
   imports: [
     LoaderComponent,
     MatPaginator,
@@ -22,12 +22,12 @@ import { PageEvent } from '@angular/material/paginator';
     MatIconModule,
     ReactiveFormsModule,FormsModule,
   ],
-  templateUrl: './marque-parametre.component.html',
-  styleUrl: './marque-parametre.component.css'
+  templateUrl: './transmission-parametre.component.html',
+  styleUrl: './transmission-parametre.component.css'
 })
-export class MarqueParametreComponent implements OnInit {
+export class TransmissionParametreComponent  implements OnInit  {
   loader : boolean = false;
-  marques : any[] = [];
+  transmissions : any[] = [];
   etats = [
     { id: 10, libelle: 'Actif' },
     { id: -10, libelle: 'Inactif' }
@@ -51,7 +51,7 @@ export class MarqueParametreComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.loadMarques();
+    this.loadTransmissions();
   }
 
   sortData(column : string) {
@@ -62,7 +62,7 @@ export class MarqueParametreComponent implements OnInit {
       this.sortedColumn = column;
       this.sortDirection = 'asc';
     }
-    this.loadMarques();
+    this.loadTransmissions();
   }
 
   isSorted(column: string, direction: 'asc' | 'desc') {
@@ -72,24 +72,24 @@ export class MarqueParametreComponent implements OnInit {
   onPageChange(event: PageEvent) {
     this.currentPage = event.pageIndex + 1; 
     this.searchCriteria.limit = event.pageSize; 
-    this.loadMarques();
+    this.loadTransmissions();
   }
 
-  loadMarques() {
+  loadTransmissions() {
     this.loader = true;
     this.searchCriteria.page = this.currentPage;
     this.searchCriteria.sortedColumn = this.sortedColumn;
     this.searchCriteria.sortDirection = this.sortDirection;
-    this.apiService.getWithData('api/marques/search',this.searchCriteria).then(
+    this.apiService.getWithData('api/transmissions/search',this.searchCriteria).then(
       (response) => {
         this.totalPages = Math.ceil(response['totalItems'] / this.searchCriteria.limit);
         this.totalElement = response['totalItems'];
-        this.marques = response['items'];
+        this.transmissions = response['items'];
         this.loader = false;
       },
       (error) => {
         this.loader = false;
-        console.error('Erreur lors de loadMarques :', error);
+        console.error('Erreur lors de loadTransmissions :', error);
       }
     );
   }
@@ -101,7 +101,7 @@ export class MarqueParametreComponent implements OnInit {
         this.searchCriteria.etats.push(etat);
       }
     }
-    this.loadMarques();
+    this.loadTransmissions();
   }
 
   changeStatut(id: string, isChecked: boolean) {
@@ -110,9 +110,9 @@ export class MarqueParametreComponent implements OnInit {
       userId: id,
       statut: isChecked ? 10 : -10  
     };
-    this.apiService.insert('api/marque/' + id, data).then(
+    this.apiService.insert('api/transmission/' + id, data).then(
       (response) => {
-        this.loadMarques();
+        this.loadTransmissions();
         this.loader = false;
       },
       (error) => {
@@ -123,8 +123,8 @@ export class MarqueParametreComponent implements OnInit {
   }
   
 
-  openMarqueDialog() {
-    const dialogRef = this.dialog.open(MarqueInsertionComponent, {
+  openTransmissionDialog() {
+    const dialogRef = this.dialog.open(TransmissionInsertionComponent, {
       width: '800px',
       disableClose: true
     });
@@ -132,10 +132,10 @@ export class MarqueParametreComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loader = true;
-        this.apiService.insert('api/marque', result).then(
+        this.apiService.insert('api/transmission', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
-              this.loadMarques();
+              this.loadTransmissions();
             }
           },
           (error) => {
@@ -146,5 +146,4 @@ export class MarqueParametreComponent implements OnInit {
       }
     });
   }
-
 }

@@ -41,7 +41,7 @@ export class ApiService {
   async insert(path: string, data: any) {
     try {
       const response = await axiosInstance.post(`/${path}`, data);
-      return response.data;
+      return response;
     } catch (error) {
       throw error;
     }
