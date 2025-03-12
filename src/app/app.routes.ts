@@ -18,6 +18,7 @@ import { TransmissionParametreComponent } from './components/parametre/transmiss
 import { CategorieEntretienParametreComponent } from './components/parametre/categorie-entretien-parametre/categorie-entretien-parametre.component';
 import { UniteParametreComponent } from './components/parametre/unite-parametre/unite-parametre.component';
 import { MotriciteParametreComponent } from './components/parametre/motricite-parametre/motricite-parametre.component';
+import { SpecialisationParametreComponent } from './components/parametre/specialisation-parametre/specialisation-parametre.component';
 
 export const routes: Routes = [
   {
@@ -152,6 +153,20 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Paramètre', url: '' },
         { label: 'Motricités', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/specialisations",component:SpecialisationParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Système', url: '' },
+        { label: 'Spécialisations', url: '' }
       ],
       roles: [
         'manager'
