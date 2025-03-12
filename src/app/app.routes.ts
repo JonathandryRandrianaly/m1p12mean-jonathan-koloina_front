@@ -14,6 +14,7 @@ import {PageNotFoundComponent} from './components/templates/page-not-found/page-
 import {UserParametreComponent} from './components/parametre/user-parametre/user-parametre.component';
 import {MarqueParametreComponent} from './components/parametre/marque-parametre/marque-parametre.component';
 import { EnergieMoteurParametreComponent } from './components/parametre/energie-moteur-parametre/energie-moteur-parametre.component';
+import { TransmissionParametreComponent } from './components/parametre/transmission-parametre/transmission-parametre.component';
 
 export const routes: Routes = [
   {
@@ -92,6 +93,20 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Paramètres', url: '' },
         { label: 'Energie Moteur', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/transmissions",component:TransmissionParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Paramètres', url: '' },
+        { label: 'Transmissions', url: '' }
       ],
       roles: [
         'manager'
