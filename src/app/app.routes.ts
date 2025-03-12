@@ -13,6 +13,7 @@ import {AccueilComponent} from './components/accueil/accueil.component';
 import {PageNotFoundComponent} from './components/templates/page-not-found/page-not-found.component';
 import {UserParametreComponent} from './components/parametre/user-parametre/user-parametre.component';
 import {MarqueParametreComponent} from './components/parametre/marque-parametre/marque-parametre.component';
+import { EnergieMoteurParametreComponent } from './components/parametre/energie-moteur-parametre/energie-moteur-parametre.component';
 
 export const routes: Routes = [
   {
@@ -77,6 +78,20 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Paramètres', url: '' },
         { label: 'Marques', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/energie-moteur",component:EnergieMoteurParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Paramètres', url: '' },
+        { label: 'Energie Moteur', url: '' }
       ],
       roles: [
         'manager'
