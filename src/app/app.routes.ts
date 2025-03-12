@@ -17,6 +17,7 @@ import { EnergieMoteurParametreComponent } from './components/parametre/energie-
 import { TransmissionParametreComponent } from './components/parametre/transmission-parametre/transmission-parametre.component';
 import { CategorieEntretienParametreComponent } from './components/parametre/categorie-entretien-parametre/categorie-entretien-parametre.component';
 import { UniteParametreComponent } from './components/parametre/unite-parametre/unite-parametre.component';
+import { MotriciteParametreComponent } from './components/parametre/motricite-parametre/motricite-parametre.component';
 
 export const routes: Routes = [
   {
@@ -137,6 +138,20 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Système', url: '' },
         { label: 'Unités', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/motricites",component:MotriciteParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Paramètre', url: '' },
+        { label: 'Motricités', url: '' }
       ],
       roles: [
         'manager'
