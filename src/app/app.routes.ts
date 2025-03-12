@@ -14,6 +14,9 @@ import {PageNotFoundComponent} from './components/templates/page-not-found/page-
 import {UserParametreComponent} from './components/parametre/user-parametre/user-parametre.component';
 import {MarqueParametreComponent} from './components/parametre/marque-parametre/marque-parametre.component';
 import {TacheMecanicienComponent} from './components/mecanicien/tache-mecanicien/tache-mecanicien.component';
+import {
+  HistoriqueMecanicienComponent
+} from './components/mecanicien/historique-mecanicien/historique-mecanicien.component';
 
 export const routes: Routes = [
   {
@@ -93,6 +96,22 @@ export const routes: Routes = [
         { label: 'Mécanicien', url: '' },
         { label: 'Tâches', url: '' }
       ],
+      // TODO: mécanicien
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"mecanicien/historiques",component:HistoriqueMecanicienComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Mécanicien', url: '/mecanicien/tasks' },
+        { label: 'Historiques', url: '' }
+      ],
+      // TODO: mécanicien
       roles: [
         'manager'
       ]

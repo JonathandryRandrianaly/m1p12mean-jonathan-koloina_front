@@ -20,21 +20,28 @@ import {MatButtonModule} from '@angular/material/button';
 })
 export class TacheMecanicienComponent {
   loader: boolean = false;
+  searchQuery: string = '';
 
-  // Structure de données pour les tâches, incluant le nom, véhicule, et description
   columns = [
-    { id: 'todo', name: 'To Do', tasks: [{ name: 'Réparer le moteur', vehicle: 'Véhicule 1', description: 'Réparation du moteur principal.' }] },
-    { id: 'inProgress', name: 'En Cours', tasks: [{ name: 'Changer les pneus', vehicle: 'Véhicule 2', description: 'Changer les pneus avant.' }] },
-    { id: 'waitingForValidation', name: 'Attente de validation', tasks: [{ name: 'ARAt', vehicle: 'Véhicule 3', description: 'Révision du système ARAt.' }] },
-    { id: 'done', name: 'Validé', tasks: [{ name: 'ARAt', vehicle: 'Véhicule 3', description: 'Révision du système ARAt.' }] },
+    { id: 'todo', name: 'To Do', tasks: [
+        { name: 'Réparer le moteur', vehicle: 'Vehicule 1', description: 'Tâche de réparation' },
+        { name: 'Changer les pneus', vehicle: 'Vehicule 2', description: 'Changer les pneus avant' }
+      ]
+    },
+    { id: 'inProgress', name: 'En Cours', tasks: [
+        { name: 'Réparer la carrosserie', vehicle: 'Vehicule 3', description: 'Réparer les rayures sur la carrosserie' }
+      ]
+    },
+    { id: 'done', name: 'Terminé', tasks: [
+        { name: 'Changement d’huile', vehicle: 'Vehicule 4', description: 'Vidange de moteur' }
+      ]
+    }
   ];
 
-  // Assure que toutes les listes sont bien connectées entre elles
   get connectedDropLists(): string[] {
     return this.columns.map(column => column.id);
   }
 
-  // Modification de la méthode drop pour accepter un tableau d'objets de type tâche
   drop(event: CdkDragDrop<{ name: string, vehicle: string, description: string }[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -55,4 +62,5 @@ export class TacheMecanicienComponent {
   setAs(task: any) {
     console.log('Définir cette tâche comme:', task);
   }
+
 }

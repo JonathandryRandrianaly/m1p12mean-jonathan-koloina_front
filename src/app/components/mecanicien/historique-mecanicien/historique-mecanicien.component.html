@@ -1,0 +1,106 @@
+<main>
+  <section class="section">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="card-title m-0">Historiques des tâches:</h5>
+              </div>
+
+              <hr>
+
+              <div class="d-flex justify-content-end gap-2 mt-2 mb-3">
+                <input matInput placeholder="Rechercher un employé..." [(ngModel)]="searchCriteria.nom" (ngModelChange)="loadUsers()"  class="form-control w-auto">
+
+                <div class="dropdown">
+                  <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-filter"></i> Filtrer
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                    <li *ngFor="let role of roles">
+                      <label class="dropdown-item">
+                        <input type="checkbox" [(ngModel)]="selectedRoles[role._id]" (ngModelChange)="updateRoles()">
+                        {{ role.libelle }}
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                  <tr>
+                    <th scope="col" class="text-nowrap">Date</th>
+                    <th (click)="sortData('date')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                      Date
+                      <mat-icon *ngIf="isSorted('date', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('date', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                    </th>
+                    <th (click)="sortData('vehicule')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                      Vehicule
+                      <mat-icon *ngIf="isSorted('vehicule', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('vehicule', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                    </th>
+                    <th scope="col" class="text-nowrap">Status</th>
+                    <th scope="col" class="text-nowrap text-center">Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let user of users">
+                    <td class="text-nowrap">{{ user._id }}</td>
+                    <td class="text-nowrap">{{ user.nom }}</td>
+                    <td class="text-nowrap">
+                      <span *ngFor="let role of user.roles; let last = last">
+                        {{ role.libelle }}<span *ngIf="!last">, </span>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge" [ngClass]="{
+                        'bg-success': user.etat.libelle === 'Actif',
+                        'bg-danger': user.etat.libelle === 'Inactif',
+                        'bg-warning text-dark': user.etat.libelle === 'En attente'
+                      }">{{ user.etat.libelle }}</span>
+                    </td>
+                    <td class="text-center">
+                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                          <mat-icon>mail_outline</mat-icon>
+                          <span>Reenvoyer invitation</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>edit</mat-icon>
+                          <span>Rôles</span>
+                        </button>
+                        <button mat-menu-item (click)="changeStatus(user._id)" *ngIf="user.etat.libelle!='En attente'">
+                          <mat-icon>{{ user.etat.libelle === 'Actif' ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+                          <span>{{ user.etat.libelle === 'Actif' ? 'Désactiver' : 'Activer' }}</span>
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <mat-paginator
+                [length]="totalElement"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                (page)="loadUsers()"
+                aria-label="Select page">
+              </mat-paginator>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-loader *ngIf="loader"></app-loader>
