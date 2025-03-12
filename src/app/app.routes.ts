@@ -16,6 +16,7 @@ import {MarqueParametreComponent} from './components/parametre/marque-parametre/
 import { EnergieMoteurParametreComponent } from './components/parametre/energie-moteur-parametre/energie-moteur-parametre.component';
 import { TransmissionParametreComponent } from './components/parametre/transmission-parametre/transmission-parametre.component';
 import { CategorieEntretienParametreComponent } from './components/parametre/categorie-entretien-parametre/categorie-entretien-parametre.component';
+import { UniteParametreComponent } from './components/parametre/unite-parametre/unite-parametre.component';
 
 export const routes: Routes = [
   {
@@ -122,6 +123,20 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Entretien', url: '' },
         { label: 'Catégories', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/unites",component:UniteParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Système', url: '' },
+        { label: 'Unités', url: '' }
       ],
       roles: [
         'manager'
