@@ -24,6 +24,9 @@ import {
   HistoriqueMecanicienComponent
 } from './components/mecanicien/historique-mecanicien/historique-mecanicien.component';
 import { RoleParametreComponent } from './components/parametre/role-parametre/role-parametre.component';
+import {
+  DemandeServiceClientComponent
+} from './components/client/demande-service-client/demande-service-client.component';
 
 export const routes: Routes = [
   {
@@ -219,6 +222,19 @@ export const routes: Routes = [
       ],
       roles: [
         'manager'
+      ]
+    }
+  },
+  {
+    path:"demande-service",component:DemandeServiceClientComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Demande Service', url: '' }
+      ],
+      roles: [
+        'client'
       ]
     }
   },
