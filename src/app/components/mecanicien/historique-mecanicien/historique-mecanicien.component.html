@@ -1,0 +1,156 @@
+<main>
+  <section class="section">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="card-title m-0">Historiques des tâches:</h5>
+              </div>
+
+              <hr>
+
+              <div class="d-flex justify-content-end gap-2 mt-2 mb-3">
+                <button class="btn btn-outline-dark" type="button" id="filterButton" (click)="toggleFilter()">
+                  <i class="bi bi-filter"></i> Filtrer
+                </button>
+              </div>
+
+              <!-- Card hidden avec les filtres -->
+              <div class="card" *ngIf="showFilter" #filterCard style="width: 300px; position: absolute; right: 20px; top: 20px; z-index: 1000; animation: slideIn 0.3s;">
+                <div class="card-body">
+                  <h5 class="card-title">Filtrer les Résultats</h5>
+
+                  <div class="mb-3">
+                    <label for="vehicule" class="form-label">Véhicule</label>
+                    <input matInput id="vehicule" placeholder="Rechercher un véhicule..." [(ngModel)]="searchCriteria.vehicule" (ngModelChange)="loadUsers()" class="form-control">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="tache" class="form-label">Tâche</label>
+                    <input matInput id="tache" placeholder="Rechercher une tâche..." [(ngModel)]="searchCriteria.tache" (ngModelChange)="loadUsers()" class="form-control">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="dateMin" class="form-label">Date Min</label>
+                    <input matInput type="date" id="dateMin" [(ngModel)]="searchCriteria.dateMin" (ngModelChange)="loadUsers()" class="form-control">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="dateMax" class="form-label">Date Max</label>
+                    <input matInput type="date" id="dateMax" [(ngModel)]="searchCriteria.dateMax" (ngModelChange)="loadUsers()" class="form-control">
+                  </div>
+
+                  <div class="mb-3">
+                  </div>
+
+                  <div class="d-flex gap-2 mt-2">
+                    <div class="dropdown">
+                      <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                              #tooltip="matTooltip" matTooltip="Filtrer par status">
+                        <i class="bi bi-check-circle"></i> Status
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                        <li *ngFor="let role of roles">
+                          <label class="dropdown-item">
+                            <input type="checkbox" [(ngModel)]="selectedRoles[role._id]" (ngModelChange)="updateRoles()">
+                            {{ role.libelle }}
+                          </label>
+                        </li>
+                      </ul>
+                    </div>
+                    <button class="btn btn-secondary"(click)="toggleFilter()"
+                            #tooltip="matTooltip" matTooltip="Réinitialiser">
+                      <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <button class="btn btn-dark" (click)="applyFilters()"
+                            #tooltip="matTooltip" matTooltip="Rechercher">
+                      <i class="bi bi-search"></i>
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                  <tr>
+                    <th (click)="sortData('date')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                      Date
+                      <mat-icon *ngIf="isSorted('date', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('date', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                    </th>
+                    <th (click)="sortData('vehicule')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                      Vehicule
+                      <mat-icon *ngIf="isSorted('vehicule', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('vehicule', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                    </th>
+                    <th (click)="sortData('tache')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                      Tâche
+                      <mat-icon *ngIf="isSorted('tache', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('tache', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                    </th>
+                    <th scope="col" class="text-nowrap">Status</th>
+                    <th scope="col" class="text-nowrap text-center">Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let user of users">
+                    <td class="text-nowrap">{{ user._id }}</td>
+                    <td class="text-nowrap">{{ user.nom }}</td>
+                    <td class="text-nowrap">
+                      <span *ngFor="let role of user.roles; let last = last">
+                        {{ role.libelle }}<span *ngIf="!last">, </span>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge" [ngClass]="{
+                        'bg-success-light': user.etat.libelle === 'Terminé',
+                        'bg-warning text-dark': user.etat.libelle === 'Attente de validation',
+                        'bg-primary': user.etat.libelle === 'En cours',
+                        'bg-secondary': user.etat.libelle === 'A faire'
+                      }">{{ user.etat.libelle }}</span>
+                    </td>
+                    <td class="text-center">
+                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                          <mat-icon>mail_outline</mat-icon>
+                          <span>Reenvoyer invitation</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>edit</mat-icon>
+                          <span>Rôles</span>
+                        </button>
+                        <button mat-menu-item (click)="changeStatus(user._id)" *ngIf="user.etat.libelle!='En attente'">
+                          <mat-icon>{{ user.etat.libelle === 'Actif' ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+                          <span>{{ user.etat.libelle === 'Actif' ? 'Désactiver' : 'Activer' }}</span>
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <mat-paginator
+                [length]="totalElement"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                (page)="loadUsers()"
+                aria-label="Select page">
+              </mat-paginator>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-loader *ngIf="loader"></app-loader>

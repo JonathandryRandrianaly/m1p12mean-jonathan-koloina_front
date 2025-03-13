@@ -57,6 +57,22 @@
                   </div>
 
                   <div class="mb-3">
+                    <label for="idGenre" class="form-label">Genre</label>
+                    <select
+                      id="idGenre"
+                      formControlName="idGenre"
+                      class="form-control"
+                      [ngClass]="{'is-invalid': usr_form.get('idGenre')?.invalid && usr_form.get('idGenre')?.touched}"
+                      required>
+                      <option value="" disabled selected>Choisissez votre genre</option>
+                      <option *ngFor="let genre of genres" [value]="genre.idGenre">{{genre.libelle}}</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="usr_form.get('idGenre')?.invalid && usr_form.get('idGenre')?.touched">
+                      Le genre est requis.
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
                     <label for="telephone" class="form-label">Numéro de téléphone</label>
                     <input
                       id="telephone"

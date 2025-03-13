@@ -1,0 +1,19 @@
+.custom-snackbar-container {
+    display: flex;
+    align-items: center;
+    background-color: #f44336;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 200px;
+  }
+
+  .custom-snackbar-container mat-icon {
+    margin-right: 8px;
+    font-size: 20px;
+  }
+
+  .custom-snackbar-container span {
+    flex: 1;
+  }

@@ -1,0 +1,146 @@
+<main>
+  <section class="section">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="card-title m-0">Gestion des utilisateurs:</h5>
+
+                <button class="btn btn-dark d-none d-sm-block" type="button" (click)="openEmployerDialog()">Ajouter Employé</button>
+
+                <button class="btn btn-dark d-block d-sm-none" type="button" (click)="openEmployerDialog()">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+
+              <hr>
+
+              <div class="d-flex justify-content-end gap-2 mt-2 mb-3">
+                <input matInput placeholder="Rechercher un employé..." [(ngModel)]="searchCriteria.nom" (ngModelChange)="loadUsers()"  class="form-control w-auto">
+
+                <div class="dropdown">
+                  <button class="btn btn-outline-dark" type="button" id="filterStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-filter"></i> Status
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="filterStatusDropdown">
+                    <li>
+                      <label class="dropdown-item">
+                        <input type="checkbox" [(ngModel)]="selectedEtats['10']" (ngModelChange)="updateEtats()">
+                        Actif
+                      </label>
+                    </li>
+                    <li>
+                      <label class="dropdown-item">
+                        <input type="checkbox" [(ngModel)]="selectedEtats['-10']" (ngModelChange)="updateEtats()">
+                        Inactif
+                      </label>
+                    </li>
+                    <li>
+                      <label class="dropdown-item">
+                        <input type="checkbox" [(ngModel)]="selectedEtats['0']" (ngModelChange)="updateEtats()">
+                        En attente
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+
+
+                <div class="dropdown">
+                  <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-filter"></i> Rôles
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                    <li *ngFor="let role of roles">
+                      <label class="dropdown-item">
+                        <input type="checkbox" [(ngModel)]="selectedRoles[role._id]" (ngModelChange)="updateRoles()">
+                        {{ role.libelle }}
+                      </label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                  <tr>
+                    <th scope="col" class="text-nowrap">Id</th>
+                    <th (click)="sortData('nom')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                      Nom
+                      <mat-icon *ngIf="isSorted('nom', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('nom', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                    </th>
+                    <th (click)="sortData('roles')" scope="col" class="text-nowrap" style="cursor: pointer;">Rôle
+                      <mat-icon *ngIf="isSorted('roles', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('roles', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                    </th>
+                    <th scope="col" class="text-nowrap">Status</th>
+                    <th scope="col" class="text-nowrap text-center">Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let user of users">
+                    <td class="text-nowrap">{{ user._id }}</td>
+                    <td class="text-nowrap">{{ user.nom }}</td>
+                    <td class="text-nowrap">
+                      <span *ngFor="let role of user.roles; let last = last">
+                        {{ role.libelle }}<span *ngIf="!last">, </span>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="badge" [ngClass]="{
+                        'bg-success': user.etat.libelle === 'Actif',
+                        'bg-danger': user.etat.libelle === 'Inactif',
+                        'bg-warning text-dark': user.etat.libelle === 'En attente'
+                      }">{{ user.etat.libelle }}</span>
+                    </td>
+                    <td class="text-center">
+                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="openUserInfoDialog(user)">
+                          <mat-icon>info</mat-icon>
+                          <span>Info</span>
+                        </button>
+                        <button mat-menu-item *ngIf="user.etat.libelle=='En attente'" (click)="resendInvit(user._id)">
+                          <mat-icon>mail_outline</mat-icon>
+                          <span>Reenvoyer invitation</span>
+                        </button>
+                        <button mat-menu-item *ngIf="hasRole(user, 'mecanicien') && user.etat.libelle!='Inactif' && user.etat.libelle!='En attente'" (click)="openAttributionSpecialisationDialog(user._id)">
+                          <mat-icon>build</mat-icon>
+                          <span>Spécialisation</span>
+                        </button>
+                        <button mat-menu-item *ngIf="!hasRole(user, 'manager') && user.etat.libelle!='Inactif' && user.etat.libelle!='En attente'" (click)="openAttributionRoleDialog(user)">
+                          <mat-icon>supervisor_account</mat-icon>
+                          <span>Rôle</span>
+                        </button>
+                        <button mat-menu-item (click)="changeStatus(user._id)" *ngIf="user.etat.libelle!='En attente' && !hasRole(user, 'manager')">
+                          <mat-icon>{{ user.etat.libelle === 'Actif' ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+                          <span>{{ user.etat.libelle === 'Actif' ? 'Désactiver' : 'Activer' }}</span>
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <mat-paginator
+                [length]="totalElement"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                (page)="loadUsers()"
+              aria-label="Select page">
+              </mat-paginator>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-loader *ngIf="loader"></app-loader>

@@ -1,9 +1,11 @@
 export interface User {
-  id? : number,
+  id? : string,
   email : string,
   password : string,
+  genre : string,
   nom : string,
   dateNaissance : string,
   telephone : string,
-  roleLibelles?: string[]
+  roleLibelles?: string[],
+  etat: string
 }

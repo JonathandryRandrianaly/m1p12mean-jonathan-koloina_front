@@ -12,5 +12,146 @@
           <span>Accueil</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" (click)="navigate('/parametre/users')">
+          <i class="bi bi-truck"></i><span>Mes vehicules</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" (click)="navigate('/')">
+          <i class="bi bi-credit-card"></i> <span>Mes paiements</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" (click)="navigate('/')">
+          <i class="bi bi-calendar-check"></i> <span>Demander service</span>
+        </a>
+      </li>
+      <li class="nav-heading">Mécanicien</li>
+      <li class="nav-item">
+        <a class="nav-link collapsed"  (click)="navigate('/mecanicien/tasks')">
+          <i class="bi bi-card-checklist"></i>
+          <span>Mes tâches</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" (click)="navigate('/mecanicien/historiques')">
+          <i class="bi bi-clock-history"></i><span>Historiques</span>
+        </a>
+      </li>
+      <li class="nav-heading" *ngIf="isManager$ | async">Manager</li>
+      <li class="nav-item" *ngIf="isManager$ | async">
+        <a class="nav-link collapsed" data-bs-target="#parametre" data-bs-toggle="collapse">
+          <i class="bi bi-gear"></i><span>Système</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="parametre" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/users')">
+              <i class="bi bi-circle"></i><span>Utilisateurs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/roles')">
+              <i class="bi bi-circle"></i><span>Rôles</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/specialisations')">
+              <i class="bi bi-circle"></i><span>Spécialisations</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/users')">
+              <i class="bi bi-circle"></i><span>Tâches</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/unites')">
+              <i class="bi bi-circle"></i><span>Unité</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/users')">
+              <i class="bi bi-circle"></i><span>Consommable et matériel</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/users')">
+              <i class="bi bi-circle"></i><span>Stock</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item" *ngIf="isManager$ | async">
+        <a class="nav-link collapsed" data-bs-target="#vehicule-parametre" data-bs-toggle="collapse">
+          <i class="bi bi-tools"></i><span>Vehicule</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="vehicule-parametre" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/marques')">
+              <i class="bi bi-circle"></i><span>Marque</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/marques')">
+              <i class="bi bi-circle"></i><span>Modèle</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('parametre/energie-moteur')">
+              <i class="bi bi-circle"></i><span>Energie moteur</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/transmissions')">
+              <i class="bi bi-circle"></i><span>Transmission</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/motricites')">
+              <i class="bi bi-circle"></i><span>Motricité</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item" *ngIf="isManager$ | async">
+        <a class="nav-link collapsed" data-bs-target="#entretien" data-bs-toggle="collapse">
+          <i class="bi bi-wrench"></i><span>Entretien</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="entretien" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/categories')">
+              <i class="bi bi-circle"></i><span>Catégorie</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/marques')">
+              <i class="bi bi-circle"></i><span>Type</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item" *ngIf="isManager$ | async">
+        <a class="nav-link collapsed" data-bs-target="#statistique" data-bs-toggle="collapse">
+          <i class="bi bi-graph-up"></i><span>Statistiques</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="statistique" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/users')">
+              <i class="bi bi-circle"></i><span>Finance</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/marques')">
+              <i class="bi bi-circle"></i><span>Personnel</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/marques')">
+              <i class="bi bi-circle"></i><span>Client</span>
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </aside>
