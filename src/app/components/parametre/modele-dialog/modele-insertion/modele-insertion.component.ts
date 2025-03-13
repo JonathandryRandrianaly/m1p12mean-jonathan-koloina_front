@@ -32,6 +32,7 @@ export class ModeleInsertionComponent {
   energies: any[]= [];
   transmissions: any[]= [];
   motricites: any[]= [];
+  categories: any[]= [];
 
   constructor(
     private fb: FormBuilder,
@@ -44,6 +45,7 @@ export class ModeleInsertionComponent {
       this.loadEnergies();
       this.loadTransmissions();
       this.loadMotricites();
+      this.loadCategories();
       this.modele_form = this.fb.group({
         nom: ['', Validators.required],
         marque: ['', Validators.required],
@@ -58,6 +60,7 @@ export class ModeleInsertionComponent {
             Validators.max(currentYear)
           ]
         ],
+        categorie: ['', Validators.required],
       });
   }
 
@@ -105,6 +108,18 @@ export class ModeleInsertionComponent {
       },
       (error) => {
         console.error('Erreur lors de loadMotricites :', error);
+      }
+    );
+  }
+
+  loadCategories() {
+    const statut = 10;
+    this.apiService.getWithData(`api/categorie-modeles/statut/${statut}`, {}).then(
+      (response) => {
+        this.categories = response;
+      },
+      (error) => {
+        console.error('Erreur lors de loadCategories :', error);
       }
     );
   }

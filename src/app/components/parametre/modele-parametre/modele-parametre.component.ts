@@ -34,6 +34,7 @@ export class ModeleParametreComponent implements OnInit {
   energies : any[] = [];
   transmissions : any[] = [];
   motricites : any[] = [];
+  categories : any[] = [];
   etats = [
     { id: 10, libelle: 'Actif' },
     { id: -10, libelle: 'Inactif' }
@@ -43,6 +44,7 @@ export class ModeleParametreComponent implements OnInit {
   selectedEnergies: { [key: string]: boolean } = {};
   selectedTransmissions: { [key: string]: boolean } = {};
   selectedMotricites: { [key: string]: boolean } = {};
+  selectedCategories: { [key: string]: boolean } = {};
   searchCriteria: any = {
     nom: '',
     etat: '',
@@ -53,8 +55,9 @@ export class ModeleParametreComponent implements OnInit {
     etats: [],
     marques: [],
     energies: [],
-    tranmissions: [],
+    transmissions: [],
     motricites: [],
+    categories: [],
     anneeMin: '',
     anneeMax: '',
   };
@@ -72,6 +75,7 @@ export class ModeleParametreComponent implements OnInit {
     this.loadEnergies();
     this.loadTransmissions();
     this.loadMotricites();
+    this.loadCategories();
     this.loadModeles();
     this.selectedEtats = {
       '10': true, 
@@ -168,6 +172,23 @@ export class ModeleParametreComponent implements OnInit {
     );
   }
 
+  loadCategories() {
+    this.loader = true;
+    this.apiService.getWithData(`api/categorie-modeles`, {}).then(
+      (response) => {
+        this.categories = response;
+        this.categories.forEach(categorie => {
+          this.selectedCategories[categorie._id] = true;
+        });
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors de loadCategories :', error);
+      }
+    );
+  }
+
   loadModeles() {
     this.loader = true;
     this.searchCriteria.page = this.currentPage;
@@ -218,7 +239,7 @@ export class ModeleParametreComponent implements OnInit {
     this.searchCriteria.transmissions = [];
     for (let transmission in this.selectedTransmissions) {
       if (this.selectedTransmissions[transmission]) {
-        this.searchCriteria.tranmissions.push(transmission);
+        this.searchCriteria.transmissions.push(transmission);
       }
     }
   }
@@ -228,6 +249,15 @@ export class ModeleParametreComponent implements OnInit {
     for (let motricite in this.selectedMotricites) {
       if (this.selectedMotricites[motricite]) {
         this.searchCriteria.motricites.push(motricite);
+      }
+    }
+  }
+
+  updateCategories(): void {
+    this.searchCriteria.categories = [];
+    for (let categorie in this.selectedCategories) {
+      if (this.selectedCategories[categorie]) {
+        this.searchCriteria.categories.push(categorie);
       }
     }
   }
@@ -298,6 +328,7 @@ export class ModeleParametreComponent implements OnInit {
       energies: [],
       tranmissions: [],
       motricites: [],
+      categories: [],
       anneeMin: '',
       anneeMax: '',
     };
@@ -305,6 +336,21 @@ export class ModeleParametreComponent implements OnInit {
       '10': true, 
       '-10': true 
     };
+    Object.keys(this.selectedMarques).forEach(key => {
+      this.selectedMarques[key] = true;
+    });
+    Object.keys(this.selectedEnergies).forEach(key => {
+      this.selectedEnergies[key] = true;
+    });
+    Object.keys(this.selectedTransmissions).forEach(key => {
+      this.selectedTransmissions[key] = true;
+    });
+    Object.keys(this.selectedMotricites).forEach(key => {
+      this.selectedMotricites[key] = true;
+    });
+    Object.keys(this.selectedCategories).forEach(key => {
+      this.selectedCategories[key] = true;
+    });
     this.loadModeles();
     this.showFilter = !this.showFilter;
   }

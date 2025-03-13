@@ -29,7 +29,6 @@
                             <input matInput id="vehicule" placeholder="Rechercher un modèle..." [(ngModel)]="searchCriteria.nom" class="form-control">
                         </div>
                 
-                        <!-- Champs côte à côte (Marques, Energies, Transmissions, Motricités) -->
                         <div class="d-flex flex-wrap gap-3 mb-3">
                             <!-- Marques -->
                             <div class="dropdown">
@@ -84,29 +83,27 @@
                                 <ul class="dropdown-menu" aria-labelledby="filterDropdown">
                                     <li *ngFor="let motricite of motricites">
                                         <label class="dropdown-item">
-                                            <input type="checkbox" [(ngModel)]="selectedMotricites[motricite._id]" (ngModelChange)="updateTransmissions()">
+                                            <input type="checkbox" [(ngModel)]="selectedMotricites[motricite._id]" (ngModelChange)="updateMotricites()">
                                             {{ motricite.nom }}
                                         </label>
                                     </li>
                                 </ul>
                             </div>
-                        </div>
-                
-                        <!-- Année Min et Max  -->
-                        <div class="d-flex gap-3 mb-3">
-                            <div class="w-50">
-                                <label for="anneeMin" class="form-label">Annee Min</label>
-                                <input matInput type="number" id="anneeMin" [(ngModel)]="searchCriteria.anneeMin" class="form-control">
-                            </div>
-                            <div class="w-50">
-                                <label for="anneeMax" class="form-label">Annee Max</label>
-                                <input matInput type="number" id="anneeMax" [(ngModel)]="searchCriteria.anneeMax" class="form-control">
-                            </div>
-                        </div>
-                
-                        <!-- Boutons -->
-                        <div class="d-flex gap-2 mt-2">
+
                             <div class="dropdown">
+                              <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="bi bi-filter"></i> Catégories
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                              <li *ngFor="let categorie of categories">
+                                  <label class="dropdown-item">
+                                  <input type="checkbox" [(ngModel)]="selectedCategories[categorie._id]" (ngModelChange)="updateCategories()">
+                                  {{ categorie.nom }}
+                                  </label>
+                              </li>
+                              </ul>
+                            </div>
+                              <div class="dropdown">
                                 <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-filter"></i> Statuts
                                 </button>
@@ -119,6 +116,24 @@
                                 </li>
                                 </ul>
                             </div>
+                        </div>
+                
+               
+                        <div class="d-flex gap-3 mb-3">
+                          <div class="w-50">
+                            <label for="anneeMin" class="form-label">Annee Min</label>
+                            <input matInput type="number" id="anneeMin" [(ngModel)]="searchCriteria.anneeMin" class="form-control" placeholder="Ex: 2000">
+                        </div>
+                        <div class="w-50">
+                            <label for="anneeMax" class="form-label">Annee Max</label>
+                            <input matInput type="number" id="anneeMax" [(ngModel)]="searchCriteria.anneeMax" class="form-control" placeholder="Ex: 2024">
+                        </div>
+                           
+                        </div>
+                
+                        <!-- Boutons -->
+                        <div class="d-flex gap-2 mt-2">
+                            
                             <button class="btn btn-secondary" (click)="resetSearchCriteria()" #tooltip="matTooltip" matTooltip="Réinitialiser">
                                 <i class="bi bi-arrow-clockwise"></i>
                             </button>
@@ -149,6 +164,11 @@
                         <mat-icon *ngIf="isSorted('marque', 'asc')" class="sort-icon">arrow_upward</mat-icon>
                         <mat-icon *ngIf="isSorted('marque', 'desc')" class="sort-icon">arrow_downward</mat-icon>
                       </th>
+                      <th (click)="sortData('categorie')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                        Categorie
+                        <mat-icon *ngIf="isSorted('categorie', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="isSorted('categorie', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                      </th>
                       <th scope="col" class="text-nowrap">Année de fabrication</th>
                       <th (click)="sortData('energieMoteur')" scope="col" class="text-nowrap" style="cursor: pointer;">
                         Energie moteur
@@ -173,6 +193,7 @@
                       <td class="text-nowrap">{{modele._id}}</td>
                       <td class="text-nowrap">{{modele.nom}}</td>
                       <td class="text-nowrap">{{modele.marque.nom}}</td>
+                      <td class="text-nowrap">{{modele.categorie.nom}}</td>
                       <td class="text-nowrap" style="text-align: center;">{{modele.anneeFabrication}}</td>
                       <td class="text-nowrap">{{modele.energieMoteur.nom}}</td>
                       <td class="text-nowrap">{{modele.transmission.nom}}</td>
