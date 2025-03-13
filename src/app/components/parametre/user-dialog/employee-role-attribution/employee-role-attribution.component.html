@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Spécifier rôles utilisateur</h2>
+<mat-dialog-content class="dialog-content">
+  <div class="mb-3">
+    <label for="roles" class="form-label">Choisissez les rôles</label>
+    <div *ngFor="let role of roles">
+      <label>
+        <input
+          id="roles"
+          type="checkbox"
+          [value]="role._id"
+          (change)="onRoleChange($event, role._id)"
+          [checked]="isRoleAssigned(role._id)">
+        {{ role.libelle }}
+      </label>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    #tooltip="matTooltip"
+    matTooltip="Mettre à jour l'access de l'utilisateur"
+    mat-raised-button color="dark" (click)="onSubmit()" [disabled]="usr_form.invalid">
+    Mettre à jour
+  </button>
+</mat-dialog-actions>
