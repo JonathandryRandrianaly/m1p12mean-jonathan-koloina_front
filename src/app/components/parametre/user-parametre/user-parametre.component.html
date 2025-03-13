@@ -105,15 +105,15 @@
                           <mat-icon>info</mat-icon>
                           <span>Info</span>
                         </button>
-                        <button mat-menu-item *ngIf="user.etat.libelle=='En attente'">
+                        <button mat-menu-item *ngIf="user.etat.libelle=='En attente'" (click)="resendInvit(user._id)">
                           <mat-icon>mail_outline</mat-icon>
                           <span>Reenvoyer invitation</span>
                         </button>
-                        <button mat-menu-item *ngIf="hasRole(user, 'mecanicien')" (click)="openAttributionSpecialisationDialog(user._id)">
+                        <button mat-menu-item *ngIf="hasRole(user, 'mecanicien') && user.etat.libelle!='Inactif' && user.etat.libelle!='En attente'" (click)="openAttributionSpecialisationDialog(user._id)">
                           <mat-icon>build</mat-icon>
                           <span>Spécialisation</span>
                         </button>
-                        <button mat-menu-item *ngIf="!hasRole(user, 'manager')">
+                        <button mat-menu-item *ngIf="!hasRole(user, 'manager') && user.etat.libelle!='Inactif' && user.etat.libelle!='En attente'" (click)="openAttributionRoleDialog(user)">
                           <mat-icon>supervisor_account</mat-icon>
                           <span>Rôle</span>
                         </button>

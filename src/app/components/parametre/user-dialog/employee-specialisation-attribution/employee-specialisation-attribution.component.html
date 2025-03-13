@@ -2,7 +2,7 @@
 <mat-dialog-content>
   <form [formGroup]="usr_form" (ngSubmit)="onSubmit()" novalidate>
         <div class="mb-3">
-          <label for="specialisation" class="form-label">Choisissez la spécialisation</label>
+          <label for="specialisation" class="form-label">Choisissez les spécialisations</label>
           <div *ngFor="let specialisation of specialisations">
             <label>
               <input
