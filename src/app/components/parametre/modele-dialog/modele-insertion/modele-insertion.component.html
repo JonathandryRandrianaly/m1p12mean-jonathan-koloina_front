@@ -1,0 +1,104 @@
+<h2 mat-dialog-title>Ajouter un nouveau modèle</h2>
+<mat-dialog-content>
+  <form [formGroup]="modele_form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+      <label for="nom" class="form-label">Nom</label>
+      <input
+        id="nom"
+        type="text"
+        formControlName="nom"
+        class="form-control"
+        [ngClass]="{'is-invalid': modele_form.get('nom')?.invalid && modele_form.get('nom')?.touched}"
+        placeholder="ex: Prado"
+        required>
+      <div class="invalid-feedback" *ngIf="modele_form.get('nom')?.invalid && modele_form.get('nom')?.touched">
+        Le nom est requis.
+      </div>
+    </div>
+    <div class="mb-3">
+        <label for="anneeFabrication" class="form-label">Année de fabrication</label>
+        <input
+          id="anneeFabrication"
+          type="number"
+          formControlName="anneeFabrication"
+          class="form-control"
+          [ngClass]="{'is-invalid': modele_form.get('anneeFabrication')?.invalid && modele_form.get('anneeFabrication')?.touched}"
+          required>
+        <div class="invalid-feedback" *ngIf="modele_form.get('anneeFabrication')?.invalid && modele_form.get('anneeFabrication')?.touched">
+          Année invalide.
+        </div>
+      </div>
+    <div class="mb-3">
+        <label for="marque" class="form-label">Marque</label>
+        <select
+          id="marque"
+          formControlName="marque"
+          class="form-control"
+          [ngClass]="{'is-invalid': modele_form.get('marque')?.invalid && modele_form.get('marque')?.touched}"
+          required>
+          <option value="" disabled selected>Choisissez la marque</option>
+          <option *ngFor="let marque of marques" [value]="marque._id">{{ marque.nom }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="modele_form.get('marque')?.invalid && modele_form.get('marque')?.touched">
+          La marque est requise.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="energieMoteur" class="form-label">Energie Moteur</label>
+        <select
+          id="energieMoteur"
+          formControlName="energieMoteur"
+          class="form-control"
+          [ngClass]="{'is-invalid': modele_form.get('energieMoteur')?.invalid && modele_form.get('energieMoteur')?.touched}"
+          required>
+          <option value="" disabled selected>Choisissez l'energie du moteur</option>
+          <option *ngFor="let energie of energies" [value]="energie._id">{{ energie.nom }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="modele_form.get('energieMoteur')?.invalid && modele_form.get('energieMoteur')?.touched">
+          L'energie du moteur est requise.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="transmission" class="form-label">Transmission</label>
+        <select
+          id="transmission"
+          formControlName="transmission"
+          class="form-control"
+          [ngClass]="{'is-invalid': modele_form.get('transmission')?.invalid && modele_form.get('transmission')?.touched}"
+          required>
+          <option value="" disabled selected>Choisissez la transmission</option>
+          <option *ngFor="let transmission of transmissions" [value]="transmission._id">{{ transmission.nom }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="modele_form.get('transmission')?.invalid && modele_form.get('transmission')?.touched">
+          La transmission est requise.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="motricite" class="form-label">Motricité</label>
+        <select
+          id="motricite"
+          formControlName="motricite"
+          class="form-control"
+          [ngClass]="{'is-invalid': modele_form.get('motricite')?.invalid && modele_form.get('motricite')?.touched}"
+          required>
+          <option value="" disabled selected>Choisissez la motricité</option>
+          <option *ngFor="let motricite of motricites" [value]="motricite._id">{{ motricite.nom }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="modele_form.get('motricite')?.invalid && modele_form.get('motricite')?.touched">
+          La motricité est requise.
+        </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    #tooltip="matTooltip"
+    matTooltip="Création d'un nouveau modèle"
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="modele_form.invalid">
+    Ajouter
+  </button>
+</mat-dialog-actions>
+

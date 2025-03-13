@@ -1,0 +1,206 @@
+<main>
+    <section class="section">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-lg-12">
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                  <h5 class="card-title m-0">Gestion des modèles:</h5>
+                  <div class="d-flex gap-2 mt-2 mt-sm-0">
+                    <button class="btn btn-dark" type="button" (click)="openModeleDialog()">Ajouter Modèle</button>
+                  </div>
+                </div>
+                <hr>
+
+                <div class="d-flex justify-content-end gap-2 mt-2 mb-3">
+                    <button class="btn btn-outline-dark" type="button" id="filterButton" (click)="toggleFilter()">
+                      <i class="bi bi-filter"></i> Filtrer
+                    </button>
+                </div>
+
+                <div class="card" *ngIf="showFilter" #filterCard style="width: 400px; position: absolute; right: 20px; top: 20px; z-index: 1000; animation: slideIn 0.3s;">
+                    <div class="card-body">
+                        <h5 class="card-title">Filtrer les Résultats</h5>
+                
+                        <!-- Recherche Modèle -->
+                        <div class="mb-3">
+                            <label for="vehicule" class="form-label">Modèle</label>
+                            <input matInput id="vehicule" placeholder="Rechercher un modèle..." [(ngModel)]="searchCriteria.nom" class="form-control">
+                        </div>
+                
+                        <!-- Champs côte à côte (Marques, Energies, Transmissions, Motricités) -->
+                        <div class="d-flex flex-wrap gap-3 mb-3">
+                            <!-- Marques -->
+                            <div class="dropdown">
+                                <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-filter"></i> Marques
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                    <li *ngFor="let marque of marques">
+                                        <label class="dropdown-item">
+                                            <input type="checkbox" [(ngModel)]="selectedMarques[marque._id]" (ngModelChange)="updateMarques()">
+                                            {{ marque.nom }}
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                
+                            <!-- Energies Moteur -->
+                            <div class="dropdown">
+                                <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-filter"></i> Energies Moteur
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                    <li *ngFor="let energie of energies">
+                                        <label class="dropdown-item">
+                                            <input type="checkbox" [(ngModel)]="selectedEnergies[energie._id]" (ngModelChange)="updateEnergies()">
+                                            {{ energie.nom }}
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                
+                            <!-- Transmissions -->
+                            <div class="dropdown">
+                                <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-filter"></i> Transmissions
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                    <li *ngFor="let transmission of transmissions">
+                                        <label class="dropdown-item">
+                                            <input type="checkbox" [(ngModel)]="selectedTransmissions[transmission._id]" (ngModelChange)="updateTransmissions()">
+                                            {{ transmission.nom }}
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                
+                            <!-- Motricités -->
+                            <div class="dropdown">
+                                <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-filter"></i> Motricités
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                    <li *ngFor="let motricite of motricites">
+                                        <label class="dropdown-item">
+                                            <input type="checkbox" [(ngModel)]="selectedMotricites[motricite._id]" (ngModelChange)="updateTransmissions()">
+                                            {{ motricite.nom }}
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                
+                        <!-- Année Min et Max  -->
+                        <div class="d-flex gap-3 mb-3">
+                            <div class="w-50">
+                                <label for="anneeMin" class="form-label">Annee Min</label>
+                                <input matInput type="number" id="anneeMin" [(ngModel)]="searchCriteria.anneeMin" class="form-control">
+                            </div>
+                            <div class="w-50">
+                                <label for="anneeMax" class="form-label">Annee Max</label>
+                                <input matInput type="number" id="anneeMax" [(ngModel)]="searchCriteria.anneeMax" class="form-control">
+                            </div>
+                        </div>
+                
+                        <!-- Boutons -->
+                        <div class="d-flex gap-2 mt-2">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-filter"></i> Statuts
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                <li *ngFor="let etat of etats">
+                                    <label class="dropdown-item">
+                                    <input type="checkbox" [(ngModel)]="selectedEtats[etat.id]" (ngModelChange)="updateEtats()">
+                                    {{ etat.libelle }}
+                                    </label>
+                                </li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-secondary" (click)="resetSearchCriteria()" #tooltip="matTooltip" matTooltip="Réinitialiser">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </button>
+                            <button class="btn btn-dark" (click)="applyFilters()" #tooltip="matTooltip" matTooltip="Rechercher">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <button class="btn btn-danger" (click)="toggleFilter()" #tooltip="matTooltip" matTooltip="Fermer">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+
+  
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead class="table-light">
+                    <tr>
+                      <th scope="col" class="text-nowrap">Id</th>
+                      <th (click)="sortData('nom')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                        Nom
+                        <mat-icon *ngIf="isSorted('nom', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="isSorted('nom', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                      </th>
+                      <th (click)="sortData('marque')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                        Marque
+                        <mat-icon *ngIf="isSorted('marque', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="isSorted('marque', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                      </th>
+                      <th scope="col" class="text-nowrap">Année de fabrication</th>
+                      <th (click)="sortData('energieMoteur')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                        Energie moteur
+                        <mat-icon *ngIf="isSorted('energieMoteur', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="isSorted('energieMoteur', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                      </th>
+                      <th (click)="sortData('transmission')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                        Transmission
+                        <mat-icon *ngIf="isSorted('transmission', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="isSorted('transmission', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                      </th>
+                      <th (click)="sortData('motricite')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                        Motricité
+                        <mat-icon *ngIf="isSorted('motricite', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="isSorted('motricite', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                      </th>
+                      <th scope="col" class="text-nowrap">Statut</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let modele of modeles">
+                      <td class="text-nowrap">{{modele._id}}</td>
+                      <td class="text-nowrap">{{modele.nom}}</td>
+                      <td class="text-nowrap">{{modele.marque.nom}}</td>
+                      <td class="text-nowrap" style="text-align: center;">{{modele.anneeFabrication}}</td>
+                      <td class="text-nowrap">{{modele.energieMoteur.nom}}</td>
+                      <td class="text-nowrap">{{modele.transmission.nom}}</td>
+                      <td class="text-nowrap">{{modele.motricite.nom}}</td>
+                      <td>
+                        <mat-slide-toggle 
+                            [checked]="modele.etat.code === 10" 
+                            (change)="changeStatut(modele._id, $event.checked)">
+                        </mat-slide-toggle>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+  
+                <mat-paginator [length]="totalElement"
+                               [pageSize]="searchCriteria.limit"
+                               [pageSizeOptions]="[5, 10, 25, 100]"
+                               (page)="onPageChange($event)"
+                               aria-label="Select page">
+                </mat-paginator>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <app-loader *ngIf="loader"></app-loader>
+  

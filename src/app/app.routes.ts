@@ -25,6 +25,7 @@ import {
 } from './components/mecanicien/historique-mecanicien/historique-mecanicien.component';
 import { RoleParametreComponent } from './components/parametre/role-parametre/role-parametre.component';
 import { ConsommableParametreComponent } from './components/parametre/consommable-parametre/consommable-parametre.component';
+import { ModeleParametreComponent } from './components/parametre/modele-parametre/modele-parametre.component';
 
 export const routes: Routes = [
   {
@@ -231,6 +232,20 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Système', url: '' },
         { label: 'Consommables', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/modeles",component:ModeleParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Paramètre', url: '' },
+        { label: 'Modèles', url: '' }
       ],
       roles: [
         'manager'
