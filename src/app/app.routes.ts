@@ -26,6 +26,7 @@ import {
 import { RoleParametreComponent } from './components/parametre/role-parametre/role-parametre.component';
 import { ConsommableParametreComponent } from './components/parametre/consommable-parametre/consommable-parametre.component';
 import { ModeleParametreComponent } from './components/parametre/modele-parametre/modele-parametre.component';
+import { CategorieModeleParametreComponent } from './components/parametre/categorie-modele-parametre/categorie-modele-parametre.component';
 
 export const routes: Routes = [
   {
@@ -125,13 +126,13 @@ export const routes: Routes = [
     }
   },
   {
-    path:"parametre/categories",component:CategorieEntretienParametreComponent,
+    path:"parametre/categories-entretien",component:CategorieEntretienParametreComponent,
     canActivate:[authGuard],
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
         { label: 'Entretien', url: '' },
-        { label: 'Catégories', url: '' }
+        { label: 'Catégories entretien', url: '' }
       ],
       roles: [
         'manager'
@@ -246,6 +247,20 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Paramètre', url: '' },
         { label: 'Modèles', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/categories-modele",component:CategorieModeleParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Paramètre', url: '' },
+        { label: 'Catégories de modèles', url: '' }
       ],
       roles: [
         'manager'
