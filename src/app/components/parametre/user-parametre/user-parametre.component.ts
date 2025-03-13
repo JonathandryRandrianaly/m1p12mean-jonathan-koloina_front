@@ -15,6 +15,13 @@ import {ApiService} from '../../../services/api/api.service';
 import {Router} from '@angular/router';
 import {MatSort} from '@angular/material/sort';
 import {environment} from '../../../../environments/environment';
+import {
+  EmployeeRoleAttributionComponent
+} from '../user-dialog/employee-role-attribution/employee-role-attribution.component';
+import {
+  EmployeeSpecialisationAttributionComponent
+} from '../user-dialog/employee-specialisation-attribution/employee-specialisation-attribution.component';
+import {UserInfoComponent} from '../user-dialog/user-info/user-info.component';
 
 @Component({
   selector: 'app-user-parametre',
@@ -178,5 +185,64 @@ export class UserParametreComponent implements OnInit {
         );
       }
     });
+  }
+
+  openAttributionRoleDialog() {
+    const dialogRef = this.dialog.open(EmployeeRoleAttributionComponent, {
+      width: '800px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
+    });
+  }
+
+  openAttributionSpecialisationDialog(userId: string) {
+    const dialogRef = this.dialog.open(EmployeeSpecialisationAttributionComponent, {
+      width: '800px',
+      data: userId,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loader = true;
+        const dataSpecialisation = {
+          user: result.userId,
+          specialisations: result.specialisations,
+        }
+        this.apiService.insert('api/specialisations-personnel', dataSpecialisation).then(
+          () => {
+            this.loadUsers();
+            this.loader = false;
+          },
+          (error) => {
+            this.loader = false;
+            console.error('Erreur lors de l\'insertion :', error);
+          }
+        );
+      }
+    });
+  }
+
+  openUserInfoDialog(user: any) {
+    const dialogRef = this.dialog.open(UserInfoComponent, {
+      width: '800px',
+      data: user,
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
+    });
+  }
+
+  hasRole(user: any, roleName: string): boolean {
+    return user.roles.some((role: any) => role.libelle === roleName);
   }
 }
