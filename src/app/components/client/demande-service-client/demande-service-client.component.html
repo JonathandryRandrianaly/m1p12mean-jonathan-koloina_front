@@ -50,7 +50,6 @@
               <div *ngIf="selectedCategorieEntretien === ''" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <button *ngFor="let service of services"
                         (click)="selectedCategorieEntretien = service.name"
-                        matTooltip="{{ service.name }} - {{ service.description }}"
                         class="block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
                   <div class="flex justify-end">
                     <mat-icon class="text-gray-500 dark:text-gray-400">{{ service.icon }}</mat-icon>
@@ -68,7 +67,7 @@
                     </div>
                     <hr>
                     <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
-                      Sélectionner
+                      Choisir
                     </button>
                   </div>
                 </button>
@@ -78,7 +77,6 @@
               <div *ngIf="selectedCategorieEntretien !== '' && selectedVehicule === ''" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <button *ngFor="let vehicle of vehicles"
                         (click)="selectedVehicule = vehicle.marque"
-                        matTooltip="{{ vehicle.marque }} - {{ vehicle.categorie }} - {{ vehicle.annee }}"
                         class="block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
                   <div class="flex justify-end">
                     <mat-icon class="text-gray-500 dark:text-gray-400">{{ vehicle.icon }}</mat-icon>
@@ -96,7 +94,7 @@
                     </div>
                     <hr>
                     <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
-                      Sélectionner
+                      Choisir
                     </button>
                   </div>
                 </button>
@@ -104,9 +102,7 @@
 
               <!-- Step 3: Choisir type entretien -->
               <div *ngIf="selectedCategorieEntretien !== '' && selectedVehicule !== ''" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <a *ngFor="let entretien of typeEntretiens"
-                   href="#"
-                   matTooltip="{{ entretien.libelle }} - {{ entretien.description }}"
+                <button *ngFor="let entretien of typeEntretiens"
                    class="relative block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
                   <div class="absolute top-4 left-4">
                     <input type="checkbox" [(ngModel)]="entretien.selected"
@@ -132,7 +128,7 @@
                       Sélectionner
                     </button>
                   </div>
-                </a>
+                </button>
               </div>
             </div>
           </div>
