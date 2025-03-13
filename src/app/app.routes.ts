@@ -23,6 +23,7 @@ import {TacheMecanicienComponent} from './components/mecanicien/tache-mecanicien
 import {
   HistoriqueMecanicienComponent
 } from './components/mecanicien/historique-mecanicien/historique-mecanicien.component';
+import { RoleParametreComponent } from './components/parametre/role-parametre/role-parametre.component';
 
 export const routes: Routes = [
   {
@@ -202,6 +203,20 @@ export const routes: Routes = [
         { label: 'Historiques', url: '' }
       ],
       // TODO: mécanicien
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/roles",component:RoleParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Système', url: '' },
+        { label: 'Rôles', url: '' }
+      ],
       roles: [
         'manager'
       ]
