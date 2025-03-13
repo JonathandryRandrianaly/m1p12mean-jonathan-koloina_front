@@ -9,11 +9,44 @@
         formControlName="nom"
         class="form-control"
         [ngClass]="{'is-invalid': categorie_form.get('nom')?.invalid && categorie_form.get('nom')?.touched}"
-        placeholder="ex: Control"
+        placeholder="ex: Révision mécanique"
         required>
       <div class="invalid-feedback" *ngIf="categorie_form.get('nom')?.invalid && categorie_form.get('nom')?.touched">
         Le nom est requis.
       </div>
+      
+    </div>
+
+    <div class="mb-3">
+      <label for="icone" class="form-label">Icone</label>
+      <input
+        id="icone"
+        type="text"
+        formControlName="icone"
+        class="form-control"
+        [ngClass]="{'is-invalid': categorie_form.get('icone')?.invalid && categorie_form.get('icone')?.touched}"
+        required>
+      <div class="invalid-feedback" *ngIf="categorie_form.get('icone')?.invalid && categorie_form.get('icone')?.touched">
+        L'icone est requise.
+      </div>
+      
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        id="description"
+        type="text"
+        formControlName="description"
+        class="form-control"
+        [ngClass]="{'is-invalid': categorie_form.get('description')?.invalid && categorie_form.get('description')?.touched}"
+        placeholder="Entrez la description ici"
+        required>
+        </textarea>
+      <div class="invalid-feedback" *ngIf="categorie_form.get('description')?.invalid && categorie_form.get('description')?.touched">
+        La description est requise.
+      </div>
+      
     </div>
 
   </form>

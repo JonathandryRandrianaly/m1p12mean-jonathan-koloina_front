@@ -33,7 +33,9 @@ export class CategorieEntretienInsertionComponent {
     private dialogRef: MatDialogRef<CategorieEntretienInsertionComponent>
   ) {
     this.categorie_form = this.fb.group({
-      nom: ['', Validators.required]
+      nom: ['', Validators.required],
+      icone: ['', Validators.required],
+      description: ['', Validators.required],
     });
   }
 

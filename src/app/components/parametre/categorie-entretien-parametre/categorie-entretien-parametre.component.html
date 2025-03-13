@@ -41,6 +41,8 @@
                         <mat-icon *ngIf="isSorted('nom', 'asc')" class="sort-icon">arrow_upward</mat-icon>
                         <mat-icon *ngIf="isSorted('nom', 'desc')" class="sort-icon">arrow_downward</mat-icon>
                       </th>
+                      <th scope="col" class="text-nowrap">Icone</th>
+                      <th scope="col" class="text-nowrap">Description</th>
                       <th scope="col" class="text-nowrap">Statut</th>
                     </tr>
                     </thead>
@@ -48,6 +50,8 @@
                     <tr *ngFor="let categorie of categories">
                       <td class="text-nowrap">{{categorie._id}}</td>
                       <td class="text-nowrap">{{categorie.nom}}</td>
+                      <td class="text-nowrap">{{categorie.icone}}</td>
+                      <td class="text-nowrap">{{categorie.description}}</td>
                       <td>
                         <mat-slide-toggle 
                             [checked]="categorie.etat.code === 10" 
