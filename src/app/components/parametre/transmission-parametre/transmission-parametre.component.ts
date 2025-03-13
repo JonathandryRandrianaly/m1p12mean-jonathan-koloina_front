@@ -52,6 +52,10 @@ export class TransmissionParametreComponent  implements OnInit  {
   }
   ngOnInit() {
     this.loadTransmissions();
+    this.selectedEtats = {
+      '10': true, 
+      '-10': true 
+    };
   }
 
   sortData(column : string) {

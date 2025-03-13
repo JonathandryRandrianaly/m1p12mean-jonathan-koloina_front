@@ -51,6 +51,10 @@ export class CategorieEntretienParametreComponent implements OnInit {
   }
   ngOnInit() {
     this.loadCategories();
+    this.selectedEtats = {
+      '10': true, 
+      '-10': true 
+    };
   }
 
   sortData(column : string) {

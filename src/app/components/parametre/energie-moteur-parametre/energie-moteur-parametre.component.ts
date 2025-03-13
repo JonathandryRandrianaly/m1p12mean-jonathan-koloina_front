@@ -52,6 +52,10 @@ export class EnergieMoteurParametreComponent implements OnInit  {
   }
   ngOnInit() {
     this.loadEnergieMoteurs();
+    this.selectedEtats = {
+      '10': true, 
+      '-10': true 
+    };
   }
 
   sortData(column : string) {
