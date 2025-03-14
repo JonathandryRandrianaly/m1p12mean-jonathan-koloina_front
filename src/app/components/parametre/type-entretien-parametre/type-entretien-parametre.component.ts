@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {ApiService} from '../../../services/api/api.service';
 import {LoaderComponent} from '../../templates/loader/loader.component';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
@@ -11,23 +11,25 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { ModeleInsertionComponent } from '../modele-dialog/modele-insertion/modele-insertion.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatMenu, MatMenuItem, MatMenuModule} from "@angular/material/menu";
+import {MatButtonModule, MatIconButton} from "@angular/material/button";
+import {MatChipsModule} from '@angular/material/chips';
+import {MatTableModule} from '@angular/material/table';
 import { TypeEntretienInsertionComponent } from '../type-entretien-dialog/type-entretien-insertion/type-entretien-insertion.component';
+import { TypeEntretienUpdateComponent } from '../type-entretien-dialog/type-entretien-update/type-entretien-update.component';
+import { TypeEntretienDetailsComponent } from '../type-entretien-dialog/type-entretien-details/type-entretien-details.component';
 
 @Component({
   selector: 'app-type-entretien-parametre',
-  imports: [
-    LoaderComponent,
-    MatPaginator,
-    MatSlideToggleModule,
-    CommonModule,
-    MatIconModule,
-    ReactiveFormsModule,FormsModule,
-    MatTooltipModule
+  imports: [ReactiveFormsModule,FormsModule,LoaderComponent,
+    MatPaginatorModule,CommonModule,MatButtonModule, MatMenuModule, MatIconModule
+    ,MatTableModule,MatChipsModule,
+    MatTooltipModule, MatSlideToggleModule
   ],
   templateUrl: './type-entretien-parametre.component.html',
   styleUrl: './type-entretien-parametre.component.css'
 })
-export class TypeEntretienParametreComponent {
+export class TypeEntretienParametreComponent implements OnInit {
   loader : boolean = false;
   types : any[] = [];
   categoriesEntretien : any[] = [];
@@ -147,6 +149,18 @@ export class TypeEntretienParametreComponent {
     );
   }
 
+  loadSpecialisationsActives() {
+    const statut = 10;
+    this.apiService.getWithData(`api/specialisations/statut/${statut}`, {}).then(
+      (response) => {
+        this.specialisations = response;
+      },
+      (error) => {
+        console.error('Erreur lors de loadSpecialisations :', error);
+      }
+    );
+  }
+
 
   loadTypes() {
     this.loader = true;
@@ -222,7 +236,7 @@ export class TypeEntretienParametreComponent {
   }
   
 
-  openModeleDialog() {
+  openTypeEntretienInsertionDialog() {
     const dialogRef = this.dialog.open(TypeEntretienInsertionComponent, {
       width: '800px',
       disableClose: true
@@ -245,6 +259,44 @@ export class TypeEntretienParametreComponent {
             console.error('Erreur lors de l\'insertion :', error);
           }
         );
+      }
+    });
+  }
+
+  openTypeEntretienUpdateDialog(user: any) {
+    const dialogRef = this.dialog.open(TypeEntretienUpdateComponent, {
+      width: '800px',
+      data: user,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loader = true;
+        this.apiService.insert('api/type-entretien/update', result).then(
+          (response) => {
+            this.loadTypes();
+            this.loader = false;
+          },
+          (error) => {
+            this.loader = false;
+            console.error('Erreur lors de l\'insertion :', error);
+          }
+        );
+      }
+    });
+  }
+
+  openDetailsDialog(type: any) {
+    const dialogRef = this.dialog.open(TypeEntretienDetailsComponent, {
+      width: '800px',
+      data: type,
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
       }
     });
   }

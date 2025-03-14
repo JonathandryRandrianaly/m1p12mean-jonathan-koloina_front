@@ -82,7 +82,7 @@
               type="checkbox"
               [value]="specialisation._id"
               (change)="onSpecialisationChange($event, specialisation._id)"
-              [checked]="(type_form.get('specialisations')?.value).includes(specialisation._id)">
+              [checked]="(type_form.get('specialisationsId')?.value).includes(specialisation._id)">
             {{ specialisation.nom }}
           </label>
         </div>
