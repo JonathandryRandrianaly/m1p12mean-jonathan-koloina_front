@@ -30,6 +30,7 @@ import { CategorieModeleParametreComponent } from './components/parametre/catego
 import {
   DemandeServiceClientComponent
 } from './components/client/demande-service-client/demande-service-client.component';
+import { TypeEntretienParametreComponent } from './components/parametre/type-entretien-parametre/type-entretien-parametre.component';
 
 export const routes: Routes = [
   {
@@ -280,6 +281,20 @@ export const routes: Routes = [
       ],
       roles: [
         'client'
+      ]
+    }
+  },
+  {
+    path:"parametre/types-entretien",component:TypeEntretienParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Entretien', url: '' },
+        { label: 'Types', url: '' }
+      ],
+      roles: [
+        'manager'
       ]
     }
   },
