@@ -8,7 +8,7 @@ import {CommonModule} from '@angular/common';
 import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-categorie-entretien-insertion',
+  selector: 'app-categorie-modele-insertion',
   imports: [
     MatDialogModule,
     MatFormFieldModule,
@@ -19,23 +19,20 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     CommonModule,
     MatTooltipModule
   ],
-  templateUrl: './categorie-entretien-insertion.component.html',
-  styleUrl: './categorie-entretien-insertion.component.css'
+  templateUrl: './categorie-modele-insertion.component.html',
+  styleUrl: './categorie-modele-insertion.component.css'
 })
-export class CategorieEntretienInsertionComponent {
-
+export class CategorieModeleInsertionComponent {
   loading: boolean = false;
   error: boolean = false;
   categorie_form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<CategorieEntretienInsertionComponent>
+    private dialogRef: MatDialogRef<CategorieModeleInsertionComponent>
   ) {
     this.categorie_form = this.fb.group({
-      nom: ['', Validators.required],
-      icone: ['', Validators.required],
-      description: ['', Validators.required],
+      nom: ['', Validators.required]
     });
   }
 
@@ -49,5 +46,4 @@ export class CategorieEntretienInsertionComponent {
   closeDialog() {
     this.dialogRef.close();
   }
-
 }

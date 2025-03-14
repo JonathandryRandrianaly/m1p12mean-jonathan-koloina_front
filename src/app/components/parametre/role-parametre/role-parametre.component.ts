@@ -51,6 +51,10 @@ export class RoleParametreComponent  implements OnInit{
   }
   ngOnInit() {
     this.loadRoles();
+    this.selectedEtats = {
+      '10': true, 
+      '-10': true 
+    };
   }
 
   sortData(column : string) {

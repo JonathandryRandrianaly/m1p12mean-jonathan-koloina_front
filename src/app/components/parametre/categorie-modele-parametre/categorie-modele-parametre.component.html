@@ -6,7 +6,7 @@
             <div class="card mb-3">
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center flex-wrap">
-                  <h5 class="card-title m-0">Gestion des catégories d'entretien:</h5>
+                  <h5 class="card-title m-0">Gestion des catégories de modèles:</h5>
                   <div class="d-flex gap-2 mt-2 mt-sm-0">
                     <button class="btn btn-dark" type="button" (click)="openCategorieDialog()">Ajouter Catégorie</button>
                   </div>
@@ -41,8 +41,6 @@
                         <mat-icon *ngIf="isSorted('nom', 'asc')" class="sort-icon">arrow_upward</mat-icon>
                         <mat-icon *ngIf="isSorted('nom', 'desc')" class="sort-icon">arrow_downward</mat-icon>
                       </th>
-                      <th scope="col" class="text-nowrap">Icone</th>
-                      <th scope="col" class="text-nowrap">Description</th>
                       <th scope="col" class="text-nowrap">Statut</th>
                     </tr>
                     </thead>
@@ -50,8 +48,6 @@
                     <tr *ngFor="let categorie of categories">
                       <td class="text-nowrap">{{categorie._id}}</td>
                       <td class="text-nowrap">{{categorie.nom}}</td>
-                      <td class="text-nowrap">{{categorie.icone}}</td>
-                      <td class="text-nowrap">{{categorie.description}}</td>
                       <td>
                         <mat-slide-toggle 
                             [checked]="categorie.etat.code === 10" 

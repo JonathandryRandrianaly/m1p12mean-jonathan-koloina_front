@@ -24,6 +24,12 @@ import {
   HistoriqueMecanicienComponent
 } from './components/mecanicien/historique-mecanicien/historique-mecanicien.component';
 import { RoleParametreComponent } from './components/parametre/role-parametre/role-parametre.component';
+import { ConsommableParametreComponent } from './components/parametre/consommable-parametre/consommable-parametre.component';
+import { ModeleParametreComponent } from './components/parametre/modele-parametre/modele-parametre.component';
+import { CategorieModeleParametreComponent } from './components/parametre/categorie-modele-parametre/categorie-modele-parametre.component';
+import {
+  DemandeServiceClientComponent
+} from './components/client/demande-service-client/demande-service-client.component';
 
 export const routes: Routes = [
   {
@@ -123,13 +129,13 @@ export const routes: Routes = [
     }
   },
   {
-    path:"parametre/categories",component:CategorieEntretienParametreComponent,
+    path:"parametre/categories-entretien",component:CategorieEntretienParametreComponent,
     canActivate:[authGuard],
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
         { label: 'Entretien', url: '' },
-        { label: 'Catégories', url: '' }
+        { label: 'Catégories entretien', url: '' }
       ],
       roles: [
         'manager'
@@ -219,6 +225,61 @@ export const routes: Routes = [
       ],
       roles: [
         'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/consommables",component:ConsommableParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Système', url: '' },
+        { label: 'Consommables', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/modeles",component:ModeleParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Paramètre', url: '' },
+        { label: 'Modèles', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"parametre/categories-modele",component:CategorieModeleParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Paramètre', url: '' },
+        { label: 'Catégories de modèles', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"demande-service",component:DemandeServiceClientComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Demande Service', url: '' }
+      ],
+      roles: [
+        'client'
       ]
     }
   },

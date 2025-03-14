@@ -51,6 +51,10 @@ export class UniteParametreComponent implements OnInit  {
   }
   ngOnInit() {
     this.loadUnites();
+    this.selectedEtats = {
+      '10': true, 
+      '-10': true 
+    };
   }
 
   sortData(column : string) {
