@@ -1,0 +1,141 @@
+<main>
+  <section class="section">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="card-title m-0">Veuillez sélectionner le type de service dont vous avez besoin parmi les options ci-dessous:</h5>
+              </div>
+
+              <div class="mb-1">
+                <ol class="flex items-center w-full space-x-4">
+                  <!-- Étape 1 -->
+                  <li class="flex items-center space-x-2 w-full text-blue-600 dark:text-blue-500 relative">
+                    <span class="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-800 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110">
+                      <mat-icon class="w-6 h-6 text-blue-600 dark:text-blue-300" matTooltip="Étape 1: Choisir le service" aria-hidden="true">work</mat-icon>
+                    </span>
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-2 bg-blue-100 dark:bg-blue-800 rounded-full"></div>
+                  </li>
+
+                  <!-- Étape 2 -->
+                  <li class="flex items-center space-x-2 w-full text-gray-600 dark:text-gray-400 relative">
+                    <span class="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110">
+                      <mat-icon class="w-6 h-6 text-gray-600 dark:text-gray-100" matTooltip="Étape 2: Choisir le véhicule" aria-hidden="true">directions_car</mat-icon>
+                    </span>
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full"></div>
+                  </li>
+
+                  <!-- Étape 3 -->
+                  <li class="flex items-center space-x-2 w-full text-gray-600 dark:text-gray-400 relative">
+                    <span class="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110">
+                      <mat-icon class="w-6 h-6 text-gray-600 dark:text-gray-100" matTooltip="Étape 3: Choisir le type d'entretien" aria-hidden="true">build</mat-icon>
+                    </span>
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full"></div>
+                  </li>
+
+                  <!-- Étape 4 -->
+                  <li class="flex items-center space-x-2 w-full text-gray-600 dark:text-gray-400 relative">
+      <span class="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110">
+        <mat-icon class="w-6 h-6 text-gray-600 dark:text-gray-100" matTooltip="Étape 4: Confirmer service" aria-hidden="true">check_circle</mat-icon>
+      </span>
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full"></div>
+                  </li>
+                </ol>
+              </div>
+
+
+              <!-- Step 1: Choisir services -->
+              <div *ngIf="selectedCategorieEntretien === ''" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button *ngFor="let service of services"
+                        (click)="selectedCategorieEntretien = service.name"
+                        class="block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
+                  <div class="flex justify-end">
+                    <mat-icon class="text-gray-500 dark:text-gray-400">{{ service.icon }}</mat-icon>
+                  </div>
+                  <div class="text-center">
+                    <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+                      {{ service.name }}
+                    </h5>
+                    <p class="text-gray-700 dark:text-gray-400">
+                      {{ service.description }}
+                    </p>
+                    <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
+                      <span class="text-lg font-normal text-gray-500 dark:text-gray-400">A partir de </span>
+                      {{ service.price }}
+                    </div>
+                    <hr>
+                    <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                      Choisir
+                    </button>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Step 2: Choisir vehicules -->
+              <div *ngIf="selectedCategorieEntretien !== '' && selectedVehicule === ''" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button *ngFor="let vehicle of vehicles"
+                        (click)="selectedVehicule = vehicle.marque"
+                        class="block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
+                  <div class="flex justify-end">
+                    <mat-icon class="text-gray-500 dark:text-gray-400">{{ vehicle.icon }}</mat-icon>
+                  </div>
+                  <div class="text-center">
+                    <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+                      {{ vehicle.marque }}
+                    </h5>
+                    <p class="text-gray-700 dark:text-gray-400">
+                      {{ vehicle.categorie }} - {{ vehicle.annee }}
+                    </p>
+                    <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
+                      <span class="text-lg font-normal text-gray-500 dark:text-gray-400">Immatriculation :</span>
+                      {{ vehicle.immatriculation }}
+                    </div>
+                    <hr>
+                    <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                      Choisir
+                    </button>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Step 3: Choisir type entretien -->
+              <div *ngIf="selectedCategorieEntretien !== '' && selectedVehicule !== ''" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button *ngFor="let entretien of typeEntretiens"
+                   class="relative block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
+                  <div class="absolute top-4 left-4">
+                    <input type="checkbox" [(ngModel)]="entretien.selected"
+                           class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                  </div>
+
+                  <div class="flex justify-end">
+                    <mat-icon class="text-gray-500 dark:text-gray-400">{{ entretien.icon }}</mat-icon>
+                  </div>
+                  <div class="text-center">
+                    <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+                      {{ entretien.libelle }}
+                    </h5>
+                    <p class="text-gray-700 dark:text-gray-400">
+                      {{ entretien.description }}
+                    </p>
+                    <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
+                      <span class="text-lg font-normal text-gray-500 dark:text-gray-400">Prix :</span>
+                      {{ entretien.prix }}
+                    </div>
+                    <hr>
+                    <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                      Sélectionner
+                    </button>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-loader *ngIf="loader"></app-loader>

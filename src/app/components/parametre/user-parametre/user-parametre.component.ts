@@ -15,6 +15,16 @@ import {ApiService} from '../../../services/api/api.service';
 import {Router} from '@angular/router';
 import {MatSort} from '@angular/material/sort';
 import {environment} from '../../../../environments/environment';
+import {
+  EmployeeRoleAttributionComponent
+} from '../user-dialog/employee-role-attribution/employee-role-attribution.component';
+import {
+  EmployeeSpecialisationAttributionComponent
+} from '../user-dialog/employee-specialisation-attribution/employee-specialisation-attribution.component';
+import {UserInfoComponent} from '../user-dialog/user-info/user-info.component';
+import {ConfirmationComponent} from '../../templates/dialog/confirmation/confirmation.component';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-parametre',
@@ -48,7 +58,7 @@ export class UserParametreComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 0;
   totalElement: number = 0;
-  constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private router: Router, private apiService: ApiService) {
 
 
   }
@@ -79,8 +89,8 @@ export class UserParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de l\'insertion :', error);
       }
     );
   }
@@ -101,8 +111,8 @@ export class UserParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadUsers :', error);
       }
     );
   }
@@ -117,8 +127,8 @@ export class UserParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadUsers :', error);
       }
     );
   }
@@ -166,17 +176,129 @@ export class UserParametreComponent implements OnInit {
                     this.loader = false;
                 },
                 (error) => {
+                  this.showErrorMessage(error.response.data.message);
                   this.loader = false;
-                  console.error('Erreur lors de l\'insertion :', error);
                 }
               );
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
     });
+  }
+
+  openAttributionRoleDialog(user: any) {
+    const dialogRef = this.dialog.open(EmployeeRoleAttributionComponent, {
+      width: '800px',
+      data: user,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loader = true;
+        const dataRoles = {
+          userId: result.userId,
+          roles: result.roles,
+        }
+        this.apiService.insert('api/updateRoles', dataRoles).then(
+          () => {
+            this.loadUsers();
+            this.loader = false;
+          },
+          (error) => {
+            this.showErrorMessage(error.response.data.message);
+            this.loader = false;
+          }
+        );
+      }
+    });
+  }
+
+  openAttributionSpecialisationDialog(userId: string) {
+    const dialogRef = this.dialog.open(EmployeeSpecialisationAttributionComponent, {
+      width: '800px',
+      data: userId,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loader = true;
+        const dataSpecialisation = {
+          user: result.userId,
+          specialisations: result.specialisations,
+        }
+        this.apiService.insert('api/specialisations-personnel', dataSpecialisation).then(
+          () => {
+            this.loadUsers();
+            this.loader = false;
+          },
+          (error) => {
+            this.showErrorMessage(error.response.data.message);
+            this.loader = false;
+          }
+        );
+      }
+    });
+  }
+
+  openUserInfoDialog(user: any) {
+    const dialogRef = this.dialog.open(UserInfoComponent, {
+      width: '800px',
+      data: user,
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
+    });
+  }
+
+  showErrorMessage(message: string) {
+    this.snackBar.open(message, 'Fermer', {
+      duration: 3000,
+      panelClass: ['error-snackbar'],
+    });
+  }
+
+  resendInvit(userId: string) {
+    const dialogRef = this.dialog.open(ConfirmationComponent, {
+      width: '250px',
+      data: {
+        action: "envoyer email",
+        data: { nom: 'de confirmation' }
+      },
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loader = true;
+        const emailData = {
+          userId: userId,
+          lien: this.environmentApi+'/inscription-mecanicien',
+        }
+        this.apiService.insert('api/resendInvit', emailData).then(
+          () => {
+            this.loadUsers();
+            this.loader = false;
+          },
+          (error) => {
+            this.showErrorMessage(error.response.data.message);
+            this.loader = false;
+          }
+        );
+      }
+    });
+  }
+
+  hasRole(user: any, roleName: string): boolean {
+    return user.roles.some((role: any) => role.libelle === roleName);
   }
 }

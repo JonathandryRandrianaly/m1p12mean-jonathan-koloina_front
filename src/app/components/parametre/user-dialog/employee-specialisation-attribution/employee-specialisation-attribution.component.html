@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Spécifier specialisation</h2>
+<mat-dialog-content>
+  <form [formGroup]="usr_form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="mb-3">
+          <label for="specialisation" class="form-label">Choisissez les spécialisations</label>
+          <div *ngFor="let specialisation of specialisations">
+            <label>
+              <input
+                id="specialisation"
+                type="checkbox"
+                [value]="specialisation._id"
+                (change)="onSpecialisationChange($event, specialisation._id)"
+                [checked]="(usr_form.get('specialisations')?.value).includes(specialisation._id)">
+              {{ specialisation.nom }}
+            </label>
+          </div>
+        </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    #tooltip="matTooltip"
+    matTooltip="Mettre à jour les spécialisations de l'employer"
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="usr_form.invalid">
+    Mettre à jour
+  </button>
+</mat-dialog-actions>

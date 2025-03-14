@@ -17,9 +17,10 @@ import {MatButton, MatButtonModule} from '@angular/material/button';
 export class ConfirmationComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmationComponent>,
-    @Inject(MAT_DIALOG_DATA) public action: any,
+    @Inject(MAT_DIALOG_DATA) public action: string,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

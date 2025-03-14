@@ -27,6 +27,9 @@ import { RoleParametreComponent } from './components/parametre/role-parametre/ro
 import { ConsommableParametreComponent } from './components/parametre/consommable-parametre/consommable-parametre.component';
 import { ModeleParametreComponent } from './components/parametre/modele-parametre/modele-parametre.component';
 import { CategorieModeleParametreComponent } from './components/parametre/categorie-modele-parametre/categorie-modele-parametre.component';
+import {
+  DemandeServiceClientComponent
+} from './components/client/demande-service-client/demande-service-client.component';
 
 export const routes: Routes = [
   {
@@ -264,6 +267,19 @@ export const routes: Routes = [
       ],
       roles: [
         'manager'
+      ]
+    }
+  },
+  {
+    path:"demande-service",component:DemandeServiceClientComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Demande Service', url: '' }
+      ],
+      roles: [
+        'client'
       ]
     }
   },
