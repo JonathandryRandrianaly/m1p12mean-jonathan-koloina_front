@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Ajouter une nouvelle catégorie de modèle</h2>
+<mat-dialog-content>
+  <form [formGroup]="categorie_form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+      <label for="nom" class="form-label">Nom</label>
+      <input
+        id="nom"
+        type="text"
+        formControlName="nom"
+        class="form-control"
+        [ngClass]="{'is-invalid': categorie_form.get('nom')?.invalid && categorie_form.get('nom')?.touched}"
+        placeholder="ex: SUV"
+        required>
+      <div class="invalid-feedback" *ngIf="categorie_form.get('nom')?.invalid && categorie_form.get('nom')?.touched">
+        Le nom est requis.
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    #tooltip="matTooltip"
+    matTooltip="Création d'une nouvelle catégorie de modèle"
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="categorie_form.invalid">
+    Ajouter
+  </button>
+</mat-dialog-actions>

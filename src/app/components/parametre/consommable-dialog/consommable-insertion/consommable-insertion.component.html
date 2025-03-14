@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>Ajouter un nouveau consommable ou matériel</h2>
+<mat-dialog-content>
+  <form [formGroup]="consommable_form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+      <label for="nom" class="form-label">Nom</label>
+      <input
+        id="nom"
+        type="text"
+        formControlName="nom"
+        class="form-control"
+        [ngClass]="{'is-invalid': consommable_form.get('nom')?.invalid && consommable_form.get('nom')?.touched}"
+        placeholder="ex: Liquide frein"
+        required>
+      <div class="invalid-feedback" *ngIf="consommable_form.get('nom')?.invalid && consommable_form.get('nom')?.touched">
+        Le nom est requis.
+      </div>
+    </div>
+    <div class="mb-3">
+        <label for="unite" class="form-label">Unité</label>
+        <select
+          id="unite"
+          formControlName="unite"
+          class="form-control"
+          [ngClass]="{'is-invalid': consommable_form.get('unite')?.invalid && consommable_form.get('unite')?.touched}"
+          required>
+          <option value="" disabled selected>Choisissez l'unité</option>
+          <option *ngFor="let unite of unites" [value]="unite._id">{{ unite.nom }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="consommable_form.get('unite')?.invalid && consommable_form.get('unite')?.touched">
+          L'unité est requise.
+        </div>
+      </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    #tooltip="matTooltip"
+    matTooltip="Création d'un nouveau consommable"
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="consommable_form.invalid">
+    Ajouter
+  </button>
+</mat-dialog-actions>
+

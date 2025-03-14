@@ -51,6 +51,10 @@ export class MotriciteParametreComponent implements OnInit {
   }
   ngOnInit() {
     this.loadMotricites();
+    this.selectedEtats = {
+      '10': true, 
+      '-10': true 
+    };
   }
 
   sortData(column : string) {

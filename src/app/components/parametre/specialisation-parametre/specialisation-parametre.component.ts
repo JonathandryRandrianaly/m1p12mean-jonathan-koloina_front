@@ -51,6 +51,10 @@ export class SpecialisationParametreComponent implements OnInit{
   }
   ngOnInit() {
     this.loadSpecialisations();
+    this.selectedEtats = {
+      '10': true, 
+      '-10': true 
+    };
   }
 
   sortData(column : string) {
