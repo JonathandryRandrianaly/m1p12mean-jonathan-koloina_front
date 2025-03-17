@@ -37,10 +37,14 @@
               <form [formGroup]="entretien_form" (ngSubmit)="onSubmit()" novalidate>
               <!--              Step 1-->
               <div *ngIf="currentStep === 0">
+                <div *ngIf="vehicles.length === 0" class="text-center p-4 text-red-500 font-semibold">
+                  Aucun vehicule disponible veuillez d'abord configurer votre vehicule.
+                  <button class="btn btn-outline-dark" (click)="navigate('/vehicules')">Ajouter vehicule</button>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <button
                     type="button"
-                    *ngFor="let vehicle of vehicles.items"
+                    *ngFor="let vehicle of vehicles"
                           (click)="selectVehicle(vehicle)"
                           class="articleCard block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
                     <div class="flex justify-end">
@@ -48,10 +52,10 @@
                     </div>
                     <div class="text-center">
                       <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
-                        {{ vehicle.modele.marque }} {{ vehicle.modele.nom }}
+                        {{ vehicle.modele.marque.nom }} {{ vehicle.modele.nom }}
                       </h5>
                       <p class="text-gray-700 dark:text-gray-400">
-                        {{ vehicle.modele.categorie }} {{ vehicle.modele.anneeFabrication }}
+                        {{ vehicle.modele.categorie.nom }} {{ vehicle.modele.anneeFabrication }}
                       </p>
                       <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
                         <span class="text-lg font-normal text-white-500 dark:text-gray-400">Immatriculation :</span>
@@ -69,7 +73,6 @@
               </div>
 <!--              Step 2-->
               <div *ngIf="currentStep === 1">
-
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <button *ngFor="let service of services"
                           type="button"
@@ -102,6 +105,10 @@
 
 <!--              Step 3-->
                 <div *ngIf="currentStep === 2">
+                  <div *ngIf="typeEntretiens.length === 0" class="text-center p-4 text-red-500 font-semibold">
+                    Aucun entretien disponible pour ce véhicule avec ce type de service.
+                    <button type="button" class="btn btn-outline-dark" (click)="currentStep=1">Choisir un autre type de service</button>
+                  </div>
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <button
                       type="button"
@@ -170,8 +177,8 @@
               <div *ngIf="currentStep === 4" class="text-center mt-12">
                 <h5>Votre panier a été enregistré.</h5>
                 <p>Souhaitez-vous ajouter un autre service ou consulter votre panier ?</p>
-                <button mat-button color="primary" (click)="currentStep=1">Effectuer un autre service pour ce vehicule</button>
-                <button mat-button color="primary" (click)="currentStep=0">Choisir autre vehicule</button>
+                <button mat-button color="primary" (click)="anotherService()">Effectuer un autre service</button>
+                <button mat-button color="primary" (click)="chooseVehicle()">Choisir autre vehicule</button>
                 <button mat-button color="accent">Consulter le panier</button>
               </div>
 
