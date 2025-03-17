@@ -31,6 +31,7 @@ import {
   DemandeServiceClientComponent
 } from './components/client/demande-service-client/demande-service-client.component';
 import { TypeEntretienParametreComponent } from './components/parametre/type-entretien-parametre/type-entretien-parametre.component';
+import { VehiculeParametreComponent } from './components/parametre/vehicule-parametre/vehicule-parametre.component';
 
 export const routes: Routes = [
   {
@@ -295,6 +296,20 @@ export const routes: Routes = [
       ],
       roles: [
         'manager'
+      ]
+    }
+  },
+  {
+    path:"vehicules",component:VehiculeParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Vehicules', url: '' }
+      ],
+      roles: [
+        'manager',
+        'client'
       ]
     }
   },

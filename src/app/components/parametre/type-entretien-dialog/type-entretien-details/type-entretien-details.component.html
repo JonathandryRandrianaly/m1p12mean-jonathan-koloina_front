@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Détails du type d'entretien</h2>
+<mat-dialog-content class="dialog-content">
+  <p><strong>Nom:</strong> {{ type.nom }}</p>
+  <label for="description" class="form-label"><strong>Description:</strong></label>
+        <textarea
+          id="description"
+          type="description"
+          class="form-control"
+          value="{{ type.description }}"
+          disabled
+        >
+  </textarea>
+  <p><strong>Catégorie entretien</strong> {{ type.categorieEntretien.nom}}</p>
+  <p><strong>Catégorie modèles</strong> {{ type.categorieModele.nom}}</p>
+  <p><strong>Spécialisations:</strong>
+    <span *ngFor="let spe of type.specialisations; let last = last">
+      {{ spe.nom }}<span *ngIf="!last">, </span>
+    </span>
+  </p>
+
+  <p><strong>État: </strong>
+    <mat-chip>
+      <span [ngClass]="{'active': type.etat?.code == 10, 'inactive': type.etat?.code == -10}">
+        {{ type.etat?.libelle }}
+      </span>
+    </mat-chip>
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button class="btn btn-dark" mat-button (click)="onNoClick()">Fermer</button>
+</mat-dialog-actions>
