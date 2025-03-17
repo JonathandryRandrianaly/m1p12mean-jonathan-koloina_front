@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>Effectuer un mouvement de stock</h2>
+<mat-dialog-content>
+  <div class="mb-3">
+    <label for="nom" class="form-label">Consommable</label>
+    <input type="text" id="nom" class="form-control" placeholder="{{consommable.nom}}" disabled>
+  </div>
+  <form [formGroup]="stock_form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+        <label for="date" class="form-label">Date mouvement</label>
+        <input
+          id="date"
+          type="date"
+          formControlName="date"
+          class="form-control"
+          [ngClass]="{'is-invalid': stock_form.get('date')?.invalid && stock_form.get('date')?.touched}"
+          placeholder="ex: Liquide frein"
+          required>
+        <div class="invalid-feedback" *ngIf="stock_form.get('date')?.invalid && stock_form.get('date')?.touched">
+          Date est requise ou invalide.
+        </div>
+      </div>
+    <div class="mb-3">
+      <label for="libelle" class="form-label">Libelle</label>
+      <input
+        id="libelle"
+        type="text"
+        formControlName="libelle"
+        class="form-control"
+        [ngClass]="{'is-invalid': stock_form.get('libelle')?.invalid && stock_form.get('libelle')?.touched}"
+        placeholder="ex: Liquide frein"
+        required>
+      <div class="invalid-feedback" *ngIf="stock_form.get('libelle')?.invalid && stock_form.get('libelle')?.touched">
+        Le nom est requis.
+      </div>
+    </div>
+    <div class="mb-3">
+        <label for="type" class="form-label">Type de mouvement</label>
+        <select
+          id="type"
+          formControlName="type"
+          class="form-control"
+          [ngClass]="{'is-invalid': stock_form.get('type')?.invalid && stock_form.get('type')?.touched}"
+          required>
+          <option value="" disabled selected>Choisissez le type</option>
+          <option value="entree">Entrée</option>
+          <option value="sortie">Sortie</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="stock_form.get('type')?.invalid && stock_form.get('type')?.touched">
+          Le type est requis.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="quantite" class="form-label">Quantité</label>
+        <input
+          id="quantite"
+          type="number"
+          formControlName="quantite"
+          class="form-control"
+          [ngClass]="{'is-invalid': stock_form.get('quantite')?.invalid && stock_form.get('quantite')?.touched}"
+          placeholder="ex: 10"
+          required>
+        <div class="invalid-feedback" *ngIf="stock_form.get('quantite')?.invalid && stock_form.get('quantite')?.touched">
+          La quantite est requise.
+        </div>
+      </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="stock_form.invalid">
+    Ajouter
+  </button>
+</mat-dialog-actions>
+

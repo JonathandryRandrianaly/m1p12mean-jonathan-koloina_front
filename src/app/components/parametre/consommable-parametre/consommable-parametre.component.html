@@ -65,7 +65,7 @@
                         <mat-icon *ngIf="isSorted('prix', 'desc')" class="sort-icon">arrow_downward</mat-icon>
                       </th>
                       <th scope="col" class="text-nowrap">Statut</th>
-                      <th scope="col" class="text-nowrap">Modifier</th>
+                      <th scope="col" class="text-nowrap">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -80,10 +80,20 @@
                             (change)="changeStatut(consommable._id, $event.checked)">
                         </mat-slide-toggle>
                       </td>
-                      <td>
-                        <button mat-icon-button (click)="openConsommableUpdateDialog(consommable)">
-                          <mat-icon>edit</mat-icon>
+                      <td class="text-center">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+                          <mat-icon>more_vert</mat-icon>
                         </button>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="openConsommableUpdateDialog(consommable)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Modifier</span>
+                          </button>
+                          <button mat-menu-item (click)="openStocks(consommable._id)">
+                            <mat-icon>inventory_2</mat-icon>
+                            <span>Stocks</span>
+                          </button>
+                        </mat-menu>
                       </td>
                     </tr>
                     </tbody>

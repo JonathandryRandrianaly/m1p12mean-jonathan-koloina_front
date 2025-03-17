@@ -209,4 +209,8 @@ export class ConsommableParametreComponent implements OnInit {
     });
   }
 
+  openStocks(consommableId: string){
+      this.router.navigate(['/stocks', consommableId]); 
+  }
+
 }
