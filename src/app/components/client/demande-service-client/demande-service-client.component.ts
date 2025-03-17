@@ -8,7 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatTableModule} from '@angular/material/table';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -16,13 +16,14 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatDialog, MatDialogContent} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {ApiService} from '../../../services/api/api.service';
+import {AuthService} from '../../../services/auth/auth-service.service';
 
 @Component({
   selector: 'app-demande-service-client',
   imports: [ReactiveFormsModule, FormsModule, LoaderComponent,
     MatPaginatorModule, CommonModule, MatButtonModule, MatMenuModule, MatIconModule
     , MatTableModule, MatChipsModule,
-    MatTooltipModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatDialogContent
+    MatTooltipModule, MatFormFieldModule, MatInputModule, MatDatepickerModule
   ],
   templateUrl: './demande-service-client.component.html',
   styleUrl: './demande-service-client.component.css',
@@ -33,6 +34,7 @@ export class DemandeServiceClientComponent implements OnInit {
   loader : boolean = false;
   selectedCategorieEntretien: string = '';
   selectedVehicule: string = '';
+  userConnected: string|null = null;
 
   services: any[] = [];
 
@@ -42,43 +44,8 @@ export class DemandeServiceClientComponent implements OnInit {
     new Date(2025, 2, 16)
   ];
 
-  vehicles: any[] = [
-    {
-      marque: "Toyota",
-      categorie: "SUV",
-      annee: 2022,
-      immatriculation: "ABC-1234",
-      icon: "directions_car" // 🚗 Icône pour voiture standard
-    },
-    {
-      marque: "Peugeot",
-      categorie: "Citadine",
-      annee: 2018,
-      immatriculation: "XYZ-5678",
-      icon: "commute" // 🚖 Icône pour véhicule de ville
-    },
-    {
-      marque: "Mercedes",
-      categorie: "Berline",
-      annee: 2020,
-      immatriculation: "MER-4567",
-      icon: "time_to_leave" // 🚙 Icône pour berline
-    },
-    {
-      marque: "Ford",
-      categorie: "Pick-up",
-      annee: 2021,
-      immatriculation: "FOR-7890",
-      icon: "local_shipping" // 🚛 Icône pour véhicule utilitaire
-    },
-    {
-      marque: "Yamaha",
-      categorie: "Moto",
-      annee: 2019,
-      immatriculation: "MOT-1122",
-      icon: "two_wheeler" // 🏍️ Icône pour moto
-    }
-  ];
+  vehicles: any = { totalItems: 0, items: [] };
+  currentStep : number = 0;
 
   typeEntretiens: any[] = [];
 
@@ -91,11 +58,15 @@ export class DemandeServiceClientComponent implements OnInit {
 
   entretien_form: any;
 
-  constructor(private fb: FormBuilder,private dialog: MatDialog, private router: Router, private apiService: ApiService) {
-
+  constructor(private fb: FormBuilder,private dialog: MatDialog, private router: Router, private apiService: ApiService
+  ,private authService: AuthService, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
+    this.authService.getConnectedUser().then(user => {
+      this.userConnected = user;
+      this.loadVehicules();
+    });
     this.loadCategorieEntretien();
     this.entretien_form = this.fb.group({
       vehicule: ['', Validators.required],
@@ -107,7 +78,18 @@ export class DemandeServiceClientComponent implements OnInit {
 
   onSubmit(): void {
       console.log('Form Submitted:', this.entretien_form.value);
+      this.currentStep = 4;
   }
+
+  selectVehicle(vehicle: any) {
+    this.selectedVehicule = vehicle._id;
+    this.entretien_form.patchValue({
+      vehicule: vehicle._id,
+      categorieModele: vehicle.modele.categorie
+    });
+  this.currentStep = 1;
+  }
+
   loadCategorieEntretien() {
     const statut = 10;
     this.apiService.getWithData(`api/categorie-entretiens/statut/${statut}`, {}).then(
@@ -123,6 +105,7 @@ export class DemandeServiceClientComponent implements OnInit {
   selectCategorieEntretien(categorieId: string) {
     this.selectedCategorieEntretien = categorieId;
     this.loadTypeEntretien();
+    this.currentStep = 2;
   }
 
   loadTypeEntretien() {
@@ -130,7 +113,7 @@ export class DemandeServiceClientComponent implements OnInit {
       this.apiService.getWithData(`api/type-entretiens/categorie/${this.selectedCategorieEntretien}`, {}).then(
         (response) => {
           this.typeEntretiens = response;
-          console.log(this.typeEntretiens);
+          this.cdr.detectChanges();
         },
         (error) => {
           console.error('Erreur lors de loadTypeEntretien :', error);
@@ -139,18 +122,28 @@ export class DemandeServiceClientComponent implements OnInit {
     }
   }
 
-  get currentStep(): number {
-    if (!this.selectedVehicule) return 0;
-    if (!this.selectedCategorieEntretien) return 1;
-    if (this.typeEntretien.controls.filter(entretien => entretien.value)) return 2;
-    return 3;
+  loadVehicules() {
+    this.loader = true;
+    this.apiService.getWithData(`api/vehicules/${this.userConnected}`, {}).then(
+      (response) => {
+        this.vehicles = response;
+        this.loader = false;
+        this.cdr.detectChanges();
+      },
+      (error) => {
+        console.error('Erreur lors de loadTypeEntretien :', error);
+        this.loader = false;
+      }
+    );
   }
 
   getStepTitle(): string {
-    if (!this.selectedCategorieEntretien) return 'Veuillez sélectionner le type de service dont vous avez besoin :';
-    if (!this.selectedVehicule) return 'Choisissez votre véhicule :';
-    if (!this.typeEntretien.controls.filter(entretien => entretien.value)) return 'Veuillez sélectionner les entretiens ou réparations souhaités :';
-    return 'Confirmez votre panier';
+    if (this.currentStep==0) return 'Choisissez votre véhicule :';
+    if (this.currentStep==1) return 'Veuillez sélectionner le type de service dont vous avez besoin :';
+    if (this.currentStep==2) return 'Veuillez sélectionner les entretiens ou réparations souhaités :';
+    if (this.currentStep==3) return 'Spécifiez la date du rendez-vous :';
+    if (this.currentStep==4) return 'Confirmez le panier :';
+    return '';
   }
 
   dateFilter = (date: Date | null): boolean => {
@@ -169,20 +162,47 @@ export class DemandeServiceClientComponent implements OnInit {
     }
     return true;
   };
-  // Helper method to get typeEntretien FormArray
+
   get typeEntretien(): FormArray {
     return this.entretien_form.get('typeEntretien') as FormArray;
   }
 
-  // Handle checkbox change for type entretien selection
-  onCheckboxChange(event: any, entretienId: string): void {
-    if (event.target.checked) {
-      this.typeEntretien.push(this.fb.control(entretienId));
+  isChecked(entretienId: string): boolean {
+    const formArray: FormArray = this.entretien_form.get('typeEntretien') as FormArray;
+    return formArray.value.includes(entretienId);
+  }
+
+  onCardClick(entretienId: string): void {
+    const formArray: FormArray = this.entretien_form.get('typeEntretien') as FormArray;
+    if (!formArray.value.includes(entretienId)) {
+      formArray.push(this.fb.control(entretienId)); // Ajoute l'ID
     } else {
-      const index = this.typeEntretien.controls.findIndex(x => x.value === entretienId);
+      const index = formArray.controls.findIndex(ctrl => ctrl.value === entretienId);
       if (index >= 0) {
-        this.typeEntretien.removeAt(index);
+        formArray.removeAt(index);
       }
+    }
+  }
+
+  onCheckboxChange(event: any, entretienId: string): void {
+    const checkbox = event.target as HTMLInputElement;
+    const formArray: FormArray = this.entretien_form.get('typeEntretien') as FormArray;
+
+    if (checkbox.checked) {
+      if (!formArray.value.includes(entretienId)) {
+        formArray.push(this.fb.control(entretienId)); // Ajoute l'ID si sélectionné
+      }
+    } else {
+      const index = formArray.controls.findIndex(ctrl => ctrl.value === entretienId);
+      if (index >= 0) {
+        formArray.removeAt(index); // Retire l'ID si décoché
+      }
+    }
+  }
+
+  changeStep(index: number): void {
+    if(index<this.currentStep){
+      this.currentStep = index;
     }
   }
 

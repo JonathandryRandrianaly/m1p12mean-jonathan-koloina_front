@@ -10,10 +10,12 @@
                 <h5 class="card-title m-0">
                   {{ getStepTitle() }}
                 </h5>
+                <button mat-button color="accent" *ngIf="currentStep === 2" (click)="currentStep=3">Suivant</button>
               </div>
               <div class="mb-1">
                 <ol class="flex items-center w-full space-x-4">
                   <li *ngFor="let step of steps; let i = index"
+                      (click)="changeStep(i)"
                       class="flex items-center space-x-2 w-full relative"
                       [ngClass]="{'text-blue-600 dark:text-blue-500': i <= currentStep, 'text-gray-600 dark:text-gray-400': i > currentStep}">
                     <span class="flex items-center justify-center w-12 h-12 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110"
@@ -36,25 +38,29 @@
               <!--              Step 1-->
               <div *ngIf="currentStep === 0">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <button *ngFor="let vehicle of vehicles"
-                          (click)="selectedVehicule = vehicle.marque"
-                          class="block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
+                  <button
+                    type="button"
+                    *ngFor="let vehicle of vehicles.items"
+                          (click)="selectVehicle(vehicle)"
+                          class="articleCard block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
                     <div class="flex justify-end">
-                      <mat-icon class="text-gray-500 dark:text-gray-400">{{ vehicle.icon }}</mat-icon>
+                      <mat-icon class="text-gray-500 dark:text-gray-400">directions_car</mat-icon>
                     </div>
                     <div class="text-center">
                       <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
-                        {{ vehicle.marque }}
+                        {{ vehicle.modele.marque }} {{ vehicle.modele.nom }}
                       </h5>
                       <p class="text-gray-700 dark:text-gray-400">
-                        {{ vehicle.categorie }} - {{ vehicle.annee }}
+                        {{ vehicle.modele.categorie }} {{ vehicle.modele.anneeFabrication }}
                       </p>
                       <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
-                        <span class="text-lg font-normal text-gray-500 dark:text-gray-400">Immatriculation :</span>
+                        <span class="text-lg font-normal text-white-500 dark:text-gray-400">Immatriculation :</span>
                         {{ vehicle.immatriculation }}
                       </div>
                       <hr>
-                      <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                      <button
+                        type="button"
+                        class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
                         Choisir
                       </button>
                     </div>
@@ -66,8 +72,9 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <button *ngFor="let service of services"
+                          type="button"
                           (click)="selectCategorieEntretien(service._id)"
-                          class="block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
+                          class="articleCard block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
                     <div class="flex justify-end">
                       <mat-icon class="text-gray-500 dark:text-gray-400">{{ service.icone }}</mat-icon>
                     </div>
@@ -79,11 +86,13 @@
                         {{ service.description }}
                       </p>
                       <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
-                        <span class="text-lg font-normal text-gray-500 dark:text-gray-400">A partir de </span>
-                        {{ service.price }}
+                        <span class="text-lg font-normal text-white-500 dark:text-gray-400">A partir de </span>
+                        {{ service.price | number:'1.0-0' }}
+                        <span class="text-lg font-normal text-white-500 dark:text-gray-400"> Ar</span>
                       </div>
                       <hr>
-                      <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                      <button
+                        type="button" class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
                         Choisir
                       </button>
                     </div>
@@ -94,38 +103,49 @@
 <!--              Step 3-->
                 <div *ngIf="currentStep === 2">
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <button *ngFor="let entretien of typeEntretiens"
-                            class="relative block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
-                      <div class="absolute top-4 left-4">
-                        <input type="checkbox" (change)="onCheckboxChange($event, entretien._id)"
-                               [checked]="typeEntretien.value.includes(entretien._id)"
-                               class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                      </div>
+                    <button
+                      type="button"
+                      *ngFor="let entretien of typeEntretiens"
+                            (click)="onCardClick(entretien._id)"
+                    class="articleCard relative block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
 
-                      <div class="flex justify-end">
-                        <mat-icon class="text-gray-500 dark:text-gray-400">car_repair</mat-icon>
+                    <div class="absolute top-4 left-4">
+                      <input type="checkbox"
+                             [checked]="isChecked(entretien._id)"
+                      (change)="onCheckboxChange($event, entretien._id)"
+                      class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                    </div>
+
+                    <div class="flex justify-end">
+                      <mat-icon class="text-gray-500 dark:text-gray-400">car_repair</mat-icon>
+                    </div>
+
+                    <div class="text-center">
+                      <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+                        {{ entretien.nom }}
+                      </h5>
+                      <p class="text-gray-700 dark:text-gray-400">
+                        {{ entretien.description }}
+                      </p>
+                      <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
+                        <span class="text-lg font-normal text-white-500 dark:text-gray-400">Prix :</span>
+                        {{ entretien.prix | number:'1.0-0' }}
+                        <span class="text-lg font-normal text-white-500 dark:text-gray-400"> Ar</span>
                       </div>
-                      <div class="text-center">
-                        <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
-                          {{ entretien.nom }}
-                        </h5>
-                        <p class="text-gray-700 dark:text-gray-400">
-                          {{ entretien.description }}
-                        </p>
-                        <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
-                          <span class="text-lg font-normal text-gray-500 dark:text-gray-400">Prix :</span>
-                          {{ entretien.prix }}
-                        </div>
-                        <hr>
-                        <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
-                          Sélectionner
-                        </button>
-                      </div>
+                      <hr>
+
+                      <button
+                        type="button"
+                              class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                        Sélectionner
+                      </button>
+                    </div>
                     </button>
                   </div>
                 </div>
 
-              <!--              Step 4-->
+
+                <!--              Step 4-->
               <div *ngIf="currentStep === 3" class="text-center mt-12 mb-12">
                 <h5>Votre panier est prêt à être confirmé.</h5>
                 <p>Prendre rendez-vous parmi les horaires disponibles ?
@@ -141,15 +161,17 @@
                   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker touchUi #picker></mat-datepicker>
                 </mat-form-field>
-                <button type="submit" class="btn btn-dark ms-2 mb-3">Valider</button>
+                <button type="submit" class="btn btn-dark ms-2 mb-3"
+                        [disabled]="entretien_form.invalid"
+                >Valider</button>
               </div>
               </form>
 
-              <div *ngIf="currentStep === 3" class="text-center mt-12">
+              <div *ngIf="currentStep === 4" class="text-center mt-12">
                 <h5>Votre panier a été enregistré.</h5>
                 <p>Souhaitez-vous ajouter un autre service ou consulter votre panier ?</p>
-                <button mat-button color="primary">Effectuer un autre service pour ce vehicule</button>
-                <button mat-button color="primary">Choisir autre vehicule</button>
+                <button mat-button color="primary" (click)="currentStep=1">Effectuer un autre service pour ce vehicule</button>
+                <button mat-button color="primary" (click)="currentStep=0">Choisir autre vehicule</button>
                 <button mat-button color="accent">Consulter le panier</button>
               </div>
 
