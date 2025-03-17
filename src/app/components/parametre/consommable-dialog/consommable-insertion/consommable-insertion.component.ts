@@ -38,7 +38,14 @@ export class ConsommableInsertionComponent {
       this.loadUnites();
       this.consommable_form = this.fb.group({
         nom: ['', Validators.required],
-        unite: ['', Validators.required]
+        unite: ['', Validators.required],
+        prix: [
+          '', 
+          [
+            Validators.required,
+            Validators.min(0)
+          ]
+        ]
       });
   }
 

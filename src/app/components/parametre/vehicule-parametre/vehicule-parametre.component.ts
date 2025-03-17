@@ -42,6 +42,7 @@ export class VehiculeParametreComponent {
     immatriculation: '',
     etat: '',
     proprietaire: '',
+    proprietaireId: '',
     page: 1,
     limit: 10,
     sortedColumn : '',
@@ -61,10 +62,15 @@ export class VehiculeParametreComponent {
 
   }
   ngOnInit() {
-    this.isManager= this.authService.hasRole('manager');
     this.getDecodedToken();
+    this.isManager= this.authService.hasRole('manager');
+    this.isManager.then(isManager => {
+      if (!isManager) {
+        this.searchCriteria.proprietaireId = this.decodedToken.userId;
+      }
+      this.loadVehicules();
+    });
     this.loadModeles();
-    this.loadVehicules();
     this.selectedEtats = {
       '10': true, 
       '-10': true 
@@ -218,6 +224,7 @@ export class VehiculeParametreComponent {
       immatriculation: '',
       etat: '',
       proprietaire: '',
+      proprietaireId: '',
       page: 1,
       limit: 10,
       sortedColumn : '',

@@ -9,7 +9,6 @@ import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { ModeleInsertionComponent } from '../modele-dialog/modele-insertion/modele-insertion.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatMenu, MatMenuItem, MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule, MatIconButton} from "@angular/material/button";
