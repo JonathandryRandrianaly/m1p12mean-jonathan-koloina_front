@@ -32,6 +32,7 @@ import {
 } from './components/client/demande-service-client/demande-service-client.component';
 import { TypeEntretienParametreComponent } from './components/parametre/type-entretien-parametre/type-entretien-parametre.component';
 import { VehiculeParametreComponent } from './components/parametre/vehicule-parametre/vehicule-parametre.component';
+import {CalendrierTacheComponent} from './components/parametre/calendrier-tache/calendrier-tache.component';
 import { StockParametreComponent } from './components/parametre/stock-parametre/stock-parametre.component';
 
 export const routes: Routes = [
@@ -196,9 +197,8 @@ export const routes: Routes = [
         { label: 'Mécanicien', url: '' },
         { label: 'Tâches', url: '' }
       ],
-      // TODO: mécanicien
       roles: [
-        'manager'
+        'mecanicien'
       ]
     }
   },
@@ -211,9 +211,8 @@ export const routes: Routes = [
         { label: 'Mécanicien', url: '/mecanicien/tasks' },
         { label: 'Historiques', url: '' }
       ],
-      // TODO: mécanicien
       roles: [
-        'manager'
+        'mecanicien'
       ]
     }
   },
@@ -322,6 +321,19 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Consommables', url: '' },
         { label: 'Stocks', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"calendrier-tache",component:CalendrierTacheComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Calendrier', url: '' }
       ],
       roles: [
         'manager'
