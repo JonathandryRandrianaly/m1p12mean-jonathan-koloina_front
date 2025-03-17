@@ -12,29 +12,29 @@
           <span>Accueil</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="isClient$ | async">
         <a class="nav-link collapsed" (click)="navigate('/vehicules')">
           <i class="bi bi-truck"></i><span>Mes vehicules</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="isClient$ | async">
         <a class="nav-link collapsed" (click)="navigate('/')">
           <i class="bi bi-credit-card"></i> <span>Mes paiements</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="isClient$ | async">
         <a class="nav-link collapsed" (click)="navigate('/demande-service')">
           <i class="bi bi-calendar-check"></i> <span>Demander service</span>
         </a>
       </li>
-      <li class="nav-heading">Mécanicien</li>
-      <li class="nav-item">
+      <li class="nav-heading" *ngIf="isMecanicien$ | async">Mécanicien</li>
+      <li class="nav-item" *ngIf="isMecanicien$ | async">
         <a class="nav-link collapsed"  (click)="navigate('/mecanicien/tasks')">
           <i class="bi bi-card-checklist"></i>
           <span>Mes tâches</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="isMecanicien$ | async">
         <a class="nav-link collapsed" (click)="navigate('/mecanicien/historiques')">
           <i class="bi bi-clock-history"></i><span>Historiques</span>
         </a>

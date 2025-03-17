@@ -16,6 +16,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isActive: boolean = false;
   private subscription: Subscription;
   isManager$!: Promise<boolean>;
+  isMecanicien$!: Promise<boolean>;
+  isClient$!: Promise<boolean>;
   @ViewChild('sidebar', { static: true }) sidebar!: ElementRef;
 
   constructor(private navbarService: NavbarService,private authService: AuthService,private router: Router) {
@@ -29,6 +31,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isManager$ = this.authService.hasRole('manager');
+    this.isClient$ = this.authService.hasRole('client');
+    this.isMecanicien$ = this.authService.hasRole('mecanicien');
     this.subscription.add(this.navbarService.isActive$.subscribe(isActive => {
       this.isActive = isActive;
     }));

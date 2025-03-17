@@ -7,3 +7,16 @@
   position: relative;
   top: 85px;
 }
+ .articleCard{
+   border-radius: 15px;
+ }
+.articleCard:hover{
+  border-radius: 15px;
+  background: #000000;
+  color:white;
+}
+.articleCard:hover h5,
+.articleCard:hover p,
+.articleCard:hover .text-2xl {
+  color: #e5e5e5;
+}
