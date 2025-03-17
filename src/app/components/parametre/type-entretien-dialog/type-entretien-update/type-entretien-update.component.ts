@@ -1,6 +1,5 @@
 import {Component, Inject} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Genre} from '../../../../models/Genre';
 import {ApiService} from '../../../../services/api/api.service';
 import {
   MAT_DIALOG_DATA,

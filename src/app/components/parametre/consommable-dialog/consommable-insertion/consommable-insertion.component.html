@@ -30,7 +30,20 @@
           L'unité est requise.
         </div>
       </div>
-
+      <div class="mb-3">
+        <label for="prix" class="form-label">Prix</label>
+        <input
+          id="prix"
+          type="number"
+          formControlName="prix"
+          class="form-control"
+          [ngClass]="{'is-invalid': consommable_form.get('prix')?.invalid && consommable_form.get('prix')?.touched}"
+          placeholder="ex: 10000 Ar"
+          required>
+        <div class="invalid-feedback" *ngIf="consommable_form.get('prix')?.invalid && consommable_form.get('prix')?.touched">
+          Le prix est requis.
+        </div>
+      </div>
   </form>
 </mat-dialog-content>
 

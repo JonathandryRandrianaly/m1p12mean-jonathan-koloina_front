@@ -59,7 +59,13 @@
                         <mat-icon *ngIf="isSorted('unite', 'asc')" class="sort-icon">arrow_upward</mat-icon>
                         <mat-icon *ngIf="isSorted('unite', 'desc')" class="sort-icon">arrow_downward</mat-icon>
                       </th>
+                      <th (click)="sortData('prix')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                        Prix
+                        <mat-icon *ngIf="isSorted('prix', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="isSorted('prix', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                      </th>
                       <th scope="col" class="text-nowrap">Statut</th>
+                      <th scope="col" class="text-nowrap">Modifier</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -67,11 +73,17 @@
                       <td class="text-nowrap">{{consommable._id}}</td>
                       <td class="text-nowrap">{{consommable.nom}}</td>
                       <td class="text-nowrap">{{consommable.unite.nom}}</td>
+                      <td class="text-nowrap" style="text-align: center;">{{consommable.prix | number:'1.2-2'}} Ar</td>
                       <td>
                         <mat-slide-toggle 
                             [checked]="consommable.etat.code === 10" 
                             (change)="changeStatut(consommable._id, $event.checked)">
                         </mat-slide-toggle>
+                      </td>
+                      <td>
+                        <button mat-icon-button (click)="openConsommableUpdateDialog(consommable)">
+                          <mat-icon>edit</mat-icon>
+                        </button>
                       </td>
                     </tr>
                     </tbody>

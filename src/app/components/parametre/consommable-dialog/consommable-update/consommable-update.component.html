@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>Modifier le consommable ou matériel</h2>
+<mat-dialog-content>
+  <div class="mb-3">
+    <label for="nom" class="form-label">Nom</label>
+    <input type="text" id="nom" class="form-control" placeholder="{{consommable.nom}}" disabled>
+  </div>
+  <div class="mb-3">
+    <label for="unite" class="form-label">Unité</label>
+    <input type="text" id="unite" class="form-control" placeholder="{{consommable.unite.nom}}"  disabled>
+</div>
+  <form [formGroup]="consommable_form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+        <label for="prix" class="form-label">Prix</label>
+        <input
+          id="prix"
+          type="number"
+          formControlName="prix"
+          class="form-control"
+          [ngClass]="{'is-invalid': consommable_form.get('prix')?.invalid && consommable_form.get('prix')?.touched}"
+          required>
+        <div class="invalid-feedback" *ngIf="consommable_form.get('prix')?.invalid && consommable_form.get('prix')?.touched">
+          Prix invalide.
+        </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="consommable_form.invalid">
+    Modifier
+  </button>
+</mat-dialog-actions>
+
