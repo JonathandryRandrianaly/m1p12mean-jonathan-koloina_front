@@ -44,7 +44,7 @@ export class DemandeServiceClientComponent implements OnInit {
     new Date(2025, 2, 16)
   ];
 
-  vehicles: any = { totalItems: 0, items: [] };
+  vehicles: any = [];
   currentStep : number = 0;
 
   typeEntretiens: any[] = [];
@@ -76,8 +76,26 @@ export class DemandeServiceClientComponent implements OnInit {
     });
   }
 
+  navigate(nav : string){
+    this.router.navigate([nav]);
+  }
+
   onSubmit(): void {
-      console.log('Form Submitted:', this.entretien_form.value);
+      let date = new Date(this.entretien_form.value.date);
+      let dateUTC = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const formData = {
+        date: dateUTC.toISOString(),
+        vehiculeId: this.entretien_form.value.vehicule,
+        typeEntretiens: this.entretien_form.value.typeEntretien
+      };
+      this.apiService.insert('api/entretien/demande-service',formData).then(
+        (response) => {
+        },
+        (error) => {
+          this.loader = false;
+          console.error('Erreur lors de l\'insertion :', error);
+        }
+      );
       this.currentStep = 4;
   }
 
@@ -109,25 +127,27 @@ export class DemandeServiceClientComponent implements OnInit {
   }
 
   loadTypeEntretien() {
-    if(this.selectedCategorieEntretien != '') {
-      this.apiService.getWithData(`api/type-entretiens/categorie/${this.selectedCategorieEntretien}`, {}).then(
-        (response) => {
-          this.typeEntretiens = response;
-          this.cdr.detectChanges();
-        },
-        (error) => {
-          console.error('Erreur lors de loadTypeEntretien :', error);
-        }
-      );
-    }
+    this.apiService.getWithData('api/type-entretiens/categories', {
+      categorieId: this.selectedCategorieEntretien,
+      categorieModeleId: this.entretien_form.value.categorieModele,
+    }).then(
+      (response) => {
+        this.typeEntretiens = response;
+        this.loader = false;
+        this.cdr.detectChanges();
+      },
+      (error) => {
+        console.error('Erreur lors de loadTypeEntretien :', error);
+      }
+    );
   }
 
   loadVehicules() {
     this.loader = true;
     this.apiService.getWithData(`api/vehicules/${this.userConnected}`, {}).then(
       (response) => {
-        this.vehicles = response;
         this.loader = false;
+        this.vehicles = response;
         this.cdr.detectChanges();
       },
       (error) => {
@@ -175,7 +195,7 @@ export class DemandeServiceClientComponent implements OnInit {
   onCardClick(entretienId: string): void {
     const formArray: FormArray = this.entretien_form.get('typeEntretien') as FormArray;
     if (!formArray.value.includes(entretienId)) {
-      formArray.push(this.fb.control(entretienId)); // Ajoute l'ID
+      formArray.push(this.fb.control(entretienId));
     } else {
       const index = formArray.controls.findIndex(ctrl => ctrl.value === entretienId);
       if (index >= 0) {
@@ -190,12 +210,12 @@ export class DemandeServiceClientComponent implements OnInit {
 
     if (checkbox.checked) {
       if (!formArray.value.includes(entretienId)) {
-        formArray.push(this.fb.control(entretienId)); // Ajoute l'ID si sélectionné
+        formArray.push(this.fb.control(entretienId));
       }
     } else {
       const index = formArray.controls.findIndex(ctrl => ctrl.value === entretienId);
       if (index >= 0) {
-        formArray.removeAt(index); // Retire l'ID si décoché
+        formArray.removeAt(index);
       }
     }
   }
@@ -204,6 +224,29 @@ export class DemandeServiceClientComponent implements OnInit {
     if(index<this.currentStep){
       this.currentStep = index;
     }
+  }
+
+  anotherService(){
+    this.currentStep = 1;
+    this.selectedCategorieEntretien='';
+    this.typeEntretien.clear();
+    this.entretien_form.reset({
+      vehicule: this.entretien_form.value.vehicule,
+      categorieModele: this.entretien_form.value.categorieModele,
+      date: this.entretien_form.value.date,
+      typeEntretien: []
+    });
+  }
+
+  chooseVehicle(){
+    this.currentStep = 0;
+    this.selectedVehicule='';
+    this.selectedCategorieEntretien='';
+    this.typeEntretien.clear();
+    this.entretien_form.reset({
+      date: this.entretien_form.value.date,
+      typeEntretien: []
+    });
   }
 
 }
