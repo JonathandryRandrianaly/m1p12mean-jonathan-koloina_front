@@ -33,6 +33,7 @@ import {
 import { TypeEntretienParametreComponent } from './components/parametre/type-entretien-parametre/type-entretien-parametre.component';
 import { VehiculeParametreComponent } from './components/parametre/vehicule-parametre/vehicule-parametre.component';
 import {CalendrierTacheComponent} from './components/parametre/calendrier-tache/calendrier-tache.component';
+import { StockParametreComponent } from './components/parametre/stock-parametre/stock-parametre.component';
 
 export const routes: Routes = [
   {
@@ -309,6 +310,20 @@ export const routes: Routes = [
       roles: [
         'manager',
         'client'
+      ]
+    }
+  },
+  {
+    path:"stocks/:id",component:StockParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Consommables', url: '' },
+        { label: 'Stocks', url: '' }
+      ],
+      roles: [
+        'manager'
       ]
     }
   },
