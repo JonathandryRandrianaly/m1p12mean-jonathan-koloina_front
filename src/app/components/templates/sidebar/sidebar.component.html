@@ -23,6 +23,11 @@
         </a>
       </li>
       <li class="nav-item" *ngIf="isClient$ | async">
+        <a class="nav-link collapsed" (click)="navigate('/rendez-vous')">
+          <i class="bi bi-calendar-date"></i> <span>Mes rendez-vous</span>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="isClient$ | async">
         <a class="nav-link collapsed" (click)="navigate('/demande-service')">
           <i class="bi bi-calendar-check"></i> <span>Demander service</span>
         </a>
