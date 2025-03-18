@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {CalendarEvent, CalendarModule, CalendarMonthViewDay} from 'angular-calendar';
 import {DatePipe} from '@angular/common';
+import {Router} from '@angular/router';
+import {ApiService} from '../../../services/api/api.service';
 
 @Component({
   selector: 'app-calendrier-tache',
@@ -20,22 +22,25 @@ export class CalendrierTacheComponent {
     },
   ];
 
+  constructor(private router: Router, private apiService: ApiService) {
+  }
+
   previousMonth(): void {
     this.viewDate = new Date(this.viewDate.setMonth(this.viewDate.getMonth() - 1));
   }
 
-  // Méthode pour aller au mois suivant
   nextMonth(): void {
     this.viewDate = new Date(this.viewDate.setMonth(this.viewDate.getMonth() + 1));
   }
 
-  // Méthode pour récupérer la date sélectionnée
   onDayClick(event: { day: CalendarMonthViewDay; sourceEvent: MouseEvent | KeyboardEvent }): void {
-    console.log('Date sélectionnée :', event.day.date);
-    alert(`Date sélectionnée : ${event.day.date.toDateString()}`);
+    const selectedDate = event.day.date;
+    const dateUTC = new Date(Date.UTC(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()));
+    this.router.navigate(['/calendrier-detail'], {
+      queryParams: { date: dateUTC.toISOString() }
+    });
   }
 
-  // Gestion des événements
   handleEvent(eventData: { event: CalendarEvent; sourceEvent: MouseEvent | KeyboardEvent }): void {
     console.log('Événement cliqué', eventData.event);
   }

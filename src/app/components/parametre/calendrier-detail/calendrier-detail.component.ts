@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CdkDragDrop, CdkDropList, DragDropModule, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LoaderComponent} from '../../templates/loader/loader.component';
@@ -6,20 +6,24 @@ import {CommonModule} from '@angular/common';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CalendrierAttributionComponent} from '../calendrier-attribution/calendrier-attribution.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-tache-mecanicien',
+  selector: 'app-calendrier-detail',
   imports: [
     CdkDropList,ReactiveFormsModule,FormsModule,
     CommonModule,LoaderComponent, DragDropModule,
-    MatMenuModule, MatIconModule,MatButtonModule
-  ],
-  templateUrl: './tache-mecanicien.component.html',
-  styleUrl: './tache-mecanicien.component.css'
+    MatMenuModule, MatIconModule,MatButtonModule],
+  templateUrl: './calendrier-detail.component.html',
+  styleUrl: './calendrier-detail.component.css'
 })
-export class TacheMecanicienComponent {
+export class CalendrierDetailComponent implements OnInit {
   loader: boolean = false;
   searchQuery: string = '';
+  selectedDate: Date | null = null;
+  selectedDateString: string = '';
 
   columns = [
     { id: 'todo', name: 'To Do', tasks: [
@@ -36,6 +40,24 @@ export class TacheMecanicienComponent {
       ]
     }
   ];
+
+  constructor(private route: ActivatedRoute, private router: Router,private dialog: MatDialog,) {}
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['date']) {
+        const dateFromUrl = new Date(params['date']);
+        this.selectedDateString = dateFromUrl.toISOString().split('T')[0];
+        this.selectedDate = dateFromUrl;
+      }
+    });
+  }
+
+  onDateChange(): void {
+    if (this.selectedDateString) {
+      this.selectedDate = new Date(this.selectedDateString);
+    }
+  }
 
   get connectedDropLists(): string[] {
     return this.columns.map(column => column.id);
@@ -60,6 +82,18 @@ export class TacheMecanicienComponent {
 
   setAs(task: any) {
     console.log('Définir cette tâche comme:', task);
+  }
+  setTaskTo(task: any) {
+    const dialogRef = this.dialog.open(CalendrierAttributionComponent, {
+      width: '800px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
+    });
   }
 
 }
