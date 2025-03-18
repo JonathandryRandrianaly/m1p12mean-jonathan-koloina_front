@@ -27,7 +27,7 @@ export class CalendrierDetailComponent implements OnInit {
 
   columns = [
     { id: 'todo', name: 'To Do', tasks: [
-        { name: 'Réparer le moteur', vehicle: 'Vehicule 1', description: 'Tâche de réparation' },
+        {detailEntretienId: '67d94ec480bc60b3223a4a41',  name: 'Réparer le moteur', vehicle: 'Vehicule 1', description: 'Tâche de réparation' },
         { name: 'Changer les pneus', vehicle: 'Vehicule 2', description: 'Changer les pneus avant' }
       ]
     },
@@ -86,7 +86,8 @@ export class CalendrierDetailComponent implements OnInit {
   setTaskTo(task: any) {
     const dialogRef = this.dialog.open(CalendrierAttributionComponent, {
       width: '800px',
-      disableClose: true
+      disableClose: true,
+      data: task
     });
 
     dialogRef.afterClosed().subscribe(result => {
