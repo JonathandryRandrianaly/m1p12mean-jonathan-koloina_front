@@ -1,28 +1,46 @@
 import {Component} from '@angular/core';
 import {CalendarEvent, CalendarModule, CalendarMonthViewDay} from 'angular-calendar';
-import {DatePipe} from '@angular/common';
+import {DatePipe, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
 import {ApiService} from '../../../services/api/api.service';
+import {LoaderComponent} from '../../templates/loader/loader.component';
 
 @Component({
   selector: 'app-calendrier-tache',
   imports: [
     CalendarModule,
-    DatePipe
+    DatePipe,
+    LoaderComponent,
+    NgIf
   ],
   templateUrl: './calendrier-tache.component.html',
   styleUrl: './calendrier-tache.component.css'
 })
 export class CalendrierTacheComponent {
+  loader: boolean = false;
   viewDate: Date = new Date();
-  events: CalendarEvent[] = [
-    {
-      start: new Date(),
-      title: 'Un événement',
-    },
-  ];
+  events: CalendarEvent[] = [];
 
   constructor(private router: Router, private apiService: ApiService) {
+    const currentMonth = new Date().getMonth() + 1;
+    this.loadEvents(currentMonth);
+  }
+
+  loadEvents(month: number) {
+    this.loader = true;
+    this.apiService.getAll('api/entretiens/month/'+month).then(
+      (response:any[]) => {
+        this.events = response.map((entretien) => ({
+          start: new Date(entretien.date),
+          title: entretien.vehicule.immatriculation
+        }));
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors de loadUsers :', error);
+      }
+    );
   }
 
   previousMonth(): void {
