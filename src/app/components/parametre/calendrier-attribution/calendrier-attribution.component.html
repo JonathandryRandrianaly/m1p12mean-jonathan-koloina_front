@@ -1,0 +1,42 @@
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Rechercher un employé</mat-label>
+    <input matInput [formControl]="searchControl">
+  </mat-form-field>
+
+  <table mat-table [dataSource]="filteredEmployees">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nom</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="tasksAssigned">
+      <th mat-header-cell *matHeaderCellDef>Tâches assignées</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.tasksAssigned }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="specialization">
+      <th mat-header-cell *matHeaderCellDef>Spécialisation</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.specialization }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>Selectionner</th>
+      <td mat-cell *matCellDef="let employee">
+        <mat-checkbox
+          [(ngModel)]="employee.isSelected"
+          (change)="toggleEmployeeSelection(employee.id, $event)"
+        ></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="task_form.invalid">
+    Valider
+  </button>
+</mat-dialog-actions>

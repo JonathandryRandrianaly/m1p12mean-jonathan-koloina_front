@@ -28,6 +28,7 @@ export class ManagerLoginComponent implements OnInit {
     private apiService: ApiService
   ) {
     localStorage.removeItem('token');
+    localStorage.removeItem('decodedToken');
   }
 
   ngOnInit() {

@@ -1,0 +1,59 @@
+/* Animation du dialogue */
+.mat-dialog-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Largeur et marges du formulaire */
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Table styling */
+table.mat-elevation-z8 {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th.mat-header-cell, td.mat-cell {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+th.mat-header-cell {
+  background-color: #f1f1f1;
+}
+
+mat-checkbox {
+  margin: 0;
+}
+
+/* Définir la couleur des boutons et l'espacement */
+.mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+button {
+  margin-left: 10px;
+}
+
+/* Adaptation pour petits écrans */
+@media screen and (max-width: 768px) {
+  .mat-dialog-content {
+    max-width: 90%;
+  }
+
+  .mat-form-field {
+    margin-bottom: 15px;
+  }
+}

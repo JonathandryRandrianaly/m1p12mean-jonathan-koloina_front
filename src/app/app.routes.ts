@@ -33,7 +33,8 @@ import {
 import { TypeEntretienParametreComponent } from './components/parametre/type-entretien-parametre/type-entretien-parametre.component';
 import { VehiculeParametreComponent } from './components/parametre/vehicule-parametre/vehicule-parametre.component';
 import {CalendrierTacheComponent} from './components/parametre/calendrier-tache/calendrier-tache.component';
-import { StockParametreComponent } from './components/parametre/stock-parametre/stock-parametre.component';
+import {CalendrierDetailComponent} from './components/parametre/calendrier-detail/calendrier-detail.component';
+import {StockParametreComponent} from './components/parametre/stock-parametre/stock-parametre.component';
 
 export const routes: Routes = [
   {
@@ -334,6 +335,20 @@ export const routes: Routes = [
       breadcrumb : [
         { label: 'Accueil', url: '/' },
         { label: 'Calendrier', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"calendrier-detail",component:CalendrierDetailComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Calendrier', url: 'calendrier-tache' },
+        { label: 'Détails', url: '' }
       ],
       roles: [
         'manager'
