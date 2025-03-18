@@ -9,6 +9,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CalendrierAttributionComponent} from '../calendrier-attribution/calendrier-attribution.component';
 import {MatDialog} from '@angular/material/dialog';
+import {ApiService} from '../../../services/api/api.service';
 
 @Component({
   selector: 'app-calendrier-detail',
@@ -41,7 +42,9 @@ export class CalendrierDetailComponent implements OnInit {
     }
   ];
 
-  constructor(private route: ActivatedRoute, private router: Router,private dialog: MatDialog,) {}
+  constructor(private route: ActivatedRoute, private router: Router,private dialog: MatDialog, private apiService: ApiService) {
+
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -49,6 +52,7 @@ export class CalendrierDetailComponent implements OnInit {
         const dateFromUrl = new Date(params['date']);
         this.selectedDateString = dateFromUrl.toISOString().split('T')[0];
         this.selectedDate = dateFromUrl;
+        this.loadEntretienDetails();
       }
     });
   }
@@ -94,6 +98,28 @@ export class CalendrierDetailComponent implements OnInit {
 
       }
     });
+  }
+
+  loadEntretienDetails(){
+    this.loader = true;
+    if (!this.selectedDate) {
+      this.selectedDate = new Date();
+    }
+    let dateUTC = new Date(Date.UTC(this.selectedDate.getFullYear(), this.selectedDate.getMonth(), this.selectedDate.getDate()));
+    const formData = {
+      date: dateUTC.toISOString()
+    };
+    console.log(formData);
+    this.apiService.getAll('api/entretiens/detail/'+dateUTC.toISOString()).then(
+      (response:any[]) => {
+        console.log(response);
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors de loadUsers :', error);
+      }
+    );
   }
 
 }
