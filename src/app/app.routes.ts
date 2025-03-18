@@ -35,6 +35,7 @@ import { VehiculeParametreComponent } from './components/parametre/vehicule-para
 import {CalendrierTacheComponent} from './components/parametre/calendrier-tache/calendrier-tache.component';
 import {CalendrierDetailComponent} from './components/parametre/calendrier-detail/calendrier-detail.component';
 import {StockParametreComponent} from './components/parametre/stock-parametre/stock-parametre.component';
+import {RendezVousComponent} from './components/client/rendez-vous/rendez-vous.component';
 
 export const routes: Routes = [
   {
@@ -280,6 +281,20 @@ export const routes: Routes = [
       breadcrumb : [
         { label: 'Accueil', url: '/' },
         { label: 'Demande Service', url: '' }
+      ],
+      roles: [
+        'client'
+      ]
+    }
+  },
+  {
+    path:"rendez-vous",component:RendezVousComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Demande', url: '/demande-service' },
+        { label: 'Rendez-vous', url: '' }
       ],
       roles: [
         'client'
