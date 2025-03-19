@@ -74,26 +74,26 @@ export class CalendrierAttributionComponent {
       this.getDetailEntretienById();
       this.searchControl = new FormControl('');
       this.task_form = this.fb.group({
-        employee: this.fb.array([])  
+        employee: this.fb.array([])
       });
       this.employeeArray = this.task_form.get('employee') as FormArray;
 
     this.searchControl.valueChanges.subscribe((searchText) => {
-      this.filterEmployees(searchText); 
+      this.filterEmployees(searchText);
     });
   }
 
   toggleEmployeeSelection(employeeId: string, event: any) {
     if (event.checked) {
-      this.employeeArray.push(new FormControl(employeeId)); 
+      this.employeeArray.push(new FormControl(employeeId));
     } else {
       const index = this.employeeArray.controls.findIndex(ctrl => ctrl.value === employeeId);
       if (index >= 0) {
-        this.employeeArray.removeAt(index); 
+        this.employeeArray.removeAt(index);
       }
     }
   }
-  
+
 
   filterEmployees(searchText: string = '') {
     this.filteredEmployees = this.employees.filter(employee =>
@@ -102,7 +102,7 @@ export class CalendrierAttributionComponent {
 
     this.filteredEmployees.forEach(employee => {
       const isSelected = this.employeeArray.controls.some(ctrl => ctrl.value === employee.user._id);
-      employee.isSelected = isSelected;  
+      employee.isSelected = isSelected;
     });
   }
 
@@ -110,50 +110,51 @@ export class CalendrierAttributionComponent {
     this.apiService.getAll(`api/entretien/mecaniciens/${this.task.id}`).then(
       (response) => {
         this.employees = response;
-        this.filteredEmployees = [...this.employees];  
+        console.log(this.employees);
+        this.filteredEmployees = [...this.employees];
 
         this.filteredEmployees.forEach(employee => {
           employee.isSelected = this.employeeArray.controls.some(ctrl => ctrl.value === employee.user._id);
         });
-  
+
       },
       (error) => {
         console.error('Erreur lors de loadMecaniciens :', error);
       }
     );
   }
-  
+
 
   getDetailEntretienById(){
     this.apiService.getAll(`api/entretien/details/${this.task.id}`).then(
       (response) => {
         this.detailEntretien = response;
-        
+
         if (this.detailEntretien.users && this.detailEntretien.users.length > 0) {
           this.detailEntretien.users.forEach((user: { _id: string }) => {
-            this.employeeArray.push(new FormControl(user._id)); 
+            this.employeeArray.push(new FormControl(user._id));
           });
         }
-      
+
         this.filteredEmployees.forEach(employee => {
           const isSelected = this.detailEntretien.users.some((user: { _id: string }) => user._id === employee.user._id);
           employee.isSelected = isSelected;
         });
-  
+
       },
       (error) => {
         console.error('Erreur lors de getDetail :', error);
       }
     );
   }
-  
-  
+
+
 
   onSubmit() {
     if (this.task_form.valid) {
       const values = {
-        usersId: this.task_form.value.employee, 
-        detailEntretienId: this.task.id  
+        usersId: this.task_form.value.employee,
+        detailEntretienId: this.task.id
       };
        this.apiService.insert('api/entretien/mecanicien/assigner', values).then(
           (response) => {

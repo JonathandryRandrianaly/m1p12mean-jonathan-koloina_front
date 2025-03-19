@@ -51,15 +51,8 @@
                           <p class="assigned-count">Employés assignés: {{ task.assignedCount }}</p>
                         </div>
                         <div class="task-card-footer">
-                          <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="viewDetails(task)">Détails</button>
-                            <button mat-menu-item (click)="setTaskTo(task)">Assignation</button>
-                          </mat-menu>
                           <button mat-icon-button (click)="viewDetails(task)">
                             <mat-icon style="color: white">info</mat-icon>
-                          </button>
-                          <button mat-icon-button [matMenuTriggerFor]="menu">
-                            <mat-icon style="color: white">more_horiz</mat-icon>
                           </button>
                         </div>
                       </div>

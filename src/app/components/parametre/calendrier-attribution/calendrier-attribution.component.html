@@ -20,12 +20,12 @@
     </ng-container>
 
     <ng-container matColumnDef="disponibilité">
-      <th mat-header-cell *matHeaderCellDef>Disponibilité</th>
+      <th mat-header-cell *matHeaderCellDef>Tâches assignés</th>
       <td mat-cell *matCellDef="let employee">
-        {{ employee.estOccupe ? 'Occupé' : 'Disponible' }}
+        {{ employee.estOccupe }}
       </td>
     </ng-container>
-    
+
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>Selectionner</th>
       <td mat-cell *matCellDef="let employee">
@@ -35,7 +35,7 @@
         ></mat-checkbox>
       </td>
     </ng-container>
-    
+
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

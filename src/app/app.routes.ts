@@ -36,6 +36,7 @@ import {CalendrierTacheComponent} from './components/parametre/calendrier-tache/
 import {CalendrierDetailComponent} from './components/parametre/calendrier-detail/calendrier-detail.component';
 import {StockParametreComponent} from './components/parametre/stock-parametre/stock-parametre.component';
 import {RendezVousComponent} from './components/client/rendez-vous/rendez-vous.component';
+import {DetailTacheComponent} from './components/parametre/detail-tache/detail-tache.component';
 
 export const routes: Routes = [
   {
@@ -366,6 +367,22 @@ export const routes: Routes = [
         { label: 'Détails', url: '' }
       ],
       roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"tache/:id",component:DetailTacheComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Tâches', url: '' },
+        { label: 'Détails', url: '' }
+      ],
+      roles: [
+        'client',
+        'mecanicien',
         'manager'
       ]
     }
