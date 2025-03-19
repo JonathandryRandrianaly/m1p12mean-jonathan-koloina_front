@@ -65,7 +65,7 @@ export class TacheMecanicienComponent {
 
   drop(event: CdkDragDrop<{ id: string, name: string, vehicle: string, description: string, etatCode: number }[]>) {
     const taskMoved = event.previousContainer.data[event.previousIndex];
-    if(taskMoved.etatCode != 20){
+    if (event.container.id != '20' && taskMoved.etatCode != 20) {
       if (event.previousContainer === event.container) {
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       } else {
