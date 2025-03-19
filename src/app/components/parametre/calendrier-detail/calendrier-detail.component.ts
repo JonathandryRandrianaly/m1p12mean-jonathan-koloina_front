@@ -100,11 +100,11 @@ export class CalendrierDetailComponent implements OnInit {
   }
 
   viewDetails(task: any) {
-    console.log('Détails de la tâche:', task);
+    this.router.navigate(['/tache', task.id]); 
   }
 
   setAs(task: any) {
-    console.log('Définir cette tâche comme:', task);
+
   }
   setTaskTo(task: any) {
     const dialogRef = this.dialog.open(CalendrierAttributionComponent, {

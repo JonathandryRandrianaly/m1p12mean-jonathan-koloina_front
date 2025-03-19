@@ -15,39 +15,56 @@
               <div class="flex flex-col lg:flex-row lg:space-x-6">
                 <!-- Section Client -->
                 <div class="bg-white shadow-md rounded-lg p-6 flex-1 mb-6 lg:mb-0">
-                  <h3 class="text-lg font-semibold mb-4">Vidange</h3>
+                  <h3 class="text-lg font-semibold mb-4">{{detail?.typeEntretien?.nom}}</h3>
                   <div class="mt-4">
-                    <p><strong> Changement huile moteur et changement du filtre à huile.</strong></p>
+                    <p><strong>{{detail?.typeEntretien?.description}}</strong></p>
                   </div>
                   <hr>
                   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <!-- Colonne de gauche -->
                     <div>
-                      <p><strong>Nom du client:</strong> Jean Dupont</p>
-                      <p><strong>Marque:</strong> Peugeot 308</p>
-                      <p><strong>Catégorie:</strong> SUV</p>
-                      <p><strong>Immatriculation:</strong> AB-123-CD</p>
+                      <p><strong>Nom du client:</strong> {{detail?.entretien?.vehicule?.proprietaire?.nom}}</p>
+                      <p><strong>Marque:</strong> {{detail?.entretien?.vehicule?.modele?.marque?.nom}}</p>
+                      <p><strong>Catégorie:</strong> {{detail?.entretien?.vehicule?.modele?.categorie?.nom}}</p>
+                      <p><strong>Immatriculation:</strong> {{detail?.entretien?.vehicule?.immatriculation}}</p>
                     </div>
 
                     <!-- Colonne de droite -->
                     <div>
-                      <p><strong>Carburant:</strong> Essence</p>
-                      <p><strong>Transmission:</strong> Peugeot</p>
-                      <p><strong>Motricité:</strong> 308</p>
-                      <p><strong>Année de fabrication:</strong> AB-123-CD</p>
+                      <p><strong>Carburant:</strong> {{detail?.entretien?.vehicule?.modele?.energieMoteur?.nom}}</p>
+                      <p><strong>Transmission:</strong> {{detail?.entretien?.vehicule?.modele?.transmission?.nom}}</p>
+                      <p><strong>Motricité:</strong> {{detail?.entretien?.vehicule?.modele?.motricite?.nom}}</p>
+                      <p><strong>Année de fabrication:</strong> {{detail?.entretien?.vehicule?.modele?.anneeFabrication}}</p>
                     </div>
                   </div>
                   <hr>
-                  <div class="flex flex-col lg:flex-row lg:space-x-4">
-                    <div class="flex-1 mb-4 lg:mb-0">
-                      <label for="start-time" class="block text-sm font-medium text-gray-700">Date et heure de début</label>
-                      <input type="datetime-local" id="start-time" name="start-time" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                  <form [formGroup]="dateForm" (ngSubmit)="updateDateRapport()">
+                    <div class="flex flex-col lg:flex-row lg:space-x-4">
+                      <div class="flex-1">
+                        <label for="start-time" class="block text-sm font-medium text-gray-700">Date et heure de début</label>
+                        <input type="datetime-local" id="start-time" formControlName="dateDebut" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        <div *ngIf="dateForm.get('dateDebut')?.errors?.['dateDebutRequired']" class="text-red-500 text-sm">
+                          La date de début est obligatoire si une date de fin est saisie.
+                        </div>
+                      </div>
+                     
+                      <div class="flex-1">
+                        <label for="end-time" class="block text-sm font-medium text-gray-700">Date et heure de fin</label>
+                        <input type="datetime-local" id="end-time" formControlName="dateFin" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        <div *ngIf="dateForm.get('dateFin')?.errors?.['dateRangeInvalid']" class="text-red-500 text-sm">
+                          La date de fin doit être postérieure à la date de début.
+                        </div>
+                      </div>
+                     
+                      
+                      <button class="px-4 py-2 btn btn-dark text-white rounded-md shadow-md hover:bg-blue-700 self-end" [disabled]="dateForm.invalid">
+                        Ajouter
+                      </button>
+                                        
                     </div>
-                    <div class="flex-1">
-                      <label for="end-time" class="block text-sm font-medium text-gray-700">Date et heure de fin</label>
-                      <input type="datetime-local" id="end-time" name="end-time" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
-                    </div>
-                  </div>
+                                      
+                  </form>
+                  
 
                   <div class="bg-white shadow-md rounded-lg p-6 mt-6">
                     <h3 class="text-lg font-semibold mb-4">Liste des rapports</h3>
@@ -115,3 +132,4 @@
     </div>
   </section>
 </main>
+<app-loader *ngIf="loader"></app-loader>
