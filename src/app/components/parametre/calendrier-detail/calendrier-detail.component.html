@@ -43,12 +43,12 @@
                          (cdkDropListDropped)="drop($event)">
                       <div class="task-card" *ngFor="let task of column.tasks" cdkDrag>
                         <div class="task-card-header">
-                          <h3>{{ task.name }}</h3>
+                          <h3>{{ task.nom }}</h3>
                         </div>
                         <div class="task-card-body">
-                          <p>Véhicule: {{ task.vehicle }}</p>
-                          <p>Description: {{ task.description }}</p>
-                          <p class="assigned-count">Employés assignés: 2</p>
+                          <p>{{ task.vehicule }}</p>
+                          <p>{{ task.description }}</p>
+                          <p class="assigned-count">Employés assignés: {{ task.assignedCount }}</p>
                         </div>
                         <div class="task-card-footer">
                           <mat-menu #menu="matMenu">
