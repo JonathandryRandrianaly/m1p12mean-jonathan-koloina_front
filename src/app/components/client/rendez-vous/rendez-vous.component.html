@@ -7,30 +7,35 @@
             <div class="card-body">
 
               <h5 class="card-title m-0">
-                Mes prochaines rendez-vous:
+                Mes rendez-vous:
               </h5>
-              <div class="max-w-6xl mt-3 flex">
+              <div class="max-w-6xl mt-3 flex" *ngFor="let rdv of rdvs">
                 <div class="w-1/6 pr-1 text-left">
-                  <p class="text-gray-500 text-sm">March 18, 2025</p>
+                  <p class="text-gray-500 text-sm">{{rdv.entretien.date | date:'dd/MM/yyyy'}}</p>
                 </div>
                 <div class="w-5/6 border-l-4 border-dark-500 pl-4">
                   <div>
                     <p class="text-gray-500 text-sm flex justify-between w-full">
-                      <span>07:00 - 08:00</span>
-                      <span class="text-green-500 font-semibold">Confirmé</span>
+                      <span *ngIf="rdv.dateDebut == null && rdv.dateFin == null">À définir</span>
+                      <span *ngIf="rdv.dateDebut != null && rdv.dateFin != null">{{rdv.dateDebut}} - {{rdv.Fin}}</span>
+                      <span *ngIf="rdv.dateDebut != null && rdv.dateFin == null">{{rdv.dateDebut}} - ... </span>
+                      <span class="text-green-500 font-semibold" *ngIf="rdv.etat.code==-10">Confirmé</span>
                     </p>
                     <h3 class="font-bold text-lg flex justify-between w-full">
-                      <span>Vidange</span>
-                      <span class="text-gray-700 font-semibold">30.000 Ariary</span>
+                      <span>{{rdv.typeEntretien.nom}}</span>
+                      <span class="text-gray-700 font-semibold">{{rdv.typeEntretien.prix | number:'1.2-2'}} Ar</span>
                     </h3>
                     <p class="text-gray-700">
-                      Changement huile moteur et filtre huile.
-                      Huile moteur besoin de 5L et autre.
+                      {{rdv.typeEntretien.description}}
                     </p>
                     <div class="flex items-center mt-4">
                       <div class="ml-3">
-                        <p class="font-semibold">2394 TBL</p>
-                        <p class="text-sm text-gray-500">Georges</p>
+                        <p class="font-semibold">{{rdv.entretien.vehicule.immatriculation}}</p>
+                        <div *ngIf="rdv.users && rdv.users.length>0">
+                          <span class="text-sm text-gray-500" *ngFor="let user of rdv.users; let last = last">
+                            {{ user.nom }}<span *ngIf="!last">, </span>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -45,3 +50,4 @@
     </div>
   </section>
 </main>
+<app-loader *ngIf="loader"></app-loader>
