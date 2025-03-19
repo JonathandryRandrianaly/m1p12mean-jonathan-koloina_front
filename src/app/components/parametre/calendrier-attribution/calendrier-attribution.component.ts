@@ -107,7 +107,7 @@ export class CalendrierAttributionComponent {
   }
 
   loadMecaniciens() {
-    this.apiService.getAll(`api/entretien/mecaniciens/${this.task.detailEntretienId}`).then(
+    this.apiService.getAll(`api/entretien/mecaniciens/${this.task.id}`).then(
       (response) => {
         this.employees = response;
         this.filteredEmployees = [...this.employees];  
@@ -125,7 +125,7 @@ export class CalendrierAttributionComponent {
   
 
   getDetailEntretienById(){
-    this.apiService.getAll(`api/entretien/details/${this.task.detailEntretienId}`).then(
+    this.apiService.getAll(`api/entretien/details/${this.task.id}`).then(
       (response) => {
         this.detailEntretien = response;
         
@@ -153,7 +153,7 @@ export class CalendrierAttributionComponent {
     if (this.task_form.valid) {
       const values = {
         usersId: this.task_form.value.employee, 
-        detailEntretienId: this.task.detailEntretienId  
+        detailEntretienId: this.task.id  
       };
        this.apiService.insert('api/entretien/mecanicien/assigner', values).then(
           (response) => {
