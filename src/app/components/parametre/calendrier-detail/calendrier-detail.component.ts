@@ -109,7 +109,8 @@ export class CalendrierDetailComponent implements OnInit {
   setTaskTo(task: any) {
     const dialogRef = this.dialog.open(CalendrierAttributionComponent, {
       width: '800px',
-      disableClose: true
+      disableClose: true,
+      data: task
     });
 
     dialogRef.afterClosed().subscribe(result => {
