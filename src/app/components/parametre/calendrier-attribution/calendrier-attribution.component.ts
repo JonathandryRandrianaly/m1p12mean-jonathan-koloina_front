@@ -62,6 +62,7 @@ export class CalendrierAttributionComponent {
   filteredEmployees: any[] = [...this.employees];
   searchControl: FormControl;
   displayedColumns: string[] = ['name', 'specialization','disponibilité', 'select'];
+  detailEntretien: any ;
 
   constructor(
     private fb: FormBuilder,
@@ -70,6 +71,7 @@ export class CalendrierAttributionComponent {
     private apiService: ApiService
   ) {
       this.loadMecaniciens();
+      this.getDetailEntretienById();
       this.searchControl = new FormControl('');
       this.task_form = this.fb.group({
         employee: this.fb.array([])  
@@ -109,12 +111,42 @@ export class CalendrierAttributionComponent {
       (response) => {
         this.employees = response;
         this.filteredEmployees = [...this.employees];  
+
+        this.filteredEmployees.forEach(employee => {
+          employee.isSelected = this.employeeArray.controls.some(ctrl => ctrl.value === employee.user._id);
+        });
+  
       },
       (error) => {
         console.error('Erreur lors de loadMecaniciens :', error);
       }
     );
   }
+  
+
+  getDetailEntretienById(){
+    this.apiService.getAll(`api/entretien/details/${this.task.detailEntretienId}`).then(
+      (response) => {
+        this.detailEntretien = response;
+        
+        if (this.detailEntretien.users && this.detailEntretien.users.length > 0) {
+          this.detailEntretien.users.forEach((user: { _id: string }) => {
+            this.employeeArray.push(new FormControl(user._id)); 
+          });
+        }
+      
+        this.filteredEmployees.forEach(employee => {
+          const isSelected = this.detailEntretien.users.some((user: { _id: string }) => user._id === employee.user._id);
+          employee.isSelected = isSelected;
+        });
+  
+      },
+      (error) => {
+        console.error('Erreur lors de getDetail :', error);
+      }
+    );
+  }
+  
   
 
   onSubmit() {
