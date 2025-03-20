@@ -65,20 +65,29 @@ export class DetailTacheComponent implements OnInit{
   detail : any;
   detailEntretienId: any;
   dateForm: FormGroup;
-  constructor(private dialog: MatDialog,private route: ActivatedRoute, private apiService: ApiService, private fb: FormBuilder) {
-    this.dateForm = this.fb.group(
-  {
-    detailEntretienId: ['', Validators.required],
-    dateDebut: [''],
-    dateFin: ['']
-  },
-  { validator: dateRangeValidator }
-);
+  rapportForm: FormGroup;
+  justificatifs: File[] = [];
 
+  constructor(private dialog: MatDialog,private route: ActivatedRoute, private apiService: ApiService, private fb: FormBuilder) {
+      this.dateForm = this.fb.group(
+      {
+        detailEntretienId: ['', Validators.required],
+        dateDebut: [''],
+        dateFin: ['']
+      },
+      { validator: dateRangeValidator }
+    );
+    this.rapportForm = this.fb.group({
+      detailEntretienId: ['', Validators.required],
+      libelle: ['', Validators.required],
+      prix: [null, [Validators.min(0)]],
+      justificatifs: [null]
+    });
   }
   ngOnInit() {
     this.detailEntretienId = this.route.snapshot.paramMap.get('id');
     this.dateForm.patchValue({ detailEntretienId: this.detailEntretienId });
+    this.rapportForm.patchValue({ detailEntretienId: this.detailEntretienId });
     this.getDetailsEntretien();
   }
 
@@ -131,6 +140,47 @@ export class DetailTacheComponent implements OnInit{
         }
       );
   }
+
+  onFileChange(event: any) {
+    const files: FileList = event.target.files;
+    if (files) {
+      this.justificatifs = Array.from(files);
+    }
+  }
+
+  addRapport() {
+    this.loader = true;
+
+    const formData = new FormData();
+    formData.append('detailEntretienId', this.rapportForm.value.detailEntretienId);
+    formData.append('libelle', this.rapportForm.value.libelle);
+    formData.append('prix', this.rapportForm.value.prix);
+    this.justificatifs.forEach((file) => {
+      formData.append('justificatifs', file);
+    });
+
+      this.apiService.import('api/entretien/rapport', formData).then(
+        (response) => {
+          const success= response.data;
+          if(success === true){
+            alert('Ajout effectué');
+            this.loader= false;
+          }
+          this.rapportForm = this.fb.group({
+            detailEntretienId: ['', Validators.required],
+            libelle: ['', Validators.required],
+            prix: [null, [Validators.min(0)]],
+            justificatifs: [null]
+          });
+         this.getDetailsEntretien();
+        },
+        (error) => {
+          this.loader = false;
+          console.error('Erreur lors de l\'insertion :', error);
+        }
+      );
+  }
+
   openJustificatif() {
 
     const justificatifs = [
