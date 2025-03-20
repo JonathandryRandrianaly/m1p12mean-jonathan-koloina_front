@@ -37,6 +37,8 @@ import {CalendrierDetailComponent} from './components/parametre/calendrier-detai
 import {StockParametreComponent} from './components/parametre/stock-parametre/stock-parametre.component';
 import {RendezVousComponent} from './components/client/rendez-vous/rendez-vous.component';
 import {DetailTacheComponent} from './components/parametre/detail-tache/detail-tache.component';
+import {FactureListeComponent} from './components/parametre/facture-liste/facture-liste.component';
+import {FactureDetailComponent} from './components/parametre/facture-detail/facture-detail.component';
 import { HistoriquesEntretienComponent } from './components/parametre/historiques-entretien/historiques-entretien.component';
 
 export const routes: Routes = [
@@ -400,6 +402,35 @@ export const routes: Routes = [
       roles: [
         'client',
         'mecanicien',
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"factures",component:FactureListeComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Factures', url: '' }
+      ],
+      roles: [
+        'client',
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"factures/:id",component:FactureDetailComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Factures', url: '/factures' },
+        { label: 'Détails', url: '' }
+      ],
+      roles: [
+        'client',
         'manager'
       ]
     }
