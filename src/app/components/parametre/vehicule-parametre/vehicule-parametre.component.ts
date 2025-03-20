@@ -243,4 +243,8 @@ export class VehiculeParametreComponent {
     this.showFilter = !this.showFilter;
   }
 
+  viewHistoriques(id: any) {
+    this.router.navigate(['/historiques/vehicule', id]); 
+  }
+
 }

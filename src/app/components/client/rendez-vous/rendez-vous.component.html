@@ -17,8 +17,8 @@
                   <div>
                     <p class="text-gray-500 text-sm flex justify-between w-full">
                       <span *ngIf="rdv.dateDebut == null && rdv.dateFin == null">À définir</span>
-                      <span *ngIf="rdv.dateDebut != null && rdv.dateFin != null">{{rdv.dateDebut | date:'HH:mm'}} - {{rdv.Fin | date:'HH:mm'}}</span>
-                      <span *ngIf="rdv.dateDebut != null && rdv.dateFin == null">{{rdv.dateDebut | date:'HH:mm'}} - ... </span>
+                      <span *ngIf="rdv.dateDebut != null && rdv.dateFin != null">{{rdv.dateDebut |  date:'dd/MM/yyyy HH:mm'}} - {{rdv.Fin |  date:'dd/MM/yyyy HH:mm'}}</span>
+                      <span *ngIf="rdv.dateDebut != null && rdv.dateFin == null">{{rdv.dateDebut |  date:'dd/MM/yyyy HH:mm'}} - ... </span>
                       <span class="text-green-500 font-semibold" *ngIf="rdv.etat.code==-10">Confirmé</span>
                     </p>
                     <h3 class="font-bold text-lg flex justify-between w-full">
