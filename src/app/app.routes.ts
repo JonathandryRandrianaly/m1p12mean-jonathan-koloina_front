@@ -37,6 +37,7 @@ import {CalendrierDetailComponent} from './components/parametre/calendrier-detai
 import {StockParametreComponent} from './components/parametre/stock-parametre/stock-parametre.component';
 import {RendezVousComponent} from './components/client/rendez-vous/rendez-vous.component';
 import {DetailTacheComponent} from './components/parametre/detail-tache/detail-tache.component';
+import {FactureListeComponent} from './components/parametre/facture-liste/facture-liste.component';
 
 export const routes: Routes = [
   {
@@ -383,6 +384,20 @@ export const routes: Routes = [
       roles: [
         'client',
         'mecanicien',
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"factures",component:FactureListeComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Factures', url: '' }
+      ],
+      roles: [
+        'client',
         'manager'
       ]
     }
