@@ -71,23 +71,26 @@
                     <div class="overflow-x-auto">
                       <table class="min-w-full table-auto border-collapse">
                         <thead>
-                        <tr class="bg-gray-100">
-                          <th class="px-4 py-2 text-left">Libellé du rapport</th>
-                          <th class="px-4 py-2 text-left">Prix</th>
-                          <th class="px-4 py-2 text-left">Actions</th>
-                        </tr>
+                          <tr class="bg-gray-100">
+                            <th class="px-4 py-2 text-left">Libellé du rapport</th>
+                            <th class="px-4 py-2 text-left">Prix</th>
+                            <th class="px-4 py-2 text-left">Actions</th>
+                          </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                          <td class="px-4 py-2">Changement filtre à huile</td>
-                          <td class="px-4 py-2">20€</td>
-                          <td class="px-4 py-2">
-                            <button class="btn btn-primary" (click)="openJustificatif()">Voir justificatifs</button>
-                          </td>
-                        </tr>
-                        <!-- Ajoutez plus de rapports ici si nécessaire -->
+                          <ng-container *ngIf="detail?.rapports && detail?.rapports.length > 0">
+                            <tr *ngFor="let rapport of detail?.rapports">
+                              <td class="px-4 py-2">{{ rapport?.libelle }}</td>
+                              <td class="px-4 py-2" *ngIf="rapport?.prix">{{ rapport?.prix | number: '1.2-2' }} Ar</td>
+                              <td class="px-4 py-2" *ngIf="!rapport?.prix"> - </td>
+                              <td class="px-4 py-2">
+                                <button class="btn btn-primary" (click)="openJustificatif(rapport?.justificatifs)">Voir justificatifs</button>
+                              </td>
+                            </tr>
+                          </ng-container>
                         </tbody>
                       </table>
+                      
                     </div>
                   </div>
                 </div>

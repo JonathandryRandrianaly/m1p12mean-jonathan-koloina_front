@@ -181,14 +181,7 @@ export class DetailTacheComponent implements OnInit{
       );
   }
 
-  openJustificatif() {
-
-    const justificatifs = [
-      { name: 'Facture 1', type: 'application/pdf', url: 'path/to/facture1.pdf' },
-      { name: 'Photo 1', type: 'image/png', url: 'path/to/photo1.png' },
-      { name: 'Tableau Excel', type: 'application/excel', url: 'path/to/table.xlsx' }
-    ];
-
+  openJustificatif(justificatifs: any) {
     const dialogRef = this.dialog.open(DetailTacheFichierComponent, {
       width: '800px',
       data: justificatifs
