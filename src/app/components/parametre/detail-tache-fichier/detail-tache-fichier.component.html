@@ -1,9 +1,88 @@
-<mat-dialog-content>
 
+<form [formGroup]="piece_form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content class="p-4">
+    <div class="text-center mb-4">
+      <input
+        type="file"
+        accept="image/*,.pdf,.xls,.xlsx,.doc,.docx,.txt"
+        (change)="onImageChange($event)"
+        hidden
+        #fileInput
+      />
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="fileInput.click()"
+        class="add-ref-btn"
+      >
+        <mat-icon>attach_file</mat-icon>&nbsp;Ajouter une référence
+      </button>
+    </div>
+
+    <!-- Utilisation de Flexbox pour un alignement plus souple -->
+    <div class="row gx-4 gy-4 d-flex justify-content-center">
+      <div
+        *ngFor="let ref of refControls.controls; let i = index"
+        class="col-12"
+      >
+        <div class="image-card">
+          <!-- Conteneur d'image -->
+          <div class="image-container">
+            <button
+              type="button"
+              class="delete-button"
+              (click)="removeRef(i)"
+              title="Supprimer"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <ng-container *ngIf="isImage(ref.value); else notImage">
+              <!-- Affichage de l'image -->
+              <img
+                [src]="ref.value"
+                class="image"
+                (click)="previsualise(ref.value, getFileName(ref.value))"
+                alt="Aperçu fichier"
+              />
+
+              <!-- Bouton de téléchargement -->
+              <button
+                type="button"
+                class="download-button"
+                (click)="downloadFile(ref.value, getFileName(ref.value))"
+              >
+                Télécharger
+              </button>
+            </ng-container>
+            <ng-template #notImage>
+              <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:bg-gray-50">
+                <div class="flex items-center space-x-4">
+                  <i [ngClass]="getFileIcon(ref.value)" class="text-xl text-gray-600"></i>
+                  <div class="file-info">
+                    <p class="text-sm font-semibold text-gray-800">{{ getFileName(ref.value) }}</p>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button type="button"  (click)="downloadFile(ref.value)" class="text-blue-600 hover:text-blue-800 focus:outline-none me-1">
+                    <i class="material-icons">download</i>
+                  </button>
+                  <button type="button"  (click)="previsualise(ref.value, getFileName(ref.value))" class="text-green-600 hover:text-green-800 focus:outline-none">
+                    <i class="material-icons">visibility</i>
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
 </mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button (click)="closeDialog()">Annuler</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()">
-    Valider
-  </button>
+
+<mat-dialog-actions class="d-flex justify-content-end mt-4">
+  <button type="button" mat-stroked-button color="light" (click)="closeDialog()">Fermer</button>
+  <button type="submit" mat-stroked-button color="dark">Valider</button>
 </mat-dialog-actions>
+
+</form>

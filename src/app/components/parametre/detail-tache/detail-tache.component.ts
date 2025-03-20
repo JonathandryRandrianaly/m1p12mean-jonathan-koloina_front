@@ -14,6 +14,10 @@ import {MatMenu, MatMenuItem, MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule, MatIconButton} from "@angular/material/button";
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTableModule} from '@angular/material/table';
+import {
+  EnergieMoteurInsertionComponent
+} from '../energie-moteur-dialog/energie-moteur-insertion/energie-moteur-insertion.component';
+import {DetailTacheFichierComponent} from '../detail-tache-fichier/detail-tache-fichier.component';
 
 interface Report {
   label: string;
@@ -24,7 +28,7 @@ interface Report {
 export const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const dateDebut = control.get('dateDebut')?.value;
   const dateFin = control.get('dateFin')?.value;
-  
+
   let errors: ValidationErrors = {};
 
   if (!dateDebut && dateFin) {
@@ -61,14 +65,14 @@ export class DetailTacheComponent implements OnInit{
   detail : any;
   detailEntretienId: any;
   dateForm: FormGroup;
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private fb: FormBuilder) {
+  constructor(private dialog: MatDialog,private route: ActivatedRoute, private apiService: ApiService, private fb: FormBuilder) {
     this.dateForm = this.fb.group(
   {
     detailEntretienId: ['', Validators.required],
     dateDebut: [''],
     dateFin: ['']
   },
-  { validator: dateRangeValidator } 
+  { validator: dateRangeValidator }
 );
 
   }
@@ -81,10 +85,10 @@ export class DetailTacheComponent implements OnInit{
 
   formatDateForInput(date: string): string {
     if (!date) return '';
-  
+
     const parsedDate = new Date(date);
-    return parsedDate.toISOString().slice(0, 16); 
-  }  
+    return parsedDate.toISOString().slice(0, 16);
+  }
 
   getDetailsEntretien() {
     this.loader = true;
@@ -127,6 +131,24 @@ export class DetailTacheComponent implements OnInit{
         }
       );
   }
+  openJustificatif() {
 
+    const justificatifs = [
+      { name: 'Facture 1', type: 'application/pdf', url: 'path/to/facture1.pdf' },
+      { name: 'Photo 1', type: 'image/png', url: 'path/to/photo1.png' },
+      { name: 'Tableau Excel', type: 'application/excel', url: 'path/to/table.xlsx' }
+    ];
+
+    const dialogRef = this.dialog.open(DetailTacheFichierComponent, {
+      width: '800px',
+      data: justificatifs
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
+    });
+  }
 
 }
