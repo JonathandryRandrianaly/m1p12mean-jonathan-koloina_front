@@ -47,7 +47,7 @@
                           La date de début est obligatoire si une date de fin est saisie.
                         </div>
                       </div>
-                     
+
                       <div class="flex-1">
                         <label for="end-time" class="block text-sm font-medium text-gray-700">Date et heure de fin</label>
                         <input type="datetime-local" id="end-time" formControlName="dateFin" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
@@ -55,16 +55,16 @@
                           La date de fin doit être postérieure à la date de début.
                         </div>
                       </div>
-                     
-                      
+
+
                       <button class="px-4 py-2 btn btn-dark text-white rounded-md shadow-md hover:bg-blue-700 self-end" [disabled]="dateForm.invalid">
                         Ajouter
                       </button>
-                                        
+
                     </div>
-                                      
+
                   </form>
-                  
+
 
                   <div class="bg-white shadow-md rounded-lg p-6 mt-6">
                     <h3 class="text-lg font-semibold mb-4">Liste des rapports</h3>
@@ -79,17 +79,10 @@
                         </thead>
                         <tbody>
                         <tr>
-                          <td class="px-4 py-2">Vidange moteur</td>
-                          <td class="px-4 py-2">50€</td>
-                          <td class="px-4 py-2">
-                            <button class="btn btn-primary">Voir justificatifs</button>
-                          </td>
-                        </tr>
-                        <tr>
                           <td class="px-4 py-2">Changement filtre à huile</td>
                           <td class="px-4 py-2">20€</td>
                           <td class="px-4 py-2">
-                            <button class="btn btn-primary">Voir justificatifs</button>
+                            <button class="btn btn-primary" (click)="openJustificatif()">Voir justificatifs</button>
                           </td>
                         </tr>
                         <!-- Ajoutez plus de rapports ici si nécessaire -->
@@ -111,7 +104,6 @@
                     <input type="number" id="price" name="price" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="Entrez le prix">
                   </div>
 
-                  <!-- Section téléchargement justificatif -->
                   <div class="mb-4">
                     <label for="documents" class="block text-sm font-medium text-gray-700">Ajouter des fichiers justificatifs</label>
                     <input type="file" id="documents" name="documents" class="mt-1 block w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm" multiple>
