@@ -137,13 +137,9 @@
                             <mat-icon>info</mat-icon>
                             <span>Détails</span>
                           </button>
-                          <button mat-menu-item >
-                            <mat-icon>edit</mat-icon>
-                            <span>Historiques</span>
-                          </button>
-                          <button mat-menu-item >
-                            <mat-icon>edit</mat-icon>
-                            <span>Entretiens</span>
+                          <button mat-menu-item (click)="viewHistoriques(vehicule._id)">
+                            <mat-icon>history</mat-icon>
+                            <span>Historiques entretiens</span>
                           </button>
                         </mat-menu>
                       </td>

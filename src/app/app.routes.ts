@@ -37,6 +37,7 @@ import {CalendrierDetailComponent} from './components/parametre/calendrier-detai
 import {StockParametreComponent} from './components/parametre/stock-parametre/stock-parametre.component';
 import {RendezVousComponent} from './components/client/rendez-vous/rendez-vous.component';
 import {DetailTacheComponent} from './components/parametre/detail-tache/detail-tache.component';
+import { HistoriquesEntretienComponent } from './components/parametre/historiques-entretien/historiques-entretien.component';
 
 export const routes: Routes = [
   {
@@ -379,6 +380,22 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Tâches', url: '' },
         { label: 'Détails', url: '' }
+      ],
+      roles: [
+        'client',
+        'mecanicien',
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"historiques/vehicule/:id",component:HistoriquesEntretienComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Véhicule', url: '' },
+        { label: 'Historiques', url: '' }
       ],
       roles: [
         'client',
