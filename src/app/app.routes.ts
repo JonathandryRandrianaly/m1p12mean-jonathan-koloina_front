@@ -38,6 +38,7 @@ import {StockParametreComponent} from './components/parametre/stock-parametre/st
 import {RendezVousComponent} from './components/client/rendez-vous/rendez-vous.component';
 import {DetailTacheComponent} from './components/parametre/detail-tache/detail-tache.component';
 import {FactureListeComponent} from './components/parametre/facture-liste/facture-liste.component';
+import {FactureDetailComponent} from './components/parametre/facture-detail/facture-detail.component';
 
 export const routes: Routes = [
   {
@@ -395,6 +396,21 @@ export const routes: Routes = [
       breadcrumb : [
         { label: 'Accueil', url: '/' },
         { label: 'Factures', url: '' }
+      ],
+      roles: [
+        'client',
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"factures/:id",component:FactureDetailComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Factures', url: '/factures' },
+        { label: 'Détails', url: '' }
       ],
       roles: [
         'client',
