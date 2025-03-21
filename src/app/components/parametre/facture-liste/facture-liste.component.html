@@ -5,43 +5,100 @@
         <div class="col-lg-12">
           <div class="card mb-3">
             <div class="card-body">
-              <div class="container mx-auto p-4">
-                <h1 class="text-2xl font-semibold mb-6">Liste des Factures</h1>
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="card-title m-0">Liste des factures:</h5>
+              </div>
+              <hr>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  <div *ngFor="let facture of factures" class="card bg-white shadow-lg rounded-lg border p-4">
-                    <div class="flex items-center justify-between">
-                      <div class="text-xl font-semibold">{{ facture.numero }}</div>
-                    </div>
-                    <p class="mt-2 text-gray-600">
-                      <strong>Date:</strong> {{ facture.date }}
-                    </p>
-                    <p class="mt-2 text-gray-800">
-                      <i class="fa fa-dollar-sign mr-2"></i>{{ facture.montant }}
-                    </p>
+              <!-- Bouton pour afficher le filtre -->
+              <div class="d-flex justify-content-end gap-2 mt-2 mb-3">
+                <button class="btn btn-outline-dark" type="button" (click)="toggleFilter()">
+                  <i class="bi bi-filter"></i> Filtrer
+                </button>
+              </div>
 
-                    <!-- Affichage du statut -->
-                    <p class="mt-2 flex justify-between items-center">
-                      <!-- Affichage du statut -->
-                      <span
-                        class="inline-block py-1 px-3 text-sm font-semibold rounded-full"
-                        [ngClass]="{
-                          'bg-green-100 text-green-800': facture.status === 'Payée',
-                          'bg-red-100 text-red-800': facture.status === 'Non payée'
-                        }">
-                        {{ facture.status }}
-                      </span>
+              <!-- Bloc de filtre -->
+              <div class="card" *ngIf="showFilter" style="width: 400px; position: absolute; right: 20px; top: 20px; z-index: 1000;">
+                <div class="card-body">
+                  <h5 class="card-title">Filtrer les Résultats</h5>
 
-                      <!-- Bouton Détails -->
-                      <span
-                        class="btn btn-sm btn-dark" (click)="showDetails(facture)">
-                        <mat-icon style="color: white" class="mt-1">info</mat-icon>
-                      </span>
-                    </p>
+                  <div class="mb-3">
+                    <label class="form-label">Numéro</label>
+                    <input type="text" [(ngModel)]="searchCriteria.id" placeholder="Rechercher ID..." class="form-control">
+                  </div>
 
+                  <div class="dropdown">
+                    <button class="btn btn-outline-dark" type="button" data-bs-toggle="dropdown">
+                      <i class="bi bi-filter"></i> Statuts
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li *ngFor="let etat of etats">
+                        <label class="dropdown-item">
+                          <input type="checkbox" [(ngModel)]="selectedEtats[etat.id]" (ngModelChange)="updateEtats()">
+                          {{ etat.libelle }}
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Date</label>
+                    <input type="date" [(ngModel)]="searchCriteria.date" class="form-control">
+                  </div>
+
+                  <div class="d-flex gap-2 mt-2">
+                    <button class="btn btn-secondary" (click)="resetSearchCriteria()"><i class="bi bi-arrow-clockwise"></i></button>
+                    <button class="btn btn-dark" (click)="applyFilters()"><i class="bi bi-search"></i></button>
+                    <button class="btn btn-danger" (click)="toggleFilter()"><i class="bi bi-x-circle"></i></button>
                   </div>
                 </div>
               </div>
+
+              <!-- Tableau des factures -->
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                  <tr>
+                    <th scope="col" (click)="sortData('_id')" style="cursor: pointer;">
+                      Numéro
+                      <mat-icon *ngIf="isSorted('_id', 'asc')">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('_id', 'desc')">arrow_downward</mat-icon>
+                    </th>
+                    <th scope="col" (click)="sortData('date')" style="cursor: pointer;">
+                      Date
+                      <mat-icon *ngIf="isSorted('date', 'asc')">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('date', 'desc')">arrow_downward</mat-icon>
+                    </th>
+                    <th scope="col" (click)="sortData('montant')" style="cursor: pointer;">
+                      Montant (€)
+                      <mat-icon *ngIf="isSorted('montant', 'asc')">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('montant', 'desc')">arrow_downward</mat-icon>
+                    </th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let facture of factures">
+                    <td>{{facture._id}}</td>
+                    <td>{{facture.date | date:'dd/MM/yyyy'}}</td>
+                    <td>{{facture.montantTotal | currency:' '}} Ariary</td>
+                    <td [ngClass]="{'text-success': facture.etat.code === 10, 'text-danger': facture.etat.code !== 10}">
+                      {{facture.etat.libelle}}
+                    </td>
+                    <td>
+                      <button class="btn btn-dark btn-sm" (click)="showDetails(facture)">Détail</button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <mat-paginator [length]="totalElement"
+                             [pageSize]="searchCriteria.limit"
+                             [pageSizeOptions]="[5, 10, 25, 100]"
+                             (page)="onPageChange($event)">
+              </mat-paginator>
             </div>
           </div>
         </div>
@@ -49,3 +106,5 @@
     </div>
   </section>
 </main>
+
+<app-loader *ngIf="loader"></app-loader>
