@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {ApiService} from '../../../services/api/api.service';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -30,10 +30,12 @@ export class DetailTacheFichierComponent {
   loading: boolean = false;
   error: boolean = false;
   justificatifs: any[] = [];
+  newJustificatifs: any[] = [];
   rapportId: any;
   detailId: any;
   piece_form!: FormGroup;
   backendUrl = 'http://localhost:5000/uploads/';
+  justificatifs_form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -45,21 +47,10 @@ export class DetailTacheFichierComponent {
     this.justificatifs = data?.rapport?.justificatifs;
     this.rapportId= data?.rapport?._id;
     this.detailId = data?.detailId;
-    this.piece_form = this.fb.group({
-      reference: this.fb.array([]),
+    this.justificatifs_form = this.fb.group({
+      rapportId: [data?.rapport?._id, Validators.required],
+      justificatifs: [null, Validators.required]
     });
-  }
-
-  get refControls(): FormArray {
-    return this.piece_form.get('reference') as FormArray;
-  }
-
-  addRef(fileName: string): void {
-    this.refControls.push(this.fb.control(fileName));
-  }
-
-  removeRef(index: number): void {
-    this.refControls.removeAt(index);
   }
 
   getFullImagePath(filePath: string): string {
@@ -81,17 +72,6 @@ export class DetailTacheFichierComponent {
           console.error('Erreur lors de l\'insertion :', error);
         }
       );
-  }
-
-  onImageChange(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-
-
-    }
   }
 
   isImage(fileName: string): boolean {
@@ -124,8 +104,45 @@ getFileIcon(filename: string): string {
     }
   }
 
+  onFileChange(event: any) {
+    const files: FileList = event.target.files;
+    if (files) {
+      this.newJustificatifs = Array.from(files);
+    }
+  }
+
+  removeNewFile(name: any){
+    this.newJustificatifs = this.newJustificatifs.filter(file => file.name !== name);
+  }
+
+  addJustificatifs() {
+    const formData = new FormData();
+    formData.append('rapportId', this.justificatifs_form.value.rapportId);
+    this.newJustificatifs.forEach((file) => {
+      formData.append('justificatifs', file);
+    });
+
+      this.apiService.import('api/entretien/rapport/justificatifs', formData).then(
+        (response) => {
+          const success= response.data;
+          if(success === true){
+            alert('Ajout effectué');
+            this.justificatifs = [...this.justificatifs, ...this.newJustificatifs];
+          }
+          this.justificatifs_form = this.fb.group({
+            rapportId: [this.rapportId, Validators.required],
+            justificatifs: [null, Validators.required]
+          });
+          this.dialogRef.close(true);
+        },
+        (error) => {
+          console.error('Erreur lors de l\'insertion :', error);
+        }
+      );
+  }
+
   onSubmit(): void {
-    console.log('Formulaire soumis avec:', this.piece_form.value);
+
   }
 
   closeDialog(): void {
