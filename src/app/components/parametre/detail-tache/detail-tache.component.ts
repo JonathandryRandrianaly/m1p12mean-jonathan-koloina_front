@@ -181,6 +181,17 @@ export class DetailTacheComponent implements OnInit{
       );
   }
 
+  removeRapport(rapportId: any) {
+      this.apiService.insert('api/entretien/rapport/remove/'+rapportId, {rapportId:rapportId}).then(
+        (response) => {
+            this.getDetailsEntretien();
+        },
+        (error) => {
+          console.error('Erreur lors de remove rapport:', error);
+        }
+      );
+  }
+
   openJustificatif(rapport: any, detailId: any) {
     const data= {
       rapport: rapport,

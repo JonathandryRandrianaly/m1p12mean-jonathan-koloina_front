@@ -92,7 +92,7 @@
                                     <mat-icon>info</mat-icon>
                                     <span>Justificatifs</span>
                                   </button>
-                                  <button mat-menu-item>
+                                  <button mat-menu-item (click)="removeRapport(rapport?._id)">
                                     <mat-icon>delete</mat-icon>
                                     <span>Supprimer</span>
                                   </button>
