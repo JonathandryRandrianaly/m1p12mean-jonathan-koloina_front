@@ -41,6 +41,14 @@
                     </ul>
                   </div>
 
+                  <div class="mb-3" *ngIf="!isClient">
+                    <label for="client" class="form-label">Client</label>
+                    <select class="form-select" id="client" [(ngModel)]="searchCriteria.client" (change)="applyFilters()">
+                      <option value="">Tous les clients</option>
+                      <option *ngFor="let client of clients" [value]="client._id">{{ client.nom }}</option>
+                    </select>
+                  </div>
+
                   <div class="mb-3">
                     <label class="form-label">Date</label>
                     <input type="date" [(ngModel)]="searchCriteria.date" class="form-control">

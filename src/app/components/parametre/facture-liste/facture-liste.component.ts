@@ -20,6 +20,7 @@ export class FactureListeComponent implements OnInit {
   loader : boolean = false;
   factures : any[] = [];
   clients : any[] = [];
+  isClient: boolean|null = null;
   etats = [
     { id: 10, libelle: 'Payé' },
     { id: -10, libelle: 'Non payé' }
@@ -28,6 +29,7 @@ export class FactureListeComponent implements OnInit {
   searchCriteria: any = {
     id: '',
     date: '',
+    client: '',
     page: 1,
     limit: 10,
     sortedColumn : '',
@@ -49,6 +51,7 @@ export class FactureListeComponent implements OnInit {
   ngOnInit() {
     this.authService.getConnectedUser().then(user => {
       this.userConnected = user;
+      this.loadClient();
       this.loadFactures();
       this.selectedEtats = {
         '10': true,
@@ -57,10 +60,29 @@ export class FactureListeComponent implements OnInit {
     });
   }
 
-  loadFactures() {
+  loadClient(){
     this.loader = true;
-    if(this.userConnected){
-      this.searchCriteria.client = this.userConnected;
+    this.apiService.getAll('api/users').then(
+      (response: any) => {
+        this.clients = response;
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors du chargement des factures :', error);
+      }
+    );
+  }
+
+  async loadFactures() {
+    this.loader = true;
+    if(this.isClient===null){
+      this.isClient = await this.authService.hasRole('client');
+    }
+    if (this.isClient) {
+      if(this.userConnected){
+        this.searchCriteria.client = this.userConnected;
+      }
     }
     const params = {
       ...this.searchCriteria,
@@ -106,7 +128,7 @@ export class FactureListeComponent implements OnInit {
   }
 
   showDetails(facture: any) {
-    console.log('Détails de la facture :', facture);
+    this.router.navigate(['factures/'+facture._id]);
   }
 
 
@@ -117,49 +139,6 @@ export class FactureListeComponent implements OnInit {
         this.searchCriteria.etats.push(etat);
       }
     }
-  }
-  changeStatut(id: string, isChecked: boolean) {
-    this.loader = true;
-    const data = {
-      userId: id,
-      statut: isChecked ? 10 : -10
-    };
-    this.apiService.insert('api/modele/' + id, data).then(
-      (response) => {
-        this.loadFactures();
-        this.loader = false;
-      },
-      (error) => {
-        this.loader = false;
-        console.error('Erreur lors de l\'insertion :', error);
-      }
-    );
-  }
-
-
-  openModeleDialog() {
-    const dialogRef = this.dialog.open(ModeleInsertionComponent, {
-      width: '800px',
-      disableClose: true
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('ato');
-        this.loader = true;
-        this.apiService.insert('api/modele', result).then(
-          (response) => {
-            if (response.status >= 200 && response.status <= 202) {
-              this.loadFactures();
-            }
-          },
-          (error) => {
-            this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
-          }
-        );
-      }
-    });
   }
 
   toggleFilter() {
