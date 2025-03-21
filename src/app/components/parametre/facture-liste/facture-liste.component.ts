@@ -128,7 +128,7 @@ export class FactureListeComponent implements OnInit {
   }
 
   showDetails(facture: any) {
-    this.router.navigate(['factures/'+facture._id]);
+    this.router.navigate(['/factures/'+facture._id]);
   }
 
 

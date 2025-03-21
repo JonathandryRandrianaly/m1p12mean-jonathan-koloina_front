@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatIcon} from '@angular/material/icon';
 import {CommonModule, NgForOf} from '@angular/common';
+import {MatDialog} from '@angular/material/dialog';
+import {AuthService} from '../../../services/auth/auth-service.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ApiService} from '../../../services/api/api.service';
 
 @Component({
   selector: 'app-facture-detail',
@@ -10,34 +14,56 @@ import {CommonModule, NgForOf} from '@angular/common';
   templateUrl: './facture-detail.component.html',
   styleUrl: './facture-detail.component.css'
 })
-export class FactureDetailComponent {
-  // Données du client et du véhicule
-  client = {
-    name: 'Jean Dupont',
-    vehicle: 'Peugeot 308 - 2020'
-  };
+export class FactureDetailComponent implements OnInit {
+  userConnected: string|null = null;
+  loader: boolean = false;
+  factureId: string = '';
+  detailFactures: any[] = [];
+  facture: any;
+  totalFactures: number = 0;
 
-  // Date de la facture (peut être dynamique ou récupérée d'une API)
-  factureDate = new Date();
+  constructor(private route: ActivatedRoute, private dialog: MatDialog, private authService : AuthService,private router: Router, private apiService: ApiService) {
 
-  // État de la facture (payer ou non)
-  isPaid = false;
-
-  // Liste des services
-  services = [
-    { name: 'Changement de pneus', detail: 'Changement des 4 pneus', total: 50 * 4 },
-    { name: 'Réparation freinage', detail: 'Réparation du système de freinage', total: 150 },
-    { name: 'Vidange huile', detail: 'Vidange complète du moteur', total: 40 }
-  ];
-
-  // Calcul du total des services
-  get totalServices() {
-    return this.services.reduce((acc, service) => acc + service.total, 0);
   }
 
-  // Méthode pour payer la facture
-  payInvoice() {
-    this.isPaid = true;
-    alert('La facture a été payée !');
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        this.factureId = params['id'];
+        this.loadFacture();
+        this.loadFactureDetail();
+      }
+    });
   }
+
+  loadFactureDetail() {
+    this.loader = true;
+    this.apiService.getAll('api/factures/details/'+this.factureId).then(
+      (response: any) => {
+        this.detailFactures = response;
+        console.log(this.detailFactures);
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors du chargement des factures :', error);
+      }
+    );
+  }
+
+  loadFacture() {
+    this.loader = true;
+    this.apiService.getAll('api/factures/'+this.factureId).then(
+      (response: any) => {
+        this.facture = response;
+        console.log(this.facture);
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors du chargement des factures :', error);
+      }
+    );
+  }
+
 }
