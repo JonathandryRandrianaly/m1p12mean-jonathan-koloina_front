@@ -181,15 +181,19 @@ export class DetailTacheComponent implements OnInit{
       );
   }
 
-  openJustificatif(justificatifs: any) {
+  openJustificatif(rapport: any, detailId: any) {
+    const data= {
+      rapport: rapport,
+      detailId: detailId
+    }
     const dialogRef = this.dialog.open(DetailTacheFichierComponent, {
       width: '800px',
-      data: justificatifs
+      data: data
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-
+      if (result==true) {
+        this.getDetailsEntretien();
       }
     });
   }

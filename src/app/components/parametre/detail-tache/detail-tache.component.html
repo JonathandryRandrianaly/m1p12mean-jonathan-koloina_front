@@ -84,7 +84,19 @@
                               <td class="px-4 py-2" *ngIf="rapport?.prix">{{ rapport?.prix | number: '1.2-2' }} Ar</td>
                               <td class="px-4 py-2" *ngIf="!rapport?.prix"> - </td>
                               <td class="px-4 py-2">
-                                <button class="btn btn-primary" (click)="openJustificatif(rapport?.justificatifs)">Voir justificatifs</button>
+                                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+                                  <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                  <button mat-menu-item (click)="openJustificatif(rapport,detail._id)" >
+                                    <mat-icon>info</mat-icon>
+                                    <span>Justificatifs</span>
+                                  </button>
+                                  <button mat-menu-item>
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Supprimer</span>
+                                  </button>
+                                </mat-menu>
                               </td>
                             </tr>
                           </ng-container>
