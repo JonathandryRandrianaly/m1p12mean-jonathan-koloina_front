@@ -68,6 +68,7 @@ export class DemandeServiceClientComponent implements OnInit {
       this.loadVehicules();
     });
     this.loadCategorieEntretien();
+    this.loadDisabledDate();
     this.entretien_form = this.fb.group({
       vehicule: ['', Validators.required],
       categorieModele: ['', Validators.required],
@@ -116,6 +117,19 @@ export class DemandeServiceClientComponent implements OnInit {
       },
       (error) => {
         console.error('Erreur lors de loadSpecialisations :', error);
+      }
+    );
+  }
+
+  loadDisabledDate() {
+    this.apiService.getAll('api/date-occupe').then(
+      (response) => {
+        if (response?.dateDisabled) {
+          this.disabledDates = response.dateDisabled.map((d: { date: string }) => new Date(d.date));
+        }
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des dates :', error);
       }
     );
   }
