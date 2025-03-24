@@ -68,6 +68,7 @@ export class DemandeServiceClientComponent implements OnInit {
       this.loadVehicules();
     });
     this.loadCategorieEntretien();
+    this.loadDisabledDate();
     this.entretien_form = this.fb.group({
       vehicule: ['', Validators.required],
       categorieModele: ['', Validators.required],
@@ -105,17 +106,35 @@ export class DemandeServiceClientComponent implements OnInit {
       vehicule: vehicle._id,
       categorieModele: vehicle.modele.categorie
     });
-  this.currentStep = 1;
+    this.loadCategorieEntretien();
+    this.currentStep = 1;
   }
 
   loadCategorieEntretien() {
     const statut = 10;
-    this.apiService.getWithData(`api/categorie-entretiens/statut/${statut}`, {}).then(
+    const categorieModeleId = this.entretien_form?.value?.categorieModele;
+    this.apiService.getWithData(`api/categorie-entretiens/statut-min/${statut}`, {
+      categorieModeleId: categorieModeleId || null
+    }).then(
       (response) => {
         this.services = response;
+        this.cdr.detectChanges();
       },
       (error) => {
         console.error('Erreur lors de loadSpecialisations :', error);
+      }
+    );
+  }
+
+  loadDisabledDate() {
+    this.apiService.getAll('api/date-occupe').then(
+      (response) => {
+        if (response?.dateDisabled) {
+          this.disabledDates = response.dateDisabled.map((d: { date: string }) => new Date(d.date));
+        }
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des dates :', error);
       }
     );
   }
@@ -247,6 +266,10 @@ export class DemandeServiceClientComponent implements OnInit {
       date: this.entretien_form.value.date,
       typeEntretien: []
     });
+  }
+
+  rendezvous(){
+    this.router.navigate(['/rendez-vous']);
   }
 
 }

@@ -40,6 +40,8 @@ import {DetailTacheComponent} from './components/parametre/detail-tache/detail-t
 import {FactureListeComponent} from './components/parametre/facture-liste/facture-liste.component';
 import {FactureDetailComponent} from './components/parametre/facture-detail/facture-detail.component';
 import { HistoriquesEntretienComponent } from './components/parametre/historiques-entretien/historiques-entretien.component';
+import {FinanceComponent} from './components/statistiques/finance/finance.component';
+import {PersonnelClientComponent} from './components/statistiques/personnel-client/personnel-client.component';
 
 export const routes: Routes = [
   {
@@ -431,6 +433,34 @@ export const routes: Routes = [
       ],
       roles: [
         'client',
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"statistiques/finance",component:FinanceComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Statistiques', url: '' },
+        { label: 'Finance', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"statistiques/personnel-client",component:PersonnelClientComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Statistiques', url: '/statistiques/finance' },
+        { label: 'Personnel et client', url: '' }
+      ],
+      roles: [
         'manager'
       ]
     }

@@ -24,6 +24,7 @@ export class CalendrierDetailComponent implements OnInit {
   loader: boolean = false;
   searchQuery: string = '';
   selectedDate: Date | null = null;
+  isFreeDate: boolean = true;
   selectedDateString: string = '';
 
   columns = [
@@ -45,6 +46,7 @@ export class CalendrierDetailComponent implements OnInit {
         const dateFromUrl = new Date(params['date']);
         this.selectedDateString = dateFromUrl.toISOString().split('T')[0];
         this.selectedDate = dateFromUrl;
+        this.getSelectedDateOccupe();
         this.loadEntretienDetails();
       }
     });
@@ -89,6 +91,22 @@ export class CalendrierDetailComponent implements OnInit {
     }
   }
 
+  getSelectedDateOccupe(){
+    this.apiService.getAll('api/getDateOccupe/'+this.selectedDate).then((response:boolean) => {
+      this.isFreeDate = !response;
+    }).catch(error => {
+      console.error('Erreur lors de la mise à jour du statut:', error);
+    });
+  }
+
+  setSelectedDateOccupe() {
+    this.apiService.insert(`api/setDateOccupe/${this.selectedDate}`, {}).then((response) => {
+      this.isFreeDate = !this.isFreeDate;
+    }).catch(error => {
+      console.error('Erreur lors de la mise à jour du statut:', error);
+    });
+  }
+
   getEtatLibelle(etatCode: number): string {
     switch (etatCode) {
       case -10: return 'A faire';
@@ -100,7 +118,7 @@ export class CalendrierDetailComponent implements OnInit {
   }
 
   viewDetails(task: any) {
-    this.router.navigate(['/tache', task.id]); 
+    this.router.navigate(['/tache', task.id]);
   }
 
   setAs(task: any) {

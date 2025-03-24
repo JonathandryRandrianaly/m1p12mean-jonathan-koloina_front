@@ -39,22 +39,12 @@
           <span>Mes tâches</span>
         </a>
       </li>
-      <li class="nav-item" *ngIf="isMecanicien$ | async">
-        <a class="nav-link collapsed" (click)="navigate('/mecanicien/historiques')">
-          <i class="bi bi-clock-history"></i><span>Historiques</span>
-        </a>
-      </li>
       <li class="nav-heading" *ngIf="isManager$ | async">Manager</li>
       <li class="nav-item" *ngIf="isManager$ | async">
         <a class="nav-link collapsed" data-bs-target="#parametre" data-bs-toggle="collapse">
-          <i class="bi bi-gear"></i><span>Système</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-gear"></i><span>Paramètre</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="parametre" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-          <li class="nav-item">
-            <a class="nav-link collapsed" (click)="navigate('/parametre/users')">
-              <i class="bi bi-circle"></i><span>Utilisateurs</span>
-            </a>
-          </li>
           <li class="nav-item">
             <a class="nav-link collapsed" (click)="navigate('/vehicules')">
               <i class="bi bi-circle"></i><span>Véhicules</span>
@@ -68,11 +58,6 @@
           <li class="nav-item">
             <a class="nav-link collapsed" (click)="navigate('/parametre/specialisations')">
               <i class="bi bi-circle"></i><span>Spécialisations</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link collapsed" (click)="navigate('/calendrier-tache')">
-              <i class="bi bi-circle"></i><span>Tâches</span>
             </a>
           </li>
           <li class="nav-item">
@@ -142,23 +127,40 @@
         </ul>
       </li>
       <li class="nav-item" *ngIf="isManager$ | async">
+        <a class="nav-link collapsed" data-bs-target="#manager" data-bs-toggle="collapse">
+          <i class="bi bi-key"></i><span>Système</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="manager" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/calendrier-tache')">
+              <i class="bi bi-circle"></i><span>Tâches</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/factures')">
+              <i class="bi bi-circle"></i><span>Factures</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link collapsed" (click)="navigate('/parametre/users')">
+              <i class="bi bi-circle"></i><span>Utilisateurs</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item" *ngIf="isManager$ | async">
         <a class="nav-link collapsed" data-bs-target="#statistique" data-bs-toggle="collapse">
           <i class="bi bi-graph-up"></i><span>Statistiques</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="statistique" class="nav-content collapse" data-bs-parent="#sidebar-nav">
           <li class="nav-item">
-            <a class="nav-link collapsed" (click)="navigate('/parametre/users')">
+            <a class="nav-link collapsed" (click)="navigate('/statistiques/finance')">
               <i class="bi bi-circle"></i><span>Finance</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link collapsed" (click)="navigate('/parametre/marques')">
-              <i class="bi bi-circle"></i><span>Personnel</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link collapsed" (click)="navigate('/parametre/marques')">
-              <i class="bi bi-circle"></i><span>Client</span>
+            <a class="nav-link collapsed" (click)="navigate('/statistiques/personnel-client')">
+              <i class="bi bi-circle"></i><span>Personnel et client</span>
             </a>
           </li>
         </ul>
