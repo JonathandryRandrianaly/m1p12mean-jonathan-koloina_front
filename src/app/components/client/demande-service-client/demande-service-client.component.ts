@@ -249,4 +249,8 @@ export class DemandeServiceClientComponent implements OnInit {
     });
   }
 
+  rendezvous(){
+    this.router.navigate(['/rendez-vous']);
+  }
+
 }

@@ -32,6 +32,7 @@ export class FactureDetailComponent implements OnInit {
         this.factureId = params['id'];
         this.loadFacture();
         this.loadFactureDetail();
+        this.loadTotalFacture();
       }
     });
   }
@@ -66,4 +67,33 @@ export class FactureDetailComponent implements OnInit {
     );
   }
 
+
+  loadTotalFacture() {
+    this.loader = true;
+    this.apiService.getAll('api/facture/paiement-total/'+this.factureId).then(
+      (response: any) => {
+        this.totalFactures = response;
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors du chargement des factures :', error);
+      }
+    );
+  }
+
+  payer(){
+    this.apiService.insert('api/facture/paiement', {
+      factureId: this.factureId,
+      etatCode: Number(10),
+      etatLibelle: 'Payer'
+    }).then(response => {
+      this.loadFacture();
+    }).catch(error => {
+      console.error('Erreur lors de la mise à jour du statut:', error);
+    });
+  }
+  retour(){
+    this.router.navigate(['/factures']);
+  }
 }
