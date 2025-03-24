@@ -18,6 +18,7 @@ import {
   EnergieMoteurInsertionComponent
 } from '../energie-moteur-dialog/energie-moteur-insertion/energie-moteur-insertion.component';
 import {DetailTacheFichierComponent} from '../detail-tache-fichier/detail-tache-fichier.component';
+import { DetailTacheConsommableComponent } from '../detail-tache-consommable/detail-tache-consommable.component';
 
 interface Report {
   label: string;
@@ -205,6 +206,34 @@ export class DetailTacheComponent implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       if (result==true) {
         this.getDetailsEntretien();
+      }
+    });
+  }
+
+  openStockDialog() {
+    const dialogRef = this.dialog.open(DetailTacheConsommableComponent, {
+      width: '800px',
+      data: this.detailEntretienId,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loader = true;
+        this.apiService.insert('api/entretien/consommable/stock', result).then(
+          (response) => {
+            if (response.data.success == true) {
+              this.getDetailsEntretien();
+            }else{
+              this.loader=false;
+              alert('⚠️ Mouvement impossible');
+            }
+          },
+          (error) => {
+            this.loader = false;
+            console.error('Erreur lors de l\'insertion :', error);
+          }
+        );
       }
     });
   }
