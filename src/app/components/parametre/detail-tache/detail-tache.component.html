@@ -71,23 +71,38 @@
                     <div class="overflow-x-auto">
                       <table class="min-w-full table-auto border-collapse">
                         <thead>
-                        <tr class="bg-gray-100">
-                          <th class="px-4 py-2 text-left">Libellé du rapport</th>
-                          <th class="px-4 py-2 text-left">Prix</th>
-                          <th class="px-4 py-2 text-left">Actions</th>
-                        </tr>
+                          <tr class="bg-gray-100">
+                            <th class="px-4 py-2 text-left">Libellé du rapport</th>
+                            <th class="px-4 py-2 text-left">Prix</th>
+                            <th class="px-4 py-2 text-left">Actions</th>
+                          </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                          <td class="px-4 py-2">Changement filtre à huile</td>
-                          <td class="px-4 py-2">20€</td>
-                          <td class="px-4 py-2">
-                            <button class="btn btn-primary" (click)="openJustificatif()">Voir justificatifs</button>
-                          </td>
-                        </tr>
-                        <!-- Ajoutez plus de rapports ici si nécessaire -->
+                          <ng-container *ngIf="detail?.rapports && detail?.rapports.length > 0">
+                            <tr *ngFor="let rapport of detail?.rapports">
+                              <td class="px-4 py-2">{{ rapport?.libelle }}</td>
+                              <td class="px-4 py-2" *ngIf="rapport?.prix">{{ rapport?.prix | number: '1.2-2' }} Ar</td>
+                              <td class="px-4 py-2" *ngIf="!rapport?.prix"> - </td>
+                              <td class="px-4 py-2">
+                                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+                                  <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                  <button mat-menu-item (click)="openJustificatif(rapport,detail._id)" >
+                                    <mat-icon>info</mat-icon>
+                                    <span>Justificatifs</span>
+                                  </button>
+                                  <button mat-menu-item (click)="removeRapport(rapport?._id)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Supprimer</span>
+                                  </button>
+                                </mat-menu>
+                              </td>
+                            </tr>
+                          </ng-container>
                         </tbody>
                       </table>
+                      
                     </div>
                   </div>
                 </div>
@@ -95,25 +110,32 @@
                 <!-- Section Ajout de rapport -->
                 <div class="bg-white shadow-md rounded-lg p-6 mt-6 lg:mt-0">
                   <h3 class="text-lg font-semibold mb-4">Ajout de rapport</h3>
-                  <div class="mb-4">
-                    <label for="report-label" class="block text-sm font-medium text-gray-700">Libellé du rapport</label>
-                    <input type="text" id="report-label" name="report-label" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="Entrez le libellé du rapport">
-                  </div>
-                  <div class="mb-4">
-                    <label for="price" class="block text-sm font-medium text-gray-700">Prix (optionnel)</label>
-                    <input type="number" id="price" name="price" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="Entrez le prix">
-                  </div>
-
-                  <div class="mb-4">
-                    <label for="documents" class="block text-sm font-medium text-gray-700">Ajouter des fichiers justificatifs</label>
-                    <input type="file" id="documents" name="documents" class="mt-1 block w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm" multiple>
-                  </div>
-                  <hr>
-
-                  <div class="flex flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
-                    <button class="btn btn-dark me-2 mb-2"> Ajouter rapport</button>
-                    <button class="btn btn-dark mb-2"> Consommable utilisé</button>
-                  </div>
+                      <form [formGroup]="rapportForm">
+                        <div class="mb-4">
+                          <label for="report-label" class="block text-sm font-medium text-gray-700">Libellé du rapport</label>
+                          <input type="text" id="report-label" formControlName="libelle" name="report-label" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="Entrez le libellé du rapport">
+                        </div>
+                        <div class="invalid-feedback" *ngIf="rapportForm.get('libelle')?.invalid && rapportForm.get('libelle')?.touched">
+                          Le nom est requis.
+                        </div>
+                        <div class="mb-4">
+                          <label for="price" class="block text-sm font-medium text-gray-700">Prix (optionnel)</label>
+                          <input type="number" id="price" formControlName="prix" name="price" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="Entrez le prix">
+                        </div>
+      
+                        <div class="mb-4">
+                          <label for="documents" class="block text-sm font-medium text-gray-700">Ajouter des fichiers justificatifs</label>
+                          <p class="text-sm text-gray-500">(*png/jpeg/pdf/docx/xslx/txt)</p>
+                          <input type="file" id="documents" formControlName="justificatifs" (change)="onFileChange($event)" name="documents" class="mt-1 block w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm" multiple  accept=".png,.jpeg,.jpg,.pdf,.docx,.xlsx,.txt">
+                        </div>
+                        <hr>
+      
+                        <div class="flex flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
+                          <button class="btn btn-dark me-2 mb-2" (click)="addRapport()" [disabled]="rapportForm.invalid"> Ajouter rapport</button>
+                          <button class="btn btn-dark mb-2"> Consommable utilisé</button>
+                        </div>
+                      </form>
+             
                 </div>
               </div>
 

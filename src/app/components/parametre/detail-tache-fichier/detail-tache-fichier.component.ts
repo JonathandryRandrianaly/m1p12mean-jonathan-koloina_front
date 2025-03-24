@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {ApiService} from '../../../services/api/api.service';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -8,6 +8,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {CommonModule} from '@angular/common';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIcon} from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-detail-tache-fichier',
@@ -29,129 +30,122 @@ export class DetailTacheFichierComponent {
   loading: boolean = false;
   error: boolean = false;
   justificatifs: any[] = [];
+  newJustificatifs: any[] = [];
+  rapportId: any;
+  detailId: any;
   piece_form!: FormGroup;
+  backendUrl = 'http://localhost:5000/uploads/';
+  justificatifs_form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<DetailTacheFichierComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any[],
-    private apiService: ApiService
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private apiService: ApiService,
+    private router: Router
   ) {
-    this.justificatifs = data;
-    this.piece_form = this.fb.group({
-      reference: this.fb.array([]),
+    this.justificatifs = data?.rapport?.justificatifs;
+    this.rapportId= data?.rapport?._id;
+    this.detailId = data?.detailId;
+    this.justificatifs_form = this.fb.group({
+      rapportId: [data?.rapport?._id, Validators.required],
+      justificatifs: [null, Validators.required]
     });
   }
 
-  get refControls(): FormArray {
-    return this.piece_form.get('reference') as FormArray;
+  getFullImagePath(filePath: string): string {
+    return `${this.backendUrl}${filePath}`;
   }
 
-  addRef(base64: string): void {
-    this.refControls.push(this.fb.control(base64));
-  }
-
-  removeRef(index: number): void {
-    this.refControls.removeAt(index);
-  }
-
-  onImageChange(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64 = reader.result as string;
-        this.addRef(base64);
-      };
-      reader.readAsDataURL(file);
+  removeFile(fileId: any) {
+    const value= {
+      rapportId: this.rapportId,
+      fileId: fileId
     }
+      this.apiService.insert('api/entretien/rapport/remove-fichier', value).then(
+        (response) => {
+          this.justificatifs = this.justificatifs.filter(file => file._id !== fileId);
+          this.dialogRef.close(true);
+        },
+        (error) => {
+          this.dialogRef.close();
+          console.error('Erreur lors de l\'insertion :', error);
+        }
+      );
   }
 
-  isImage(ref: string): boolean {
-    return ref.startsWith('data:image');
+  isImage(fileName: string): boolean {
+    return /\.(jpg|jpeg|png|gif)$/i.test(fileName);
   }
 
-  getFileIcon(url: string): string {
-    const extension = url.split('.').pop()?.toLowerCase();
-    switch (extension) {
-      case 'pdf':
-        return 'fas fa-file-pdf';
-      case 'doc':
-      case 'docx':
-        return 'fas fa-file-word';
-      case 'xls':
-      case 'xlsx':
-        return 'fas fa-file-excel';
-      case 'txt':
-        return 'fas fa-file-alt';
-      default:
-        return 'fas fa-file';
-    }
+getFileIcon(filename: string): string {
+  if (filename.endsWith('.pdf')) {
+    return 'picture_as_pdf'; 
+  } else if (filename.endsWith('.doc') || filename.endsWith('.docx')) {
+    return 'description'; 
+  } else if (filename.endsWith('.xls') || filename.endsWith('.xlsx')) {
+    return 'table_chart'; 
+  } else if (filename.endsWith('.png') || filename.endsWith('.jpg') || filename.endsWith('.jpeg')) {
+    return 'image'; 
+  } else {
+    return 'insert_drive_file'; 
+  }
+}
+
+  downloadFile(fileName: string): void {
+    window.open(this.getFullImagePath(fileName), '_blank');
   }
 
-  getFileName(ref: string): string {
-    const mimeTypeMatches = ref.match(/^data:(.*);base64,/);
-    const mimeType = mimeTypeMatches ? mimeTypeMatches[1] : 'fichier inconnu';
-    return `ref_${mimeType.split('/')[1] || 'unknown'}`;
-  }
-
-  downloadFile(base64String: string, fileName: string = 'document') {
-    const matches = base64String.match(/^data:(.*);base64,(.*)$/);
-    if (!matches || matches.length !== 3) {
-      console.error('Format de fichier invalide');
-      return;
-    }
-
-    const mimeType = matches[1];
-    const base64Data = matches[2];
-    const byteCharacters = atob(base64Data);
-    const byteNumbers = new Array(byteCharacters.length);
-
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: mimeType });
-
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
-  previsualise(base64String: string, fileType: string, fileName: string = 'document'): void {
-    const matches = base64String.match(/^data:(.*);base64,(.*)$/);
-    if (!matches || matches.length !== 3) {
-      console.error('Format de fichier invalide');
-      return;
-    }
-    const mimeType = matches[1];
-    const base64Data = matches[2];
-    const byteCharacters = atob(base64Data);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: mimeType });
-    const fileUrl = URL.createObjectURL(blob);
+  previsualise(fileName: string): void {
+    const fileUrl = this.getFullImagePath(fileName);
     const newTab = window.open();
     if (newTab) {
       newTab.document.write(`<iframe src="${fileUrl}" width="100%" height="100%"></iframe>`);
     }
   }
 
-  onSubmit() {
+  onFileChange(event: any) {
+    const files: FileList = event.target.files;
+    if (files) {
+      this.newJustificatifs = Array.from(files);
+    }
+  }
+
+  removeNewFile(name: any){
+    this.newJustificatifs = this.newJustificatifs.filter(file => file.name !== name);
+  }
+
+  addJustificatifs() {
+    const formData = new FormData();
+    formData.append('rapportId', this.justificatifs_form.value.rapportId);
+    this.newJustificatifs.forEach((file) => {
+      formData.append('justificatifs', file);
+    });
+
+      this.apiService.import('api/entretien/rapport/justificatifs', formData).then(
+        (response) => {
+          const success= response.data;
+          if(success === true){
+            alert('Ajout effectué');
+            this.justificatifs = [...this.justificatifs, ...this.newJustificatifs];
+          }
+          this.justificatifs_form = this.fb.group({
+            rapportId: [this.rapportId, Validators.required],
+            justificatifs: [null, Validators.required]
+          });
+          this.dialogRef.close(true);
+        },
+        (error) => {
+          console.error('Erreur lors de l\'insertion :', error);
+        }
+      );
+  }
+
+  onSubmit(): void {
 
   }
 
-  closeDialog() {
+  closeDialog(): void {
     this.dialogRef.close();
   }
-
 }
