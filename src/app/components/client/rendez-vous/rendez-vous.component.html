@@ -5,11 +5,11 @@
         <div class="col-lg-12">
           <div class="card mb-3">
             <div class="card-body">
-
               <h5 class="card-title m-0">
                 Mes rendez-vous:
               </h5>
-              <div class="max-w-6xl mt-3 flex" *ngFor="let rdv of rdvs">
+
+              <div class="max-w-6xl mt-3 flex flex-col gap-4" *ngFor="let rdv of rdvs">
                 <div class="w-1/6 pr-1 text-left">
                   <p class="text-gray-500 text-sm">{{rdv.entretien.date | date:'dd/MM/yyyy'}}</p>
                 </div>
@@ -17,13 +17,19 @@
                   <div>
                     <p class="text-gray-500 text-sm flex justify-between w-full">
                       <span *ngIf="rdv.dateDebut == null && rdv.dateFin == null">À définir</span>
-                      <span *ngIf="rdv.dateDebut != null && rdv.dateFin != null">{{rdv.dateDebut |  date:'dd/MM/yyyy HH:mm'}} - {{rdv.Fin |  date:'dd/MM/yyyy HH:mm'}}</span>
-                      <span *ngIf="rdv.dateDebut != null && rdv.dateFin == null">{{rdv.dateDebut |  date:'dd/MM/yyyy HH:mm'}} - ... </span>
-                      <span class="text-green-500 font-semibold" *ngIf="rdv.etat.code==-10">Confirmé</span>
+                      <span *ngIf="rdv.dateDebut != null && rdv.dateFin != null">
+                        {{rdv.dateDebut | date:'dd/MM/yyyy HH:mm'}} - {{rdv.dateFin | date:'dd/MM/yyyy HH:mm'}}
+                      </span>
+                      <span *ngIf="rdv.dateDebut != null && rdv.dateFin == null">
+                        {{rdv.dateDebut | date:'dd/MM/yyyy HH:mm'}} - ...
+                      </span>
+                      <span class="text-green-500 font-semibold" *ngIf="rdv.etat.code == -10">Confirmé</span>
                     </p>
                     <h3 class="font-bold text-lg flex justify-between w-full">
                       <span>{{rdv.typeEntretien.nom}}</span>
-                      <span class="text-gray-700 font-semibold">{{rdv.typeEntretien.prix | number:'1.2-2'}} Ar</span>
+                      <span class="text-gray-700 font-semibold">
+                        {{rdv.typeEntretien.prix | number:'1.2-2'}} Ar
+                      </span>
                     </h3>
                     <p class="text-gray-700">
                       {{rdv.typeEntretien.description}}
@@ -31,17 +37,26 @@
                     <div class="flex items-center mt-4">
                       <div class="ml-3">
                         <p class="font-semibold">{{rdv.entretien.vehicule.immatriculation}}</p>
-                        <div *ngIf="rdv.users && rdv.users.length>0">
+                        <div *ngIf="rdv.users && rdv.users.length > 0">
                           <span class="text-sm text-gray-500" *ngFor="let user of rdv.users; let last = last">
                             {{ user.nom }}<span *ngIf="!last">, </span>
                           </span>
                         </div>
                       </div>
                     </div>
+
+                    <div class="mt-4 flex gap-2">
+                      <button *ngIf="rdv.etat.code==-10" mat-raised-button color="warn" style="color: red;" (click)="annulerRdv(rdv._id)">
+                        <mat-icon>delete</mat-icon> Annuler
+                      </button>
+                      <button *ngIf="rdv.etat.code==-10" mat-raised-button color="primary" >
+                        <mat-icon>event</mat-icon> Reporter
+                      </button>
+                    </div>
+
                   </div>
                 </div>
               </div>
-
 
             </div>
           </div>

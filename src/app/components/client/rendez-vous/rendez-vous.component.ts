@@ -53,4 +53,18 @@ export class RendezVousComponent {
       }
     );
   }
+
+  annulerRdv(detailEntretienId: any) {
+    this.loader = true;
+    this.apiService.insert('api/entretien/rdv/annuler',{detailEntretienId}).then(
+      (response) => {
+        this.loadRdv();
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors de l\'annulation :', error);
+      }
+    );
+  }
 }

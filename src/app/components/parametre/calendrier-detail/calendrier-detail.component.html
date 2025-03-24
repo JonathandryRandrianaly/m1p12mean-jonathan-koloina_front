@@ -54,6 +54,7 @@
                           <mat-menu #menu="matMenu">
                             <button mat-menu-item (click)="viewDetails(task)">Détails</button>
                             <button mat-menu-item (click)="setTaskTo(task)">Assignation</button>
+                            <button *ngIf="task.etatCode==-10" mat-menu-item (click)="annulerRdv(task.id)">Annuler</button>
                           </mat-menu>
                           <button mat-icon-button (click)="viewDetails(task)">
                             <mat-icon style="color: white">info</mat-icon>
