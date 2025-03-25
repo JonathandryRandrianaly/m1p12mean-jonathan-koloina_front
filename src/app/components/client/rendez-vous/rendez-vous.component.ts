@@ -30,6 +30,7 @@ export class RendezVousComponent {
   loader : boolean = false;
   rdvs : any[] = [];
   userConnected: string|null = null;
+  today: any;
   constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService, private authService: AuthService) {
 
   }
@@ -38,6 +39,7 @@ export class RendezVousComponent {
       this.userConnected = user;
       this.loadRdv();
     });
+    this.today = new Date().toISOString().split('T')[0];
   }
 
   loadRdv() {
@@ -50,6 +52,20 @@ export class RendezVousComponent {
       (error) => {
         this.loader = false;
         console.error('Erreur lors de loadRDV :', error);
+      }
+    );
+  }
+
+  annulerRdv(detailEntretienId: any) {
+    this.loader = true;
+    this.apiService.insert('api/entretien/rdv/annuler',{detailEntretienId}).then(
+      (response) => {
+        this.loadRdv();
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+        console.error('Erreur lors de l\'annulation :', error);
       }
     );
   }
