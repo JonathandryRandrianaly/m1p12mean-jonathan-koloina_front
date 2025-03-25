@@ -5,9 +5,67 @@
         <div class="col-lg-12">
           <div class="card mb-3">
             <div class="card-body">
+              <h5 class="card-title m-0">Tableau de bord des finances:</h5>
+              <div class="max-w-6xl mx-auto">
 
+                <!-- Indicateurs financiers -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                  <div class="p-4 bg-white shadow rounded-lg">
+                    <h2 class="text-lg font-semibold">Chiffre d'Affaires Total</h2>
+                    <p class="text-2xl font-bold text-blue-600">$47,867</p>
+                  </div>
+                  <div class="p-4 bg-white shadow rounded-lg">
+                    <h2 class="text-lg font-semibold">Factures Impayées</h2>
+                    <p class="text-2xl font-bold text-red-600">$12,340</p>
+                  </div>
+                  <div class="p-4 bg-white shadow rounded-lg">
+                    <h2 class="text-lg font-semibold">Factures Payées</h2>
+                    <p class="text-2xl font-bold text-green-600">$35,527</p>
+                  </div>
+                </div>
 
+                <div class="bg-white p-6 shadow-lg rounded-lg border border-gray-200">
+                  <div class="flex justify-between items-center flex-wrap mb-6">
+                    <h5 class="text-xl font-semibold text-gray-800">Évolution du Chiffre d'Affaires</h5>
+                    <div class="flex space-x-4">
+                      <div class="w-full max-w-xs">
+                        <label for="period" class="text-sm text-gray-600">Période</label>
+                        <select
+                          (change)="changeFilter($event)"
+                          id="period" class="form-select bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                          <option value="Annuel">Année</option>
+                          <option value="Mensuel">Mois</option>
+                          <option value="Journalier">Jour</option>
+                        </select>
+                      </div>
 
+                      <div *ngIf="selectedPeriod === 'Mensuel'" class="w-full max-w-xs">
+                        <label for="year" class="text-sm text-gray-600">Année</label>
+                        <select id="year" class="form-select bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                          <option value="2025">2025</option>
+                          <option value="2024">2024</option>
+                        </select>
+                      </div>
+
+                      <div *ngIf="selectedPeriod === 'Journalier'" class="w-full max-w-xs">
+                        <label for="month" class="text-sm text-gray-600">Mois</label>
+                        <select id="month" class="form-select bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                          <option value="Janvier">Janvier</option>
+                          <option value="Février">Février</option>
+                          <option value="Mars">Mars</option>
+                          <option value="Avril">Avril</option>
+                          <option value="Mai">Mai</option>
+                          <option value="Juin">Juin</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="relative">
+                    <canvas id="revenueChart" class="w-full h-96"></canvas>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
