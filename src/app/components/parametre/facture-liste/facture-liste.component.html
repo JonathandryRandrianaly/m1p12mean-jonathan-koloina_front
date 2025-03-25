@@ -90,7 +90,7 @@
                   <tr *ngFor="let facture of factures">
                     <td>{{facture._id}}</td>
                     <td>{{facture.date | date:'dd/MM/yyyy'}}</td>
-                    <td>{{facture.montantTotal | currency:' '}} Ariary</td>
+                    <td>{{facture.prix | currency:' '}} Ariary</td>
                     <td [ngClass]="{'text-success': facture.etat.code === 10, 'text-danger': facture.etat.code !== 10}">
                       {{facture.etat.libelle}}
                     </td>

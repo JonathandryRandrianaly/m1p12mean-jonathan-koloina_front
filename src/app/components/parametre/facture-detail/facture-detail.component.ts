@@ -20,7 +20,6 @@ export class FactureDetailComponent implements OnInit {
   factureId: string = '';
   detailFactures: any[] = [];
   facture: any;
-  totalFactures: number = 0;
 
   constructor(private route: ActivatedRoute, private dialog: MatDialog, private authService : AuthService,private router: Router, private apiService: ApiService) {
 
@@ -32,7 +31,6 @@ export class FactureDetailComponent implements OnInit {
         this.factureId = params['id'];
         this.loadFacture();
         this.loadFactureDetail();
-        this.loadTotalFacture();
       }
     });
   }
@@ -58,21 +56,6 @@ export class FactureDetailComponent implements OnInit {
       (response: any) => {
         this.facture = response;
         console.log(this.facture);
-        this.loader = false;
-      },
-      (error) => {
-        this.loader = false;
-        console.error('Erreur lors du chargement des factures :', error);
-      }
-    );
-  }
-
-
-  loadTotalFacture() {
-    this.loader = true;
-    this.apiService.getAll('api/facture/paiement-total/'+this.factureId).then(
-      (response: any) => {
-        this.totalFactures = response;
         this.loader = false;
       },
       (error) => {
