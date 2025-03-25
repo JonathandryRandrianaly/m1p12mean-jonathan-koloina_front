@@ -5,9 +5,54 @@
         <div class="col-lg-12">
           <div class="card mb-3">
             <div class="card-body">
+              <h5 class="card-title m-0">Tableau de bord des clients et personnels:</h5>
+              <div class="max-w-6xl mx-auto">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
+                  <div class="p-4 bg-white shadow rounded-lg sm:h-30 md:h-40 lg:h-40">
+                    <h5 class="text-lg font-semibold">Nombre de personnels</h5>
+                    <p class="text-2xl font-bold text-blue-600">{{nombrePersonnel}}</p>
+                  </div>
+                  <div class="p-4 bg-white shadow rounded-lg sm:h-30 md:h-40 lg:h-40">
+                    <h5 class="text-lg font-semibold">Nombre total de clients</h5>
+                    <p class="text-2xl font-bold text-blue-600">{{nombreClient}}</p>
+                  </div>
+                  <div class="p-4 bg-white shadow rounded-lg sm:h-30 md:h-40 lg:h-40">
+                    <h5 class="text-lg font-semibold">Nombre total de rendez-vous</h5>
+                    <p class="text-2xl font-bold text-blue-600">{{nombreTotalRdv}}</p>
+                  </div>
+                  <div class="p-3 bg-white shadow rounded-lg sm:h-30 md:h-40 lg:h-40">
+                    <h5 class="text-lg font-semibold">Nombre moyen de rendez-vous (/j)</h5>
+                    <p class="text-2xl font-bold text-blue-600">{{nombreMoyenRdvJour | number:'1.0-0'}}</p>
+                  </div>
+                  <div class="p-3 bg-white shadow rounded-lg sm:h-30 md:h-40 lg:h-40">
+                    <h5 class="text-lg font-semibold">Nombre moyen de rendez-vous (/mois)</h5>
+                    <p class="text-2xl font-bold text-blue-600">{{nombreMoyenRdvMois | number:'1.0-0'}}</p>
+                  </div>
+                </div>
 
 
+                <div class="bg-white p-6 shadow-lg rounded-lg border border-gray-200">
+                  <div class="flex justify-between items-center flex-wrap mb-6">
+                    <h5 class="text-xl font-semibold text-gray-800">Entretiens par catégories</h5>
+                    <div class="flex gap-4 items-center mb-4">
 
+                      <input type="month" [(ngModel)]="selectedMonth" (change)="onFilterChange()" class="p-2 border rounded-lg" />
+                    
+                      <span>ou</span>
+ 
+                      <input type="number" [(ngModel)]="selectedYear" (change)="onFilterChange()" placeholder="YYYY"
+                        class="p-2 border rounded-lg w-24" min="2000" max="2100" />
+                    </div>
+                    
+                  </div>
+
+                  <div class="relative h-96">
+                    <canvas id="categorieChart"></canvas>
+                  </div>
+                </div>
+              
+              </div>
             </div>
           </div>
         </div>
