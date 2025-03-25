@@ -33,36 +33,25 @@
                         <select
                           (change)="changeFilter($event)"
                           id="period" class="form-select bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
-                          <option value="Annuel">Année</option>
-                          <option value="Mensuel">Mois</option>
-                          <option value="Journalier">Jour</option>
+                          <option value="0">Annuel</option>
+                          <option value="1">Mensuel</option>
                         </select>
                       </div>
 
-                      <div *ngIf="selectedPeriod === 'Mensuel'" class="w-full max-w-xs">
+                      <div *ngIf="selectedPeriod === '1'" class="w-full max-w-xs">
                         <label for="year" class="text-sm text-gray-600">Année</label>
-                        <select id="year" class="form-select bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
-                          <option value="2025">2025</option>
-                          <option value="2024">2024</option>
-                        </select>
-                      </div>
-
-                      <div *ngIf="selectedPeriod === 'Journalier'" class="w-full max-w-xs">
-                        <label for="month" class="text-sm text-gray-600">Mois</label>
-                        <select id="month" class="form-select bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
-                          <option value="Janvier">Janvier</option>
-                          <option value="Février">Février</option>
-                          <option value="Mars">Mars</option>
-                          <option value="Avril">Avril</option>
-                          <option value="Mai">Mai</option>
-                          <option value="Juin">Juin</option>
+                        <select
+                          [(ngModel)]="selectedYear"
+                          (change)="loadData()"
+                          id="year" class="form-select bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                          <option *ngFor="let year of exisitingYear" [value]="year">{{ year }}</option>
                         </select>
                       </div>
                     </div>
                   </div>
 
-                  <div class="relative">
-                    <canvas id="revenueChart" class="w-full h-96"></canvas>
+                  <div class="relative h-96">
+                    <canvas id="revenueChart"></canvas>
                   </div>
                 </div>
               </div>

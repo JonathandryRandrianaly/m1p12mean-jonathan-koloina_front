@@ -2,6 +2,7 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {ApiService} from '../../../services/api/api.service';
 
 Chart.register(...registerables);
 
@@ -12,10 +13,19 @@ Chart.register(...registerables);
   styleUrl: './finance.component.css'
 })
 export class FinanceComponent implements AfterViewInit {
-  selectedPeriod: string = 'Annuel';
+  loader: boolean = false;
+  selectedPeriod: string = '0'; // Par défaut, Annuel
+  selectedYear: number = new Date().getFullYear();
+  exisitingYear: number[] = [];
   chart: any;
+  labels: string[] = [];
+  data: number[] = [];
+  months: string[] = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
 
-  constructor() {}
+  constructor(private apiService: ApiService) {
+    this.loadExisitingYear();
+    this.loadData();
+  }
 
   ngAfterViewInit() {
     this.createChart();
@@ -29,9 +39,49 @@ export class FinanceComponent implements AfterViewInit {
     }
   }
 
+  // 🔹 Charger les années existantes
+  loadExisitingYear() {
+    this.loader = true;
+    this.apiService.getAll('api/facture/distinct-year').then(
+      (response) => {
+        this.exisitingYear = response;
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+      }
+    );
+  }
+
+  loadData() {
+    this.loader = true;
+    this.apiService.getWithData('api/statistique/finance/evo-ca', {
+      type: Number(this.selectedPeriod),
+      detailType: this.selectedYear
+    }).then(
+      (response: any[]) => {
+        if(this.selectedPeriod == '0') {
+          this.labels = response.map(item => item.periode);
+          this.data = response.map(item => item.chiffreAffaires);
+        }else{
+          this.labels = this.getLabelsForPeriod(response);
+          this.data = this.getDataForPeriod(response);
+        }
+        this.loader = false;
+        this.createChart();
+      },
+      (error) => {
+        this.loader = false;
+      }
+    );
+  }
+
   changeFilter(event: Event) {
     this.selectedPeriod = (event.target as HTMLSelectElement).value;
-    this.createChart();
+    if (this.selectedPeriod === '1') {
+      this.selectedYear = this.exisitingYear[0] || new Date().getFullYear();
+    }
+    this.loadData();
   }
 
   createChart() {
@@ -39,18 +89,15 @@ export class FinanceComponent implements AfterViewInit {
       this.chart.destroy();
     }
 
-    const labels: string[] = this.getLabelsForPeriod();
-    const data: number[] = this.getDataForPeriod();
-
     this.chart = new Chart('revenueChart', {
       type: 'bar',
       data: {
-        labels: labels,
+        labels: this.labels,
         datasets: [{
           label: 'Chiffre d\'affaires',
-          data: data,
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          data: this.data,
+          backgroundColor: '#6d7280',
+          borderColor: '#6d7280',
           borderWidth: 1
         }]
       },
@@ -64,36 +111,22 @@ export class FinanceComponent implements AfterViewInit {
     });
   }
 
-  // Méthode appelée lors du redimensionnement de la fenêtre
   onResize() {
     if (this.chart) {
-      this.chart.resize(); // Redimensionner le graphique
+      this.chart.resize();
     }
   }
-
-  getLabelsForPeriod(): string[] {
-    switch (this.selectedPeriod) {
-      case 'Annuel':
-        return ['2025', '2024'];
-      case 'Mensuel':
-        return ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'];
-      case 'Journalier':
-        return ['01', '02', '03', '04', '05', '06'];
-      default:
-        return [];
-    }
+  getLabelsForPeriod(response: any[]): string[] {
+    return this.months;
   }
 
-  getDataForPeriod(): number[] {
-    switch (this.selectedPeriod) {
-      case 'Annuel':
-        return [120000, 115000];
-      case 'Mensuel':
-        return [12000, 15000, 11000, 18000, 20000, 22000];
-      case 'Journalier':
-        return [400, 500, 450, 600, 650, 700];
-      default:
-        return [];
-    }
+  getDataForPeriod(response: any[]): number[] {
+    let monthsData = new Array(12).fill(0);
+    response.forEach((item) => {
+      const monthIndex = item.periode - 1;
+      monthsData[monthIndex] = item.chiffreAffaires;
+    });
+
+    return monthsData;
   }
 }
