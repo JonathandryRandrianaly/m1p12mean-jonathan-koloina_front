@@ -20,11 +20,17 @@ export class FinanceComponent implements AfterViewInit {
   chart: any;
   labels: string[] = [];
   data: number[] = [];
+  factureImpayee: number = 0;
+  facturePayee: number = 0;
+  factureTotal: number = 0;
   months: string[] = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
 
   constructor(private apiService: ApiService) {
     this.loadExisitingYear();
     this.loadData();
+    this.loadFactureImpayee();
+    this.loadFacturePayee();
+    this.loadFactureTotal();
   }
 
   ngAfterViewInit() {
@@ -39,12 +45,48 @@ export class FinanceComponent implements AfterViewInit {
     }
   }
 
-  // 🔹 Charger les années existantes
   loadExisitingYear() {
     this.loader = true;
     this.apiService.getAll('api/facture/distinct-year').then(
       (response) => {
         this.exisitingYear = response;
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+      }
+    );
+  }
+
+  loadFactureImpayee() {
+    this.loader = true;
+    this.apiService.getAll('api/facture/impayee').then(
+      (response) => {
+        this.factureImpayee = response;
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+      }
+    );
+  }
+  loadFacturePayee() {
+    this.loader = true;
+    this.apiService.getAll('api/facture/payee').then(
+      (response) => {
+        this.facturePayee = response;
+        this.loader = false;
+      },
+      (error) => {
+        this.loader = false;
+      }
+    );
+  }
+  loadFactureTotal() {
+    this.loader = true;
+    this.apiService.getAll('api/facture/total').then(
+      (response) => {
+        this.factureTotal = response;
         this.loader = false;
       },
       (error) => {
