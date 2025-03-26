@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:5000',
-  appUrl: 'http://localhost:4200'
+  production: true,
+  apiUrl: 'https://m1p12mean-jonathan-koloina-back.onrender.com',
+  appUrl: 'https://m1p12mean-jonathan-koloina-front.onrender.com',
 }
