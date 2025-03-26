@@ -37,18 +37,40 @@
                     <h5 class="text-xl font-semibold text-gray-800">Entretiens par catégories</h5>
                     <div class="flex gap-4 items-center mb-4">
 
-                      <input type="month" [(ngModel)]="selectedMonth" (change)="onFilterChange()" class="p-2 border rounded-lg" />
+                      <input type="month"  [(ngModel)]="selectedMonth" (change)="onMonthCategorieChange()" class="p-2 border rounded-lg" />
                     
                       <span>ou</span>
  
-                      <input type="number" [(ngModel)]="selectedYear" (change)="onFilterChange()" placeholder="YYYY"
-                        class="p-2 border rounded-lg w-24" min="2000" max="2100" />
+                      <input type="number" [(ngModel)]="selectedYear" (change)="onYearCategorieChange()"
+                        class="p-2 border rounded-lg w-24" min="2000" max="2100" placeholder="YYYY" />
+                    </div>
+                    
+                  </div>
+
+                  <div class="relative h-96 flex justify-center items-center">
+                    <canvas id="categorieChart"></canvas>
+                  </div>                  
+
+                  <div class="flex justify-between items-center flex-wrap mb-6">
+                    <h5 class="text-xl font-semibold text-gray-800">Entretiens par employés</h5>
+                    <div class="flex gap-4 items-center mb-4">
+
+                      <input type="month" [(ngModel)]="selectedMecanoMonth" 
+                        (change)="onMonthMecanoChange()" 
+                      class="p-2 border rounded-lg" />
+
+                      <span>ou</span>
+
+                      <input type="number" [(ngModel)]="selectedMecanoYear" 
+                        (change)="onYearMecanoChange()" 
+                        class="p-2 border rounded-lg w-24" min="2000" max="2100" placeholder="YYYY"/>
+                    
                     </div>
                     
                   </div>
 
                   <div class="relative h-96">
-                    <canvas id="categorieChart"></canvas>
+                    <canvas id="mecanoChart"></canvas>
                   </div>
                 </div>
               

@@ -23,18 +23,28 @@ export class PersonnelClientComponent implements AfterViewInit{
   colors: any[]= [];
   selectedMonth: string = ''; 
   selectedYear: string = '';
+  mecanoChart: any;
+  mecanoLabels: string[] = [];
+  mecanoData: number[] = [];
+  selectedMecanoMonth: string = ''; 
+  selectedMecanoYear: string = '';
 
   constructor(private apiService: ApiService) {
+   /* const currentYear = new Date().getFullYear();
+    this.selectedMecanoYear= currentYear.toString();
+    this.selectedYear=currentYear.toString();*/
     this.loadNombrePersonnel();
     this.loadNombreClient();
     this.loadNombreTotalRdv();
     this.loadNombreMoyenRdvJour();
     this.loadNombreMoyenRdvMois();
     this.loadEntretiensByCategorie();
+    this.loadEntretiensByMecano();
   }
 
   ngAfterViewInit() {
     this.createCategorieChart();
+    this.createMecanoChart();
     window.addEventListener('resize', this.onResize.bind(this));
   }
 
@@ -43,11 +53,17 @@ export class PersonnelClientComponent implements AfterViewInit{
     if (this.categorieChart) {
       this.categorieChart.destroy();
     }
+    if(this.mecanoChart){
+      this.mecanoChart.destroy();
+    }
   }
 
   onResize() {
     if (this.categorieChart) {
       this.categorieChart.resize();
+    }
+    if(this.mecanoChart){
+      this.mecanoChart.resize();
     }
   }
 
@@ -165,14 +181,70 @@ export class PersonnelClientComponent implements AfterViewInit{
     });
   }
 
-  onFilterChange() {
-    if(this.selectedMonth){
-      let value: any;
-      value= this.selectedMonth.split('-');
-      this.selectedMonth = value[1];
-      this.selectedYear = value[0];
-    }
+  onMonthCategorieChange() {
+    this.selectedYear = ''; 
     this.loadEntretiensByCategorie();
+  }
+  
+  onYearCategorieChange() {
+    this.selectedMonth = '';
+    this.loadEntretiensByCategorie();
+  }
+
+  loadEntretiensByMecano() {
+    this.loader = true;
+    this.apiService.getWithData('api/statistique/interventions-employes', {
+      mois: this.selectedMecanoMonth,
+      annee: this.selectedMecanoYear,
+    }).then(
+      (response: any[]) => {
+        this.mecanoLabels = response.map(item => item._id);
+        this.mecanoData = response.map(item => item.count);
+        this.loader = false;
+        this.createMecanoChart();
+      },
+      (error) => {
+        this.loader = false;
+      }
+    );
+  }
+
+  createMecanoChart() {
+    if (this.mecanoChart) {
+      this.mecanoChart.destroy();
+    }
+
+    this.mecanoChart = new Chart('mecanoChart', {
+      type: 'bar',
+      data: {
+        labels: this.mecanoLabels,
+        datasets: [{
+          label: 'Interventions',
+          data: this.mecanoData,
+          backgroundColor: '#6d7280',
+          borderColor: '#6d7280',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  
+  onMonthMecanoChange() {
+    this.selectedMecanoYear = ''; 
+    this.loadEntretiensByMecano();
+  }
+  
+  onYearMecanoChange() {
+    this.selectedMecanoMonth = '';
+    this.loadEntretiensByMecano();
   }
 
 }
