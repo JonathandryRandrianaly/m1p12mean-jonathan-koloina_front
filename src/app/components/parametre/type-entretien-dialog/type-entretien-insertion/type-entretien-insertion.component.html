@@ -1,0 +1,103 @@
+<h2 mat-dialog-title>Ajouter un nouveau type entretien</h2>
+<mat-dialog-content>
+  <form [formGroup]="type_form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+      <label for="nom" class="form-label">Nom</label>
+      <input
+        id="nom"
+        type="text"
+        formControlName="nom"
+        class="form-control"
+        [ngClass]="{'is-invalid': type_form.get('nom')?.invalid && type_form.get('nom')?.touched}"
+        placeholder="ex: Entretien"
+        required>
+      <div class="invalid-feedback" *ngIf="type_form.get('nom')?.invalid && type_form.get('nom')?.touched">
+        Le nom est requis.
+      </div>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          id="description"
+          type="description"
+          formControlName="description"
+          class="form-control"
+          [ngClass]="{'is-invalid': type_form.get('description')?.invalid && type_form.get('description')?.touched}"
+          required>
+        </textarea>
+        <div class="invalid-feedback" *ngIf="type_form.get('description')?.invalid && type_form.get('description')?.touched">
+          La description est requise.
+        </div>
+      </div>
+    <div class="mb-3">
+        <label for="categorieEntretien" class="form-label">Catégorie entretien</label>
+        <select
+          id="categorieEntretien"
+          formControlName="categorieEntretien"
+          class="form-control"
+          [ngClass]="{'is-invalid': type_form.get('categorieEntretien')?.invalid && type_form.get('categorieEntretien')?.touched}"
+          required>
+          <option value="" disabled selected>Choisissez la catégorie entretien</option>
+          <option *ngFor="let categorieEntretien of categoriesEntretien" [value]="categorieEntretien._id">{{ categorieEntretien.nom }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="type_form.get('categorieEntretien')?.invalid && type_form.get('categorieEntretien')?.touched">
+          La catégorie d'entretien est requise.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="categorieModele" class="form-label">Catégorie modèle</label>
+        <select
+          id="categorieModele"
+          formControlName="categorieModele"
+          class="form-control"
+          [ngClass]="{'is-invalid': type_form.get('categorieModele')?.invalid && type_form.get('categorieModele')?.touched}"
+          required>
+          <option value="" disabled selected>Choisissez la catégorie modèle</option>
+          <option *ngFor="let categorieModele of categoriesModele" [value]="categorieModele._id">{{ categorieModele.nom }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="type_form.get('categorieModele')?.invalid && type_form.get('categorieModele')?.touched">
+          La catégorie du modèle est requise.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="prix" class="form-label">Prix</label>
+        <input
+          id="prix"
+          type="number"
+          formControlName="prix"
+          class="form-control"
+          [ngClass]="{'is-invalid': type_form.get('prix')?.invalid && type_form.get('prix')?.touched}"
+          required>
+        <div class="invalid-feedback" *ngIf="type_form.get('prix')?.invalid && type_form.get('prix')?.touched">
+          Prix invalide.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="specialisation" class="form-label">Choisissez la spécialisation</label>
+        <div *ngFor="let specialisation of specialisations">
+          <label>
+            <input
+              id="specialisation"
+              type="checkbox"
+              [value]="specialisation._id"
+              (change)="onSpecialisationChange($event, specialisation._id)"
+              [checked]="(type_form.get('specialisationsId')?.value).includes(specialisation._id)">
+            {{ specialisation.nom }}
+          </label>
+        </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    #tooltip="matTooltip"
+    matTooltip="Création d'un nouveau type entretien"
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="type_form.invalid">
+    Ajouter
+  </button>
+</mat-dialog-actions>
+

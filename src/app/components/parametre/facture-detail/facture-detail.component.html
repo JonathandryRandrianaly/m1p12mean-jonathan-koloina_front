@@ -1,0 +1,77 @@
+<main>
+  <section class="section">
+    <div class="container-fluid px-4">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+              <div class="bg-white shadow-lg rounded-lg p-8 mb-8">
+                <h2 class="text-4xl font-semibold text-gray-800 mb-6">Détail de la facture n°{{ facture?._id ?? '' }}</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div class="font-medium text-gray-700">
+                    <p><strong>Nom du client :</strong> {{ facture?.client?.nom ?? '' }}</p>
+                    <p><strong>Date :</strong> {{ facture?.date }}</p>
+                  </div>
+                  <div class="text-right font-medium text-gray-700">
+                    <p><strong>État de la facture :</strong> {{ facture?.etat?.libelle ?? 'En attente' }}</p>
+                  </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                  <h3 class="text-2xl font-semibold text-gray-800 mb-4">Articles dans votre panier</h3>
+                  <table class="w-full table-auto border-collapse text-sm">
+                    <thead class="bg-gray-100">
+                    <tr>
+                      <th class="px-4 py-2 text-left font-medium text-gray-700">Véhicule</th>
+                      <th class="px-4 py-2 text-left font-medium text-gray-700">Service</th>
+                      <th class="px-4 py-2 text-left font-medium text-gray-700">Montant</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <ng-container *ngFor="let detailFacture of detailFactures">
+                      <tr class="border-b border-gray-200">
+                        <td class="px-4 py-2">
+                          {{ detailFacture.detailEntretien.entretien.vehicule.immatriculation }}
+                        </td>
+                        <td class="px-4 py-2">
+                          {{ detailFacture.detailEntretien.typeEntretien.nom }}
+                        </td>
+                        <td class="px-4 py-2">
+                          {{ detailFacture.prix | currency:'EUR':true }}
+                        </td>
+                      </tr>
+                      <ng-container *ngFor="let rapport of detailFacture.detailEntretien.rapports">
+                        <tr class="border-b border-gray-200">
+                          <td class="px-4 py-2"></td> <!-- Colonne vide pour l'alignement -->
+                          <td class="px-4 py-2">{{ rapport.libelle }}</td>
+                          <td class="px-4 py-2">{{ rapport.prix | currency:'EUR':true }}</td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="flex justify-between items-center mt-6">
+                  <div class="text-lg font-semibold text-gray-800">
+                    <p>Total des services : <span class="font-bold">{{ facture?.prix | currency:'EUR':true }}</span></p>
+                  </div>
+
+                  <div class="flex items-center gap-4">
+                    <button *ngIf="facture?.etat?.code == -10" class="btn btn-success py-3 px-8 text-white font-semibold rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    (click)="payer()">
+                      Payer maintenant
+                    </button>
+                    <button *ngIf="facture?.etat?.code != -10" class="btn btn-secondary py-3 px-8 text-white font-semibold rounded-lg shadow-lg hover:bg-gray-600"
+                    (click)="retour()">
+                      Voir facture
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,35 @@
+<main>
+  <section class="section">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3" style="margin-top: 1%">
+                <button class="btn btn-outline-dark d-flex align-items-center" (click)="previousMonth()">
+                  <span class="d-none d-sm-inline me-2">&#9665;</span>
+                  <span class="d-inline d-sm-none me-2">&#9665;</span>
+                  <span class="d-none d-sm-inline"> Mois Précédent</span>
+                </button>
+                <h4>{{ viewDate | date: 'MMMM yyyy' }}</h4>
+                <button class="btn btn-outline-dark d-flex align-items-center" (click)="nextMonth()">
+                  <span class="d-none d-sm-inline me-2">&#9655;</span>
+                  <span class="d-inline d-sm-none me-2">&#9655;</span>
+                  <span class="d-none d-sm-inline"> Mois Suivant</span>
+                </button>
+              </div>
+
+              <mwl-calendar-month-view
+                [viewDate]="viewDate"
+                [events]="events"
+                (eventClicked)="handleEvent($event)"
+                (dayClicked)="onDayClick($event)">
+              </mwl-calendar-month-view>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-loader *ngIf="loader"></app-loader>

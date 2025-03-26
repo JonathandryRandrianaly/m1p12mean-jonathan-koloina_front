@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>Ajouter un nouveau véhicule</h2>
+<mat-dialog-content>
+  <form [formGroup]="vehicule_form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+      <label for="immatriculation" class="form-label">Immatriculation</label>
+      <input
+        id="immatriculation"
+        type="text"
+        formControlName="immatriculation"
+        class="form-control"
+        [ngClass]="{'is-invalid': vehicule_form.get('immatriculation')?.invalid && vehicule_form.get('immatriculation')?.touched}"
+        placeholder="ex: 2004 TAJ"
+        required>
+      <div class="invalid-feedback" *ngIf="vehicule_form.get('immatriculation')?.invalid && vehicule_form.get('immatriculation')?.touched">
+        L'immatriculation est requise.
+      </div>
+    </div>
+    <div class="mb-3">
+        <label for="modele" class="form-label">Catégorie entretien</label>
+        <select
+          id="modele"
+          formControlName="modele"
+          class="form-control"
+          [ngClass]="{'is-invalid': vehicule_form.get('modele')?.invalid && vehicule_form.get('modele')?.touched}"
+          required>
+          <option value="" disabled selected>Choisissez le modèle</option>
+          <option *ngFor="let modele of modeles" [value]="modele._id">{{ modele.nom }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="vehicule_form.get('modele')?.invalid && vehicule_form.get('modele')?.touched">
+          Le modèle est requis.
+        </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    #tooltip="matTooltip"
+    matTooltip="Création d'un nouveau véhicule"
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="vehicule_form.invalid">
+    Ajouter
+  </button>
+</mat-dialog-actions>
+

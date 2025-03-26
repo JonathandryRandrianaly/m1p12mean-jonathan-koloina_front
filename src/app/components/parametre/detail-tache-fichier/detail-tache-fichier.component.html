@@ -1,0 +1,76 @@
+<div class="text-center mb-4">
+  <h5 class="mt-2" *ngIf="justificatifs && justificatifs.length>0">Justificatifs existants</h5>
+  <div class="row gx-4 gy-4 d-flex justify-content-center">
+    <div *ngFor="let justificatif of justificatifs; let i = index" class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="image-card">
+        <div class="image-container">
+          <button type="button" class="delete-button" (click)="removeFile(justificatif._id)" title="Supprimer">
+            <mat-icon>close</mat-icon>
+          </button>
+
+          <ng-container *ngIf="isImage(justificatif.filename); else notImage">
+            <img
+              [src]="getFullImagePath(justificatif.filename)"
+              class="image"
+              (click)="previsualise(justificatif.filename)"
+              alt="Aperçu fichier"
+            />
+          </ng-container>
+
+          <ng-template #notImage>
+            <div class="file-preview">
+              <mat-icon (click)="previsualise(justificatif.filename)">{{ getFileIcon(justificatif.filename) }}</mat-icon>
+              <div class="file-name">
+                <p>{{ justificatif.filename }}</p>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="justificatifs_form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content class="p-4">
+    <div class="text-center mb-4">
+      <input type="file" accept="image/*,.pdf,.xls,.xlsx,.doc,.docx,.txt" multiple (change)="onFileChange($event)" hidden #fileInput />
+      <button mat-raised-button color="primary" type="button" (click)="fileInput.click()" class="add-ref-btn">
+        <mat-icon>attach_file</mat-icon>&nbsp;Ajouter une référence
+      </button>
+      <div *ngFor="let justificatif of newJustificatifs; let i = index" class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="image-card">
+          <div class="image-container">
+            <button type="button" class="delete-button" (click)="removeNewFile(justificatif.name)" title="Supprimer">
+              <mat-icon>close</mat-icon>
+            </button>
+  
+            <ng-container *ngIf="isImage(justificatif.name); else notImage">
+              <img
+                [src]="getFullImagePath(justificatif.name)"
+                class="image"
+                (click)="previsualise(justificatif.name)"
+                alt="Aperçu fichier"
+              />
+            </ng-container>
+  
+            <ng-template #notImage>
+              <div class="file-preview">
+                <mat-icon (click)="previsualise(justificatif.name)">{{ getFileIcon(justificatif.name) }}</mat-icon>
+                <div class="file-name">
+                  <p>{{ justificatif.name }}</p>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="d-flex justify-content-end mt-4">
+    <button type="button" mat-stroked-button color="light" (click)="closeDialog()">Fermer</button>
+    <button type="submit" mat-stroked-button color="dark" (click)="addJustificatifs()">Valider</button>
+  </mat-dialog-actions>
+</form>

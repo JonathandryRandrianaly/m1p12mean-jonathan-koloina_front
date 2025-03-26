@@ -1,0 +1,161 @@
+.container-fluid {
+  position: relative;
+  top: 85px;
+}
+
+.task-board {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.task-column {
+  flex: 1 1 250px;
+  background: #f4f4f4;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 250px;
+  max-width: 400px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.task-column h2 {
+  top: 16px;
+  background: #f4f4f4;
+  z-index: 1;
+  padding: 8px 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.task-list {
+  flex: 1;
+  overflow-y: auto;
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  min-height: 150px;
+}
+
+.task-list::-webkit-scrollbar {
+  width: 6px;
+}
+.task-list::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 10px;
+}
+.task-list::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.task-card {
+  background: #3a3f44;
+  color: white;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  cursor: grab;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+}
+
+.task-card:hover {
+  background: #555;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* En-tête de la carte (Nom de la tâche) */
+.task-card-header {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #f0f0f0;
+}
+
+/* Corps de la carte (Description et info supplémentaires) */
+.task-card-body {
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+.task-card-body p {
+  margin: 5px 0;
+}
+
+.assigned-count {
+  font-size: 0.9em;
+  color: #b0b0b0;
+  margin-top: 10px;
+}
+
+/* Pied de carte (boutons et icônes) */
+.task-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+.task-card-footer button {
+  margin-left: 10px;
+}
+
+.mat-icon-button {
+  padding: 6px;
+  transition: color 0.3s ease;
+}
+
+.mat-icon-button:hover {
+  color: #ff9800;
+}
+
+/* Responsivité pour les petits écrans */
+@media screen and (max-width: 768px) {
+  .task-board {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .task-column {
+    width: 90%;
+  }
+
+  /* Ajustement des cartes pour petits écrans */
+  .task-card {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .task-card-header {
+    font-size: 1.1em;
+  }
+
+  .task-card-body {
+    font-size: 0.9em;
+  }
+
+  .task-card-footer {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .task-card-footer button {
+    margin: 5px 0;
+  }
+}
+
+
+.empty-column-message {
+  font-size: 1.2em;
+  color: #999;
+  text-align: center;
+  padding: 20px;
+}

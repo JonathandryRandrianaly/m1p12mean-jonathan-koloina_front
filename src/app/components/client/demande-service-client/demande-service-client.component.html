@@ -5,131 +5,183 @@
         <div class="col-lg-12">
           <div class="card mb-3">
             <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center flex-wrap">
-                <h5 class="card-title m-0">Veuillez sélectionner le type de service dont vous avez besoin parmi les options ci-dessous:</h5>
-              </div>
 
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="card-title m-0">
+                  {{ getStepTitle() }}
+                </h5>
+                <button mat-button color="accent" *ngIf="currentStep === 2" (click)="currentStep=3">Suivant</button>
+              </div>
               <div class="mb-1">
                 <ol class="flex items-center w-full space-x-4">
-                  <!-- Étape 1 -->
-                  <li class="flex items-center space-x-2 w-full text-blue-600 dark:text-blue-500 relative">
-                    <span class="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-800 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110">
-                      <mat-icon class="w-6 h-6 text-blue-600 dark:text-blue-300" matTooltip="Étape 1: Choisir le service" aria-hidden="true">work</mat-icon>
+                  <li *ngFor="let step of steps; let i = index"
+                      (click)="changeStep(i)"
+                      class="flex items-center space-x-2 w-full relative"
+                      [ngClass]="{'text-blue-600 dark:text-blue-500': i <= currentStep, 'text-gray-600 dark:text-gray-400': i > currentStep}">
+                    <span class="flex items-center justify-center w-12 h-12 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110"
+                          [ngClass]="{'bg-blue-100 dark:bg-blue-800': i <= currentStep, 'bg-gray-100 dark:bg-gray-700': i > currentStep}">
+                      <mat-icon class="w-6 h-6"
+                                [ngClass]="{'text-blue-600 dark:text-blue-300': i <= currentStep, 'text-gray-600 dark:text-gray-100': i > currentStep}"
+                                [matTooltip]="step.tooltip"
+                                aria-hidden="true">
+                        {{ step.icon }}
+                      </mat-icon>
                     </span>
-                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-2 bg-blue-100 dark:bg-blue-800 rounded-full"></div>
-                  </li>
-
-                  <!-- Étape 2 -->
-                  <li class="flex items-center space-x-2 w-full text-gray-600 dark:text-gray-400 relative">
-                    <span class="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110">
-                      <mat-icon class="w-6 h-6 text-gray-600 dark:text-gray-100" matTooltip="Étape 2: Choisir le véhicule" aria-hidden="true">directions_car</mat-icon>
-                    </span>
-                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full"></div>
-                  </li>
-
-                  <!-- Étape 3 -->
-                  <li class="flex items-center space-x-2 w-full text-gray-600 dark:text-gray-400 relative">
-                    <span class="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110">
-                      <mat-icon class="w-6 h-6 text-gray-600 dark:text-gray-100" matTooltip="Étape 3: Choisir le type d'entretien" aria-hidden="true">build</mat-icon>
-                    </span>
-                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full"></div>
-                  </li>
-
-                  <!-- Étape 4 -->
-                  <li class="flex items-center space-x-2 w-full text-gray-600 dark:text-gray-400 relative">
-      <span class="flex items-center justify-center w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110">
-        <mat-icon class="w-6 h-6 text-gray-600 dark:text-gray-100" matTooltip="Étape 4: Confirmer service" aria-hidden="true">check_circle</mat-icon>
-      </span>
-                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full"></div>
+                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-2 rounded-full"
+                         [ngClass]="{'bg-blue-100 dark:bg-blue-800': i < currentStep, 'bg-gray-100 dark:bg-gray-700': i >= currentStep}">
+                    </div>
                   </li>
                 </ol>
               </div>
 
-
-              <!-- Step 1: Choisir services -->
-              <div *ngIf="selectedCategorieEntretien === ''" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button *ngFor="let service of services"
-                        (click)="selectedCategorieEntretien = service.name"
-                        class="block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
-                  <div class="flex justify-end">
-                    <mat-icon class="text-gray-500 dark:text-gray-400">{{ service.icon }}</mat-icon>
-                  </div>
-                  <div class="text-center">
-                    <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
-                      {{ service.name }}
-                    </h5>
-                    <p class="text-gray-700 dark:text-gray-400">
-                      {{ service.description }}
-                    </p>
-                    <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
-                      <span class="text-lg font-normal text-gray-500 dark:text-gray-400">A partir de </span>
-                      {{ service.price }}
+              <form [formGroup]="entretien_form" (ngSubmit)="onSubmit()" novalidate>
+              <!--              Step 1-->
+              <div *ngIf="currentStep === 0">
+                <div *ngIf="vehicles.length === 0" class="text-center p-4 text-red-500 font-semibold">
+                  Aucun vehicule disponible veuillez d'abord configurer votre vehicule.
+                  <button class="btn btn-outline-dark" (click)="navigate('/vehicules')">Ajouter vehicule</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <button
+                    type="button"
+                    *ngFor="let vehicle of vehicles"
+                          (click)="selectVehicle(vehicle)"
+                          class="articleCard block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
+                    <div class="flex justify-end">
+                      <mat-icon class="text-gray-500 dark:text-gray-400">directions_car</mat-icon>
                     </div>
-                    <hr>
-                    <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
-                      Choisir
-                    </button>
-                  </div>
-                </button>
+                    <div class="text-center">
+                      <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+                        {{ vehicle.modele.marque.nom }} {{ vehicle.modele.nom }}
+                      </h5>
+                      <p class="text-gray-700 dark:text-gray-400">
+                        {{ vehicle.modele.categorie.nom }} {{ vehicle.modele.anneeFabrication }}
+                      </p>
+                      <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
+                        <span class="text-lg font-normal text-white-500 dark:text-gray-400">Immatriculation :</span>
+                        {{ vehicle.immatriculation }}
+                      </div>
+                      <hr>
+                      <button
+                        type="button"
+                        class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                        Choisir
+                      </button>
+                    </div>
+                  </button>
+                </div>
+              </div>
+<!--              Step 2-->
+              <div *ngIf="currentStep === 1">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <button *ngFor="let service of services"
+                          type="button"
+                          (click)="selectCategorieEntretien(service._id)"
+                          class="articleCard block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
+                    <div class="flex justify-end">
+                      <mat-icon class="text-gray-500 dark:text-gray-400">{{ service.icone }}</mat-icon>
+                    </div>
+                    <div class="text-center">
+                      <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+                        {{ service.nom }}
+                      </h5>
+                      <p class="text-gray-700 dark:text-gray-400">
+                        {{ service.description }}
+                      </p>
+                      <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
+                        <span class="text-lg font-normal text-white-500 dark:text-gray-400">A partir de </span>
+                        {{ service.prixMinimum | number:'1.0-0' }}
+                        <span class="text-lg font-normal text-white-500 dark:text-gray-400"> Ar</span>
+                      </div>
+                      <hr>
+                      <button
+                        type="button" class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                        Choisir
+                      </button>
+                    </div>
+                  </button>
+                </div>
               </div>
 
-              <!-- Step 2: Choisir vehicules -->
-              <div *ngIf="selectedCategorieEntretien !== '' && selectedVehicule === ''" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button *ngFor="let vehicle of vehicles"
-                        (click)="selectedVehicule = vehicle.marque"
-                        class="block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
-                  <div class="flex justify-end">
-                    <mat-icon class="text-gray-500 dark:text-gray-400">{{ vehicle.icon }}</mat-icon>
+<!--              Step 3-->
+                <div *ngIf="currentStep === 2">
+                  <div *ngIf="typeEntretiens.length === 0" class="text-center p-4 text-red-500 font-semibold">
+                    Aucun entretien disponible pour ce véhicule avec ce type de service.
+                    <button type="button" class="btn btn-outline-dark" (click)="currentStep=1">Choisir un autre type de service</button>
                   </div>
-                  <div class="text-center">
-                    <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
-                      {{ vehicle.marque }}
-                    </h5>
-                    <p class="text-gray-700 dark:text-gray-400">
-                      {{ vehicle.categorie }} - {{ vehicle.annee }}
-                    </p>
-                    <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
-                      <span class="text-lg font-normal text-gray-500 dark:text-gray-400">Immatriculation :</span>
-                      {{ vehicle.immatriculation }}
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <button
+                      type="button"
+                      *ngFor="let entretien of typeEntretiens"
+                            (click)="onCardClick(entretien._id)"
+                    class="articleCard relative block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
+
+                    <div class="absolute top-4 left-4">
+                      <input type="checkbox"
+                             [checked]="isChecked(entretien._id)"
+                      (change)="onCheckboxChange($event, entretien._id)"
+                      class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                     </div>
-                    <hr>
-                    <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
-                      Choisir
+
+                    <div class="flex justify-end">
+                      <mat-icon class="text-gray-500 dark:text-gray-400">car_repair</mat-icon>
+                    </div>
+
+                    <div class="text-center">
+                      <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+                        {{ entretien.nom }}
+                      </h5>
+                      <p class="text-gray-700 dark:text-gray-400">
+                        {{ entretien.description }}
+                      </p>
+                      <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
+                        <span class="text-lg font-normal text-white-500 dark:text-gray-400">Prix :</span>
+                        {{ entretien.prix | number:'1.0-0' }}
+                        <span class="text-lg font-normal text-white-500 dark:text-gray-400"> Ar</span>
+                      </div>
+                      <hr>
+
+                      <button
+                        type="button"
+                              class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
+                        Sélectionner
+                      </button>
+                    </div>
                     </button>
                   </div>
-                </button>
+                </div>
+
+
+                <!--              Step 4-->
+              <div *ngIf="currentStep === 3" class="text-center mt-12 mb-12">
+                <h5>Votre panier est prêt à être confirmé.</h5>
+                <p>Prendre rendez-vous parmi les horaires disponibles ?
+                  <br>
+                  (Notez que les dates grisées ne sont pas disponibles)
+                </p>
+                <mat-form-field class="date-picker">
+                  <mat-label>Appuyer sur l'icône</mat-label>
+                  <input
+                    formControlName="date"
+                    matInput [matDatepicker]="picker" readonly [matDatepickerFilter]="dateFilter">
+                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker touchUi #picker></mat-datepicker>
+                </mat-form-field>
+                <button type="submit" class="btn btn-dark ms-2 mb-3"
+                        [disabled]="entretien_form.invalid"
+                >Valider</button>
+              </div>
+              </form>
+
+              <div *ngIf="currentStep === 4" class="text-center mt-12">
+                <h5>Votre panier a été enregistré.</h5>
+                <p>Souhaitez-vous ajouter un autre service ou consulter votre panier ?</p>
+                <button mat-button color="primary" (click)="anotherService()">Effectuer un autre service</button>
+                <button mat-button color="primary" (click)="chooseVehicle()">Choisir autre vehicule</button>
+                <button mat-button color="accent" (click)="rendezvous()">Consulter les rendez-vous</button>
               </div>
 
-              <!-- Step 3: Choisir type entretien -->
-              <div *ngIf="selectedCategorieEntretien !== '' && selectedVehicule !== ''" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button *ngFor="let entretien of typeEntretiens"
-                   class="relative block p-6 bg-gray-100 border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 hover:-translate-y-1 transition-all dark:bg-gray-900 dark:border-gray-800 dark:hover:bg-gray-800">
-                  <div class="absolute top-4 left-4">
-                    <input type="checkbox" [(ngModel)]="entretien.selected"
-                           class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                  </div>
-
-                  <div class="flex justify-end">
-                    <mat-icon class="text-gray-500 dark:text-gray-400">{{ entretien.icon }}</mat-icon>
-                  </div>
-                  <div class="text-center">
-                    <h5 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
-                      {{ entretien.libelle }}
-                    </h5>
-                    <p class="text-gray-700 dark:text-gray-400">
-                      {{ entretien.description }}
-                    </p>
-                    <div class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
-                      <span class="text-lg font-normal text-gray-500 dark:text-gray-400">Prix :</span>
-                      {{ entretien.prix }}
-                    </div>
-                    <hr>
-                    <button class="mt-6 w-full px-4 py-2 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 transition">
-                      Sélectionner
-                    </button>
-                  </div>
-                </button>
-              </div>
             </div>
           </div>
         </div>

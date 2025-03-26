@@ -1,0 +1,23 @@
+.dialog-content {
+    font-size: 16px;
+  }
+  
+  mat-chip {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .active {
+    color: green;
+  }
+  
+  .inactive {
+    color: red;
+  }
+  
+  .created {
+    color: orange;
+  }
+  

@@ -30,6 +30,18 @@ import { CategorieModeleParametreComponent } from './components/parametre/catego
 import {
   DemandeServiceClientComponent
 } from './components/client/demande-service-client/demande-service-client.component';
+import { TypeEntretienParametreComponent } from './components/parametre/type-entretien-parametre/type-entretien-parametre.component';
+import { VehiculeParametreComponent } from './components/parametre/vehicule-parametre/vehicule-parametre.component';
+import {CalendrierTacheComponent} from './components/parametre/calendrier-tache/calendrier-tache.component';
+import {CalendrierDetailComponent} from './components/parametre/calendrier-detail/calendrier-detail.component';
+import {StockParametreComponent} from './components/parametre/stock-parametre/stock-parametre.component';
+import {RendezVousComponent} from './components/client/rendez-vous/rendez-vous.component';
+import {DetailTacheComponent} from './components/parametre/detail-tache/detail-tache.component';
+import {FactureListeComponent} from './components/parametre/facture-liste/facture-liste.component';
+import {FactureDetailComponent} from './components/parametre/facture-detail/facture-detail.component';
+import { HistoriquesEntretienComponent } from './components/parametre/historiques-entretien/historiques-entretien.component';
+import {FinanceComponent} from './components/statistiques/finance/finance.component';
+import {PersonnelClientComponent} from './components/statistiques/personnel-client/personnel-client.component';
 
 export const routes: Routes = [
   {
@@ -193,9 +205,8 @@ export const routes: Routes = [
         { label: 'Mécanicien', url: '' },
         { label: 'Tâches', url: '' }
       ],
-      // TODO: mécanicien
       roles: [
-        'manager'
+        'mecanicien'
       ]
     }
   },
@@ -208,9 +219,8 @@ export const routes: Routes = [
         { label: 'Mécanicien', url: '/mecanicien/tasks' },
         { label: 'Historiques', url: '' }
       ],
-      // TODO: mécanicien
       roles: [
-        'manager'
+        'mecanicien'
       ]
     }
   },
@@ -280,6 +290,178 @@ export const routes: Routes = [
       ],
       roles: [
         'client'
+      ]
+    }
+  },
+  {
+    path:"rendez-vous",component:RendezVousComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Demande', url: '/demande-service' },
+        { label: 'Rendez-vous', url: '' }
+      ],
+      roles: [
+        'client'
+      ]
+    }
+  },
+  {
+    path:"parametre/types-entretien",component:TypeEntretienParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Entretien', url: '' },
+        { label: 'Types', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"vehicules",component:VehiculeParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Vehicules', url: '' }
+      ],
+      roles: [
+        'manager',
+        'client'
+      ]
+    }
+  },
+  {
+    path:"stocks/:id",component:StockParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Consommables', url: '' },
+        { label: 'Stocks', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"calendrier-tache",component:CalendrierTacheComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Calendrier', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"calendrier-detail",component:CalendrierDetailComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Calendrier', url: 'calendrier-tache' },
+        { label: 'Détails', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"tache/:id",component:DetailTacheComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Tâches', url: '' },
+        { label: 'Détails', url: '' }
+      ],
+      roles: [
+        'client',
+        'mecanicien',
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"historiques/vehicule/:id",component:HistoriquesEntretienComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Véhicule', url: '' },
+        { label: 'Historiques', url: '' }
+      ],
+      roles: [
+        'client',
+        'mecanicien',
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"factures",component:FactureListeComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Factures', url: '' }
+      ],
+      roles: [
+        'client',
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"factures/:id",component:FactureDetailComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Factures', url: '/factures' },
+        { label: 'Détails', url: '' }
+      ],
+      roles: [
+        'client',
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"statistiques/finance",component:FinanceComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Statistiques', url: '' },
+        { label: 'Finance', url: '' }
+      ],
+      roles: [
+        'manager'
+      ]
+    }
+  },
+  {
+    path:"statistiques/personnel-client",component:PersonnelClientComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Statistiques', url: '/statistiques/finance' },
+        { label: 'Personnel et client', url: '' }
+      ],
+      roles: [
+        'manager'
       ]
     }
   },

@@ -1,0 +1,29 @@
+.container-fluid {
+  position: relative;
+  top: 85px;
+}
+
+/*::ng-deep .cal-day-cell:hover {*/
+/*  background-color: #6d7280 !important;*/
+/*  color: white !important;*/
+/*}*/
+/*::ng-deep .cal-month-view .cal-event {*/
+/*  background-color: #b4daff;*/
+/*  border-color: #d1e8ff;*/
+/*  color: #fff;*/
+/*}*/
+
+/*::ng-deep .cal-month-view .cal-day-badge {*/
+/*  background-color: #fff;*/
+/*  color: #000000;*/
+/*}*/
+/*::ng-deep .cal-month-view .cal-day-cell.cal-weekend .cal-day-number {*/
+/*  color: #8b0000;*/
+/*}*/
+/*::ng-deep .cal-month-view .cal-day-cell.cal-today {*/
+/*  background-color: #000000;*/
+/*  color: #fff;*/
+/*}*/
+/*::ng-deep .cal-month-view .cal-day-cell.cal-drag-over {*/
+/*  background-color: #000000 !important;*/
+/*}*/

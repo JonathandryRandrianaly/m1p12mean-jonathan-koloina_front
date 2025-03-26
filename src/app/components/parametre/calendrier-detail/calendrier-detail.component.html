@@ -1,0 +1,80 @@
+<main>
+  <section class="section">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="card-title m-0">Détails journée:</h5>
+                <button class="btn btn-outline-danger" *ngIf="isFreeDate" (click)="setSelectedDateOccupe()"> Marquer comme occupé </button>
+                <button class="btn btn-outline-success" *ngIf="!isFreeDate" (click)="setSelectedDateOccupe()"> Marquer comme libre </button>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3 mb-3">
+                  <input
+                    id="date"
+                    type="date"
+                    class="form-control w-100"
+                    [(ngModel)]="selectedDateString"
+                    (change)="onDateChange()"
+                    [value]="selectedDateString">
+                </div>
+                <div class="col-sm-4">
+                  <input
+                    type="text"
+                    placeholder="Rechercher tâche"
+                    class="form-control w-100"
+                    [(ngModel)]="searchQuery"
+                    (change)="onDateChange()">
+                </div>
+              </div>
+              <hr>
+              <div class="task-board" cdkDropListGroup>
+                <div class="task-column" *ngFor="let column of columns">
+                  <div class="example-container">
+                    <h2>{{ column.name }}</h2>
+                    <div *ngIf="column.tasks.length === 0" class="empty-column-message">
+                      Aucune tâche pour cette colonne.
+                    </div>
+                    <div cdkDropList
+                         [id]="column.id"
+                         [cdkDropListData]="column.tasks"
+                         [cdkDropListConnectedTo]="connectedDropLists"
+                         class="task-list"
+                         (cdkDropListDropped)="drop($event)">
+                      <div class="task-card" *ngFor="let task of column.tasks" cdkDrag>
+                        <div class="task-card-header">
+                          <h3>{{ task.nom }}</h3>
+                        </div>
+                        <div class="task-card-body">
+                          <p>{{ task.vehicule }}</p>
+                          <p>{{ task.description }}</p>
+                          <p class="assigned-count">Employés assignés: {{ task.assignedCount }}</p>
+                        </div>
+                        <div class="task-card-footer">
+                          <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="viewDetails(task)">Détails</button>
+                            <button mat-menu-item (click)="setTaskTo(task)">Assignation</button>
+                            <button *ngIf="task.etatCode==-10" mat-menu-item (click)="annulerRdv(task.id)">Annuler</button>
+                          </mat-menu>
+                          <button mat-icon-button (click)="viewDetails(task)">
+                            <mat-icon style="color: white">info</mat-icon>
+                          </button>
+                          <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon style="color: white">more_horiz</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-loader *ngIf="loader"></app-loader>

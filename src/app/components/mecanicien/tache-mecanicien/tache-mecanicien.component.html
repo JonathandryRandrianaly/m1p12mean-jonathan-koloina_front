@@ -5,8 +5,27 @@
         <div class="col-lg-12">
           <div class="card mb-3">
             <div class="card-body">
-              <div class="d-flex justify-content-start gap-2 mt-2 mb-3">
-                <input matInput placeholder="Rechercher une tâche..." class="form-control w-50">
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="card-title m-0">Détails journée:</h5>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3 mb-3">
+                  <input
+                    id="date"
+                    type="date"
+                    class="form-control w-100"
+                    [(ngModel)]="selectedDateString"
+                    (change)="onDateChange()"
+                    [value]="selectedDateString">
+                </div>
+                <div class="col-sm-4">
+                  <input
+                    type="text"
+                    placeholder="Rechercher tâche"
+                    class="form-control w-100"
+                    [(ngModel)]="searchQuery"
+                    (change)="onDateChange()">
+                </div>
               </div>
               <hr>
               <div class="task-board" cdkDropListGroup>
@@ -24,22 +43,16 @@
                          (cdkDropListDropped)="drop($event)">
                       <div class="task-card" *ngFor="let task of column.tasks" cdkDrag>
                         <div class="task-card-header">
-                          <h3>{{ task.name }}</h3>
+                          <h3>{{ task.nom }}</h3>
                         </div>
                         <div class="task-card-body">
-                          <p>Véhicule: {{ task.vehicle }}</p>
-                          <p>Description: {{ task.description }}</p>
+                          <p>{{ task.vehicule }}</p>
+                          <p>{{ task.description }}</p>
+                          <p class="assigned-count">Employés assignés: {{ task.assignedCount }}</p>
                         </div>
                         <div class="task-card-footer">
-                          <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="viewDetails(task)">Détails</button>
-                            <button mat-menu-item (click)="setAs(task)">Définir comme...</button>
-                          </mat-menu>
-                          <button mat-icon-button>
+                          <button mat-icon-button (click)="viewDetails(task)">
                             <mat-icon style="color: white">info</mat-icon>
-                          </button>
-                          <button mat-icon-button [matMenuTriggerFor]="menu">
-                            <mat-icon style="color: white">more_horz</mat-icon>
                           </button>
                         </div>
                       </div>

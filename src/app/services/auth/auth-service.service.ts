@@ -53,4 +53,15 @@ export class AuthService {
     return false;
   }
 
+  async getConnectedUser(): Promise<string|null> {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(localStorage.getItem('decodedToken') ?? '');
+      if (payload && payload.userId) {
+        return payload.userId;
+      }
+    }
+    return null;
+  }
+
 }

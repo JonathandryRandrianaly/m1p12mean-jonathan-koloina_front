@@ -16,7 +16,7 @@ export class MecanicienLoginComponent implements OnInit {
   error: boolean = false;
   loading: boolean = false;
   usr: UserDto = {
-    email: 'mecanicien@gmail.com',
+    email: 'jonathanrandrianaly@gmail.com',
     password: 'mecanicien',
   };
   usr_form: any;
@@ -28,6 +28,7 @@ export class MecanicienLoginComponent implements OnInit {
     private apiService: ApiService
   ) {
     localStorage.removeItem('token');
+    localStorage.removeItem('decodedToken');
   }
 
   ngOnInit() {
@@ -58,7 +59,7 @@ export class MecanicienLoginComponent implements OnInit {
       const response = await this.apiService.login('api/login', data);
       if (response.status >= 200 && response.status <= 202) {
         const token = response.data;
-        localStorage.setItem('token', token);
+        localStorage.setItem('token', token.token);
         sessionStorage.setItem(this.SESSION_KEY, 'true');
         this.router.navigate(['/']);
       }

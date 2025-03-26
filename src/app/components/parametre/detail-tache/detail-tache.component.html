@@ -1,0 +1,180 @@
+<main>
+  <section class="section">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="card mb-3">
+            <div class="card-body">
+
+              <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="card-title m-0">Informations de l'entretien:</h5>
+              </div>
+              <hr>
+
+              <!-- Section Informations Client et Véhicule -->
+              <div class="flex flex-col lg:flex-row lg:space-x-6">
+                <!-- Section Client -->
+                <div class="bg-white shadow-md rounded-lg p-6 flex-1 mb-6 lg:mb-0">
+                  <h3 class="text-lg font-semibold mb-4">{{detail?.typeEntretien?.nom}}</h3>
+                  <div class="mt-4">
+                    <p><strong>{{detail?.typeEntretien?.description}}</strong></p>
+                  </div>
+                  <hr>
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <!-- Colonne de gauche -->
+                    <div>
+                      <p><strong>Nom du client:</strong> {{detail?.entretien?.vehicule?.proprietaire?.nom}}</p>
+                      <p><strong>Marque:</strong> {{detail?.entretien?.vehicule?.modele?.marque?.nom}}</p>
+                      <p><strong>Catégorie:</strong> {{detail?.entretien?.vehicule?.modele?.categorie?.nom}}</p>
+                      <p><strong>Immatriculation:</strong> {{detail?.entretien?.vehicule?.immatriculation}}</p>
+                    </div>
+
+                    <!-- Colonne de droite -->
+                    <div>
+                      <p><strong>Carburant:</strong> {{detail?.entretien?.vehicule?.modele?.energieMoteur?.nom}}</p>
+                      <p><strong>Transmission:</strong> {{detail?.entretien?.vehicule?.modele?.transmission?.nom}}</p>
+                      <p><strong>Motricité:</strong> {{detail?.entretien?.vehicule?.modele?.motricite?.nom}}</p>
+                      <p><strong>Année de fabrication:</strong> {{detail?.entretien?.vehicule?.modele?.anneeFabrication}}</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <form [formGroup]="dateForm" (ngSubmit)="updateDateRapport()">
+                    <div class="flex flex-col lg:flex-row lg:space-x-4">
+                      <div class="flex-1">
+                        <label for="start-time" class="block text-sm font-medium text-gray-700">Date et heure de début</label>
+                        <input type="datetime-local" id="start-time" formControlName="dateDebut" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        <div *ngIf="dateForm.get('dateDebut')?.errors?.['dateDebutRequired']" class="text-red-500 text-sm">
+                          La date de début est obligatoire si une date de fin est saisie.
+                        </div>
+                      </div>
+
+                      <div class="flex-1">
+                        <label for="end-time" class="block text-sm font-medium text-gray-700">Date et heure de fin</label>
+                        <input type="datetime-local" id="end-time" formControlName="dateFin" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        <div *ngIf="dateForm.get('dateFin')?.errors?.['dateRangeInvalid']" class="text-red-500 text-sm">
+                          La date de fin doit être postérieure à la date de début.
+                        </div>
+                      </div>
+
+
+                      <button class="px-4 py-2 btn btn-dark text-white rounded-md shadow-md hover:bg-blue-700 self-end" [disabled]="dateForm.invalid">
+                        Ajouter
+                      </button>
+
+                    </div>
+
+                  </form>
+
+
+                  <div class="bg-white shadow-md rounded-lg p-6 mt-6">
+                    <h3 class="text-lg font-semibold mb-4">Liste des rapports</h3>
+                    <div class="overflow-x-auto">
+                      <table class="min-w-full table-auto border-collapse">
+                        <thead>
+                          <tr class="bg-gray-100">
+                            <th class="px-4 py-2 text-left">Libellé du rapport</th>
+                            <th class="px-4 py-2 text-left">Prix</th>
+                            <th class="px-4 py-2 text-left">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container *ngIf="detail?.rapports && detail?.rapports.length > 0">
+                            <tr *ngFor="let rapport of detail?.rapports">
+                              <td class="px-4 py-2">{{ rapport?.libelle }}</td>
+                              <td class="px-4 py-2" *ngIf="rapport?.prix">{{ rapport?.prix | number: '1.2-2' }} Ar</td>
+                              <td class="px-4 py-2" *ngIf="!rapport?.prix"> - </td>
+                              <td class="px-4 py-2">
+                                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Options">
+                                  <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                  <button mat-menu-item (click)="openJustificatif(rapport,detail._id)" >
+                                    <mat-icon>info</mat-icon>
+                                    <span>Justificatifs</span>
+                                  </button>
+                                  <button mat-menu-item (click)="removeRapport(rapport?._id)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Supprimer</span>
+                                  </button>
+                                </mat-menu>
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+                      </table>
+                      
+                    </div>
+                  </div>
+
+
+                  <div class="bg-white shadow-md rounded-lg p-6 mt-6">
+                    <h3 class="text-lg font-semibold mb-4">Liste des consommables utilisés</h3>
+                    <div class="overflow-x-auto">
+                      <table class="min-w-full table-auto border-collapse">
+                        <thead>
+                          <tr class="bg-gray-100">
+                            <th class="px-4 py-2 text-left">Date</th>
+                            <th class="px-4 py-2 text-left">Consommable</th>
+                            <th class="px-4 py-2 text-left">Libellé</th>
+                            <th class="px-4 py-2 text-left">Quantité</th>
+                            <th class="px-4 py-2 text-left">Unité</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container *ngIf="detail?.sortieStocks && detail?.sortieStocks.length > 0">
+                            <tr *ngFor="let sortie of detail?.sortieStocks">
+                              <td class="px-4 py-2">{{ sortie?.date |  date:'dd/MM/yyyy' }}</td>
+                              <td class="px-4 py-2">{{ sortie?.consommable.nom}} </td>
+                              <td class="px-4 py-2" >{{ sortie?.libelle }}</td>
+                              <td class="px-4 py-2" >{{ sortie?.sortie }}</td>
+                              <td class="px-4 py-2" >{{ sortie?.consommable.unite.nom }}</td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+                      </table>
+                      
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Section Ajout de rapport -->
+                <div class="bg-white shadow-md rounded-lg p-6 mt-6 lg:mt-0">
+                  <h3 class="text-lg font-semibold mb-4">Ajout de rapport</h3>
+                      <form [formGroup]="rapportForm">
+                        <div class="mb-4">
+                          <label for="report-label" class="block text-sm font-medium text-gray-700">Libellé du rapport</label>
+                          <input type="text" id="report-label" formControlName="libelle" name="report-label" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="Entrez le libellé du rapport">
+                        </div>
+                        <div class="invalid-feedback" *ngIf="rapportForm.get('libelle')?.invalid && rapportForm.get('libelle')?.touched">
+                          Le nom est requis.
+                        </div>
+                        <div class="mb-4">
+                          <label for="price" class="block text-sm font-medium text-gray-700">Prix (optionnel)</label>
+                          <input type="number" id="price" formControlName="prix" name="price" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="Entrez le prix">
+                        </div>
+      
+                        <div class="mb-4">
+                          <label for="documents" class="block text-sm font-medium text-gray-700">Ajouter des fichiers justificatifs</label>
+                          <p class="text-sm text-gray-500">(*png/jpeg/pdf/docx/xslx/txt)</p>
+                          <input type="file" id="documents" formControlName="justificatifs" (change)="onFileChange($event)" name="documents" class="mt-1 block w-full text-sm text-gray-700 border border-gray-300 rounded-md shadow-sm" multiple  accept=".png,.jpeg,.jpg,.pdf,.docx,.xlsx,.txt">
+                        </div>
+                        <hr>
+      
+                        <div class="flex flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
+                          <button class="btn btn-dark me-2 mb-2" (click)="addRapport()" [disabled]="rapportForm.invalid"> Ajouter rapport</button>
+                          <button class="btn btn-dark mb-2" (click)="openStockDialog()"> Consommable utilisé</button>
+                        </div>
+                      </form>
+             
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-loader *ngIf="loader"></app-loader>

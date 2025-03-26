@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "flowbite/src/themes/default.css";
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+.container-fluid {
+  position: relative;
+  top: 85px;
+}

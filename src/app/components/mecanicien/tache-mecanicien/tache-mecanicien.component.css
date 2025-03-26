@@ -3,6 +3,7 @@
   top: 85px;
 }
 
+
 .task-board {
   display: flex;
   gap: 20px;
@@ -56,41 +57,66 @@
 }
 
 .task-card {
-  background: #6d7280;
+  background: #3a3f44;
   color: white;
-  padding: 10px;
-  margin-bottom: 8px;
-  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
   cursor: grab;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
 }
+
 .task-card:hover {
-  background: #696969;
-  color: white;
-  padding: 10px;
-  margin-bottom: 8px;
-  border-radius: 4px;
-  cursor: grab;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  background: #555;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.5);
 }
 
+/* En-tête de la carte (Nom de la tâche) */
 .task-card-header {
-  font-size: 1.1em;
+  font-size: 1.2em;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  color: #f0f0f0;
 }
 
+/* Corps de la carte (Description et info supplémentaires) */
 .task-card-body {
-  font-size: 0.9em;
-  margin-bottom: 8px;
+  font-size: 1em;
+  margin-bottom: 10px;
 }
 
+.task-card-body p {
+  margin: 5px 0;
+}
+
+.assigned-count {
+  font-size: 0.9em;
+  color: #b0b0b0;
+  margin-top: 10px;
+}
+
+/* Pied de carte (boutons et icônes) */
 .task-card-footer {
   display: flex;
   justify-content: flex-end;
-  font-size: 0.8em;
+  font-size: 0.9em;
+  margin-top: 10px;
 }
 
+.task-card-footer button {
+  margin-left: 10px;
+}
+
+.mat-icon-button {
+  padding: 6px;
+  transition: color 0.3s ease;
+}
+
+.mat-icon-button:hover {
+  color: #ff9800;
+}
+
+/* Responsivité pour les petits écrans */
 @media screen and (max-width: 768px) {
   .task-board {
     flex-direction: column;
@@ -100,21 +126,37 @@
   .task-column {
     width: 90%;
   }
+
+  /* Ajustement des cartes pour petits écrans */
+  .task-card {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .task-card-header {
+    font-size: 1.1em;
+  }
+
+  .task-card-body {
+    font-size: 0.9em;
+  }
+
+  .task-card-footer {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .task-card-footer button {
+    margin: 5px 0;
+  }
 }
+
 
 .empty-column-message {
   font-size: 1.2em;
   color: #999;
   text-align: center;
   padding: 20px;
-}
-.search-bar {
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.search-field {
-  width: 100%;
-  max-width: 400px;
 }

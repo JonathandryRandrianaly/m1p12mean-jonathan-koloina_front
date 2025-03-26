@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormArray, FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {LoaderComponent} from '../../templates/loader/loader.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {CommonModule} from '@angular/common';
@@ -9,145 +8,268 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatTableModule} from '@angular/material/table';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import {MatDialog, MatDialogContent} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {ApiService} from '../../../services/api/api.service';
+import {AuthService} from '../../../services/auth/auth-service.service';
 
 @Component({
   selector: 'app-demande-service-client',
-  imports: [ReactiveFormsModule,FormsModule,LoaderComponent,
-    MatPaginatorModule,CommonModule,MatButtonModule, MatMenuModule, MatIconModule
-    ,MatTableModule,MatChipsModule,
-    MatTooltipModule
+  imports: [ReactiveFormsModule, FormsModule, LoaderComponent,
+    MatPaginatorModule, CommonModule, MatButtonModule, MatMenuModule, MatIconModule
+    , MatTableModule, MatChipsModule,
+    MatTooltipModule, MatFormFieldModule, MatInputModule, MatDatepickerModule
   ],
   templateUrl: './demande-service-client.component.html',
-  styleUrl: './demande-service-client.component.css'
+  styleUrl: './demande-service-client.component.css',
+  providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DemandeServiceClientComponent {
-  loader: boolean = false;
+export class DemandeServiceClientComponent implements OnInit {
+  loader : boolean = false;
   selectedCategorieEntretien: string = '';
   selectedVehicule: string = '';
-  services: any[] = [
-    {
-      name: "Révision et Entretien",
-      description: "Vidange, changement de filtres, freins, etc.",
-      price: "15000 Ariary",
-      icon: "build" // 🛠️ Outils, entretien
-    },
-    {
-      name: "Réparation Mécanique",
-      description: "Moteur, transmission, suspension, etc.",
-      price: "15000 Ariary",
-      icon: "handyman" // 🔧 Clé à molette pour réparations mécaniques
-    },
-    {
-      name: "Diagnostic et Contrôle",
-      description: "Voyant moteur allumé, bruit suspect, etc.",
-      price: "15000 Ariary",
-      icon: "search" // 🔍 Icône de recherche pour diagnostic
-    },
-    {
-      name: "Pneumatiques et Équilibrage",
-      description: "Changement et équilibrage de pneus",
-      price: "15000 Ariary",
-      icon: "tire_repair" // 🛞 Icône pour pneus (Nouvelle icône Material 2023)
-    },
-    {
-      name: "Climatisation et Électricité",
-      description: "Recharge, détection de fuites, réparations",
-      price: "15000 Ariary",
-      icon: "ac_unit" // ❄️ Icône de climatisation
-    },
-    {
-      name: "Autre",
-      description: "Préciser un besoin spécifique",
-      price: "15000 Ariary",
-      icon: "more_horiz" // ⋯ Icône pour autres services
-    }
+  userConnected: string|null = null;
+
+  services: any[] = [];
+
+  disabledDates: Date[] = [
+    new Date(2025, 2, 15),
+    new Date(2025, 2, 21),
+    new Date(2025, 2, 16)
   ];
 
-  vehicles: any[] = [
-    {
-      marque: "Toyota",
-      categorie: "SUV",
-      annee: 2022,
-      immatriculation: "ABC-1234",
-      icon: "directions_car" // 🚗 Icône pour voiture standard
-    },
-    {
-      marque: "Peugeot",
-      categorie: "Citadine",
-      annee: 2018,
-      immatriculation: "XYZ-5678",
-      icon: "commute" // 🚖 Icône pour véhicule de ville
-    },
-    {
-      marque: "Mercedes",
-      categorie: "Berline",
-      annee: 2020,
-      immatriculation: "MER-4567",
-      icon: "time_to_leave" // 🚙 Icône pour berline
-    },
-    {
-      marque: "Ford",
-      categorie: "Pick-up",
-      annee: 2021,
-      immatriculation: "FOR-7890",
-      icon: "local_shipping" // 🚛 Icône pour véhicule utilitaire
-    },
-    {
-      marque: "Yamaha",
-      categorie: "Moto",
-      annee: 2019,
-      immatriculation: "MOT-1122",
-      icon: "two_wheeler" // 🏍️ Icône pour moto
-    }
+  vehicles: any = [];
+  currentStep : number = 0;
+
+  typeEntretiens: any[] = [];
+
+  steps = [
+    { icon: 'directions_car', tooltip: 'Étape 1: Choisir le véhicule' },
+    { icon: 'work', tooltip: 'Étape 2: Choisir le service' },
+    { icon: 'build', tooltip: 'Étape 3: Choisir le type d\'entretien' },
+    { icon: 'check_circle', tooltip: 'Étape 4: Confirmer service' }
   ];
 
-  typeEntretiens: any[] = [
-    {
-      idTypeEntretien: 1,
-      libelle: "Vidange",
-      description: "Remplacement de l'huile moteur et du filtre à huile",
-      categorie: "Révision et Entretien",
-      idSpecialisation: 101,
-      prix: "50 000 Ariary",
-      icon: "build" // 🛠️ Icône pour l'entretien
-    },
-    {
-      idTypeEntretien: 2,
-      libelle: "Changement de freins",
-      description: "Remplacement des plaquettes et disques de frein",
-      categorie: "Réparation Mécanique",
-      idSpecialisation: 102,
-      prix: "80 000 Ariary",
-      icon: "car_repair" // 🚗 Réparation véhicule
-    },
-    {
-      idTypeEntretien: 3,
-      libelle: "Diagnostic électronique",
-      description: "Analyse des erreurs et diagnostic moteur",
-      categorie: "Diagnostic et Contrôle",
-      idSpecialisation: 103,
-      prix: "60 000 Ariary",
-      icon: "memory" // 💾 Pour électronique
-    },
-    {
-      idTypeEntretien: 4,
-      libelle: "Équilibrage des pneus",
-      description: "Correction de l'équilibrage des roues",
-      categorie: "Pneumatiques et Équilibrage",
-      idSpecialisation: 104,
-      prix: "40 000 Ariary",
-      icon: "sync" // 🔄 Équilibrage
-    },
-    {
-      idTypeEntretien: 5,
-      libelle: "Recharge climatisation",
-      description: "Recharge et contrôle des fuites de climatisation",
-      categorie: "Climatisation et Électricité",
-      idSpecialisation: 105,
-      prix: "70 000 Ariary",
-      icon: "ac_unit" // ❄️ Climatisation
-    }
-  ];
+  entretien_form: any;
 
+  constructor(private fb: FormBuilder,private dialog: MatDialog, private router: Router, private apiService: ApiService
+  ,private authService: AuthService, private cdr: ChangeDetectorRef) {
+  }
+
+  ngOnInit() {
+    this.authService.getConnectedUser().then(user => {
+      this.userConnected = user;
+      this.loadVehicules();
+    });
+    this.loadCategorieEntretien();
+    this.loadDisabledDate();
+    this.entretien_form = this.fb.group({
+      vehicule: ['', Validators.required],
+      categorieModele: ['', Validators.required],
+      typeEntretien: this.fb.array([]),
+      date: ['', Validators.required]
+    });
+  }
+
+  navigate(nav : string){
+    this.router.navigate([nav]);
+  }
+
+  onSubmit(): void {
+      let date = new Date(this.entretien_form.value.date);
+      let dateUTC = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const formData = {
+        date: dateUTC.toISOString(),
+        vehiculeId: this.entretien_form.value.vehicule,
+        typeEntretiens: this.entretien_form.value.typeEntretien
+      };
+      this.apiService.insert('api/entretien/demande-service',formData).then(
+        (response) => {
+        },
+        (error) => {
+          this.loader = false;
+          console.error('Erreur lors de l\'insertion :', error);
+        }
+      );
+      this.currentStep = 4;
+  }
+
+  selectVehicle(vehicle: any) {
+    this.selectedVehicule = vehicle._id;
+    this.entretien_form.patchValue({
+      vehicule: vehicle._id,
+      categorieModele: vehicle.modele.categorie
+    });
+    this.loadCategorieEntretien();
+    this.currentStep = 1;
+  }
+
+  loadCategorieEntretien() {
+    const statut = 10;
+    const categorieModeleId = this.entretien_form?.value?.categorieModele;
+    this.apiService.getWithData(`api/categorie-entretiens/statut-min/${statut}`, {
+      categorieModeleId: categorieModeleId || null
+    }).then(
+      (response) => {
+        this.services = response;
+        this.cdr.detectChanges();
+      },
+      (error) => {
+        console.error('Erreur lors de loadSpecialisations :', error);
+      }
+    );
+  }
+
+  loadDisabledDate() {
+    this.apiService.getAll('api/date-occupe').then(
+      (response) => {
+        if (response?.dateDisabled) {
+          this.disabledDates = response.dateDisabled.map((d: { date: string }) => new Date(d.date));
+        }
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des dates :', error);
+      }
+    );
+  }
+
+  selectCategorieEntretien(categorieId: string) {
+    this.selectedCategorieEntretien = categorieId;
+    this.loadTypeEntretien();
+    this.currentStep = 2;
+  }
+
+  loadTypeEntretien() {
+    this.apiService.getWithData('api/type-entretiens/categories', {
+      categorieId: this.selectedCategorieEntretien,
+      categorieModeleId: this.entretien_form.value.categorieModele,
+    }).then(
+      (response) => {
+        this.typeEntretiens = response;
+        this.loader = false;
+        this.cdr.detectChanges();
+      },
+      (error) => {
+        console.error('Erreur lors de loadTypeEntretien :', error);
+      }
+    );
+  }
+
+  loadVehicules() {
+    this.loader = true;
+    this.apiService.getWithData(`api/vehicules/${this.userConnected}`, {}).then(
+      (response) => {
+        this.loader = false;
+        this.vehicles = response;
+        this.cdr.detectChanges();
+      },
+      (error) => {
+        console.error('Erreur lors de loadTypeEntretien :', error);
+        this.loader = false;
+      }
+    );
+  }
+
+  getStepTitle(): string {
+    if (this.currentStep==0) return 'Choisissez votre véhicule :';
+    if (this.currentStep==1) return 'Veuillez sélectionner le type de service dont vous avez besoin :';
+    if (this.currentStep==2) return 'Veuillez sélectionner les entretiens ou réparations souhaités :';
+    if (this.currentStep==3) return 'Spécifiez la date du rendez-vous :';
+    if (this.currentStep==4) return 'Confirmez le panier :';
+    return '';
+  }
+
+  dateFilter = (date: Date | null): boolean => {
+    if (!date) return true;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (date < today) {
+      return false;
+    }
+    for (let disabledDate of this.disabledDates) {
+      const disabledDateWithoutTime = new Date(disabledDate.setHours(0, 0, 0, 0));
+      if (date.getTime() === disabledDateWithoutTime.getTime()) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  get typeEntretien(): FormArray {
+    return this.entretien_form.get('typeEntretien') as FormArray;
+  }
+
+  isChecked(entretienId: string): boolean {
+    const formArray: FormArray = this.entretien_form.get('typeEntretien') as FormArray;
+    return formArray.value.includes(entretienId);
+  }
+
+  onCardClick(entretienId: string): void {
+    const formArray: FormArray = this.entretien_form.get('typeEntretien') as FormArray;
+    if (!formArray.value.includes(entretienId)) {
+      formArray.push(this.fb.control(entretienId));
+    } else {
+      const index = formArray.controls.findIndex(ctrl => ctrl.value === entretienId);
+      if (index >= 0) {
+        formArray.removeAt(index);
+      }
+    }
+  }
+
+  onCheckboxChange(event: any, entretienId: string): void {
+    const checkbox = event.target as HTMLInputElement;
+    const formArray: FormArray = this.entretien_form.get('typeEntretien') as FormArray;
+
+    if (checkbox.checked) {
+      if (!formArray.value.includes(entretienId)) {
+        formArray.push(this.fb.control(entretienId));
+      }
+    } else {
+      const index = formArray.controls.findIndex(ctrl => ctrl.value === entretienId);
+      if (index >= 0) {
+        formArray.removeAt(index);
+      }
+    }
+  }
+
+  changeStep(index: number): void {
+    if(index<this.currentStep){
+      this.currentStep = index;
+    }
+  }
+
+  anotherService(){
+    this.currentStep = 1;
+    this.selectedCategorieEntretien='';
+    this.typeEntretien.clear();
+    this.entretien_form.reset({
+      vehicule: this.entretien_form.value.vehicule,
+      categorieModele: this.entretien_form.value.categorieModele,
+      date: this.entretien_form.value.date,
+      typeEntretien: []
+    });
+  }
+
+  chooseVehicle(){
+    this.currentStep = 0;
+    this.selectedVehicule='';
+    this.selectedCategorieEntretien='';
+    this.typeEntretien.clear();
+    this.entretien_form.reset({
+      date: this.entretien_form.value.date,
+      typeEntretien: []
+    });
+  }
+
+  rendezvous(){
+    this.router.navigate(['/rendez-vous']);
+  }
 
 }
