@@ -45,10 +45,12 @@ export class CalendrierTacheComponent {
 
   previousMonth(): void {
     this.viewDate = new Date(this.viewDate.setMonth(this.viewDate.getMonth() - 1));
+    this.loadEvents(this.viewDate.getMonth()+1);
   }
 
   nextMonth(): void {
     this.viewDate = new Date(this.viewDate.setMonth(this.viewDate.getMonth() + 1));
+    this.loadEvents(this.viewDate.getMonth()+1);
   }
 
   onDayClick(event: { day: CalendarMonthViewDay; sourceEvent: MouseEvent | KeyboardEvent }): void {
