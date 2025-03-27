@@ -10,52 +10,53 @@
               </h5>
 
               <div class="max-w-6xl mt-3 flex flex-col gap-4" *ngFor="let rdv of rdvs">
-                <div *ngIf="rdv.entretien.date>=today">
+                <div *ngIf="rdv.entretien.date >= today" class="flex items-start gap-4">
+
                   <div class="w-1/6 pr-1 text-left">
-                    <p class="text-gray-500 text-sm">{{rdv.entretien.date | date:'dd/MM/yyyy'}}</p>
+                    <p class="text-gray-500 text-sm font-semibold">{{ rdv.entretien.date | date:'dd/MM/yyyy' }}</p>
                   </div>
+
                   <div class="w-5/6 border-l-4 border-dark-500 pl-4">
-                    <div>
-                      <p class="text-gray-500 text-sm flex justify-between w-full">
+                    <div class="flex justify-between items-center w-full">
+                      <p class="text-gray-500 text-sm">
                         <span *ngIf="rdv.dateDebut == null && rdv.dateFin == null">À définir</span>
                         <span *ngIf="rdv.dateDebut != null && rdv.dateFin != null">
-                          {{rdv.dateDebut | date:'dd/MM/yyyy HH:mm'}} - {{rdv.dateFin | date:'dd/MM/yyyy HH:mm'}}
+                          {{ rdv.dateDebut | date:'dd/MM/yyyy HH:mm' }} - {{ rdv.dateFin | date:'dd/MM/yyyy HH:mm' }}
                         </span>
                         <span *ngIf="rdv.dateDebut != null && rdv.dateFin == null">
-                          {{rdv.dateDebut | date:'dd/MM/yyyy HH:mm'}} - ...
+                          {{ rdv.dateDebut | date:'dd/MM/yyyy HH:mm' }} - ...
                         </span>
-                        <span class="text-green-500 font-semibold" *ngIf="rdv.etat.code == -10">Confirmé</span>
                       </p>
-                      <h3 class="font-bold text-lg flex justify-between w-full">
-                        <span>{{rdv.typeEntretien.nom}}</span>
-                        <span class="text-gray-700 font-semibold">
-                          {{rdv.typeEntretien.prix | number:'1.2-2'}} Ar
+
+                      <p class="text-green-500 font-semibold" *ngIf="rdv.etat.code == -10">Confirmé</p>
+                    </div>
+
+                    <h3 class="font-bold text-lg flex justify-between w-full">
+                      <span>{{ rdv.typeEntretien.nom }}</span>
+                      <span class="text-gray-700 font-semibold text-end">
+                        {{ rdv.typeEntretien.prix | currency:'MGA ':true }}
+                      </span>
+                    </h3>
+                    <p class="text-gray-700">{{ rdv.typeEntretien.description }}</p>
+
+                    <div class="flex items-center mt-4">
+                      <div class="ml-3">
+                        <p class="font-semibold">{{ rdv.entretien.vehicule.immatriculation }}</p>
+                        <div *ngIf="rdv.users && rdv.users.length > 0">
+                        <span class="text-sm text-gray-500" *ngFor="let user of rdv.users; let last = last">
+                          {{ user.nom }}<span *ngIf="!last">, </span>
                         </span>
-                      </h3>
-                      <p class="text-gray-700">
-                        {{rdv.typeEntretien.description}}
-                      </p>
-                      <div class="flex items-center mt-4">
-                        <div class="ml-3">
-                          <p class="font-semibold">{{rdv.entretien.vehicule.immatriculation}}</p>
-                          <div *ngIf="rdv.users && rdv.users.length > 0">
-                            <span class="text-sm text-gray-500" *ngFor="let user of rdv.users; let last = last">
-                              {{ user.nom }}<span *ngIf="!last">, </span>
-                            </span>
-                          </div>
                         </div>
                       </div>
-  
-                      <div class="mt-4 flex gap-2">
-                        <button *ngIf="rdv.etat.code==-10" mat-raised-button color="warn" style="color: red;" (click)="annulerRdv(rdv._id)">
-                          <mat-icon>delete</mat-icon> Annuler
-                        </button>
-                      </div>
-  
+                    </div>
+
+                    <div class="mt-4 flex gap-2">
+                      <button *ngIf="rdv.etat.code == -10" mat-raised-button color="warn" class="text-red-600" (click)="annulerRdv(rdv._id)">
+                        <mat-icon>delete</mat-icon> Annuler
+                      </button>
                     </div>
                   </div>
                 </div>
-           
               </div>
 
             </div>
