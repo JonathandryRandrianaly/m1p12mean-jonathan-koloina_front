@@ -187,6 +187,7 @@ export class CalendrierDetailComponent implements OnInit {
     this.loader = true;
     this.apiService.insert('api/entretien/rdv/annuler',{detailEntretienId}).then(
       (response) => {
+        this.showAlertMessage('Rendez-vous annulé avec succès');
         this.loadEntretienDetails();
         this.loader = false;
       },

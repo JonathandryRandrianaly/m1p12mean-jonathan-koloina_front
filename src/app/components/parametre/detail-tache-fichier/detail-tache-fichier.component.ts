@@ -130,7 +130,7 @@ getFileIcon(filename: string): string {
         (response) => {
           const success= response.data;
           if(success === true){
-            alert('Ajout effectué');
+            this.showAlertMessage('Ajout effectué');
             this.justificatifs = [...this.justificatifs, ...this.newJustificatifs];
           }
           this.justificatifs_form = this.fb.group({

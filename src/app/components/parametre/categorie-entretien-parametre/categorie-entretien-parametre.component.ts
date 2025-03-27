@@ -141,6 +141,7 @@ export class CategorieEntretienParametreComponent implements OnInit {
         this.apiService.insert('api/categorie-entretien', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Catégorie d\'entretien créée avec succès');
               this.loadCategories();
             }
           },

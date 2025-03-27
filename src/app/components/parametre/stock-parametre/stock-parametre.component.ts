@@ -110,6 +110,7 @@ export class StockParametreComponent implements OnInit {
         this.apiService.insert('api/stock', result).then(
           (response) => {
             if (response.data.success == true) {
+              this.showAlertMessage('Mouvement de stock créé avec succès');
               this.loadHistoriquesMouvements();
             }else{
               this.showErrorMessage("Mouvement impossible");

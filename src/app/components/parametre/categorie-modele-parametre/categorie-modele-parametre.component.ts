@@ -141,6 +141,7 @@ export class CategorieModeleParametreComponent {
         this.apiService.insert('api/categorie-modele', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Catégorie créée avec succès');
               this.loadCategories();
             }
           },

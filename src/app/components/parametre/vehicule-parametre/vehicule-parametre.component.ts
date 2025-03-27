@@ -202,6 +202,7 @@ export class VehiculeParametreComponent {
             if (!response.data.success) {
               this.loader = false;
             }else{
+              this.showAlertMessage('Vehicule ajouté avec succès');
                 this.loadVehicules();
             }
           },

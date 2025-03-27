@@ -142,6 +142,7 @@ export class TransmissionParametreComponent  implements OnInit  {
         this.apiService.insert('api/transmission', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Transmission créée avec succès');
               this.loadTransmissions();
             }
           },

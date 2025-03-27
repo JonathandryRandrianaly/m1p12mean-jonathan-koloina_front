@@ -94,6 +94,7 @@ export class DemandeServiceClientComponent implements OnInit {
       };
       this.apiService.insert('api/entretien/demande-service',formData).then(
         (response) => {
+          this.showAlertMessage('Demande effectuée avec succès');
         },
         (error) => {
           this.showErrorMessage(error.response.data.message);

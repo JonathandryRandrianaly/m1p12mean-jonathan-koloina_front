@@ -63,6 +63,7 @@ export class RendezVousComponent {
     this.loader = true;
     this.apiService.insert('api/entretien/rdv/annuler',{detailEntretienId}).then(
       (response) => {
+        this.showAlertMessage('Rendez-vous annulé avec succès');
         this.loadRdv();
         this.loader = false;
       },

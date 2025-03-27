@@ -142,6 +142,7 @@ export class EnergieMoteurParametreComponent implements OnInit  {
         this.apiService.insert('api/energie-moteur', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Energie moteur créé avec succès');
               this.loadEnergieMoteurs();
             }
           },

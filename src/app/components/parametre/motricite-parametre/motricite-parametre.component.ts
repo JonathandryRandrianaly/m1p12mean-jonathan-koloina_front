@@ -141,6 +141,7 @@ export class MotriciteParametreComponent implements OnInit {
         this.apiService.insert('api/motricite', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Motricité créée avec succès');
               this.loadMotricites();
             }
           },
