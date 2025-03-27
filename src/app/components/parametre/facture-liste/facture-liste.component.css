@@ -2,13 +2,21 @@
   position: relative;
   top: 85px;
 }
-
-.text-success {
-  color: green;
-  font-weight: bold;
+@media (max-width: 576px) {
+  .filtre {
+    width: 90vw !important;
+    right: 50% !important;
+    transform: translateX(50%);
+    top: 10px !important;
+  }
 }
 
-.text-danger {
-  color: red;
-  font-weight: bold;
+.sort-icon {
+  font-size: 22px;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+th:hover .sort-icon {
+  color: #000000;
 }

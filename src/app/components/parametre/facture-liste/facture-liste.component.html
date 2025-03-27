@@ -10,17 +10,21 @@
               </div>
               <hr>
 
-              <!-- Bouton pour afficher le filtre -->
               <div class="d-flex justify-content-end gap-2 mt-2 mb-3">
                 <button class="btn btn-outline-dark" type="button" (click)="toggleFilter()">
                   <i class="bi bi-filter"></i> Filtrer
                 </button>
               </div>
 
-              <!-- Bloc de filtre -->
-              <div class="card" *ngIf="showFilter" style="width: 400px; position: absolute; right: 20px; top: 20px; z-index: 1000;">
+              <div class="filtre card" *ngIf="showFilter" style="width: 400px; position: absolute; right: 20px; top: 20px; z-index: 1000;">
                 <div class="card-body">
                   <h5 class="card-title">Filtrer les Résultats</h5>
+                  <button type="button" class="btn btn-close position-absolute top-0 end-0 m-2"
+                          style="width: 32px; height: 32px; font-size: 32px;"
+                          aria-label="Fermer"
+                          #tooltip="matTooltip" matTooltip="Fermer"
+                          (click)="toggleFilter()">
+                  </button>
 
                   <div class="mb-3">
                     <label class="form-label">Numéro</label>
@@ -55,32 +59,30 @@
                   </div>
 
                   <div class="d-flex gap-2 mt-2">
-                    <button class="btn btn-secondary" (click)="resetSearchCriteria()"><i class="bi bi-arrow-clockwise"></i></button>
-                    <button class="btn btn-dark" (click)="applyFilters()"><i class="bi bi-search"></i></button>
-                    <button class="btn btn-danger" (click)="toggleFilter()"><i class="bi bi-x-circle"></i></button>
+                    <button class="btn btn-secondary" #tooltip="matTooltip" matTooltip="Réinitialiser"
+                            (click)="resetSearchCriteria()"><i class="bi bi-arrow-clockwise"></i></button>
+                    <button class="btn btn-dark"  matTooltip="Rechercher"
+                            (click)="applyFilters()"><i class="bi bi-search"></i></button>
                   </div>
                 </div>
               </div>
 
-              <!-- Tableau des factures -->
               <div class="table-responsive">
                 <table class="table table-hover">
                   <thead class="table-light">
                   <tr>
-                    <th scope="col" (click)="sortData('_id')" style="cursor: pointer;">
+                    <th scope="col" class="text-nowrap">
                       Numéro
-                      <mat-icon *ngIf="isSorted('_id', 'asc')">arrow_upward</mat-icon>
-                      <mat-icon *ngIf="isSorted('_id', 'desc')">arrow_downward</mat-icon>
                     </th>
                     <th scope="col" (click)="sortData('date')" style="cursor: pointer;">
                       Date
-                      <mat-icon *ngIf="isSorted('date', 'asc')">arrow_upward</mat-icon>
-                      <mat-icon *ngIf="isSorted('date', 'desc')">arrow_downward</mat-icon>
+                      <mat-icon *ngIf="isSorted('date', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('date', 'desc')" class="sort-icon">arrow_downward</mat-icon>
                     </th>
-                    <th scope="col" (click)="sortData('montant')" style="cursor: pointer;">
-                      Montant (€)
-                      <mat-icon *ngIf="isSorted('montant', 'asc')">arrow_upward</mat-icon>
-                      <mat-icon *ngIf="isSorted('montant', 'desc')">arrow_downward</mat-icon>
+                    <th scope="col" (click)="sortData('prix')" style="cursor: pointer;">
+                      Montant
+                      <mat-icon *ngIf="isSorted('prix', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                      <mat-icon *ngIf="isSorted('prix', 'desc')" class="sort-icon">arrow_downward</mat-icon>
                     </th>
                     <th scope="col">Statut</th>
                     <th scope="col">Action</th>
@@ -90,9 +92,12 @@
                   <tr *ngFor="let facture of factures">
                     <td>{{facture._id}}</td>
                     <td>{{facture.date | date:'dd/MM/yyyy'}}</td>
-                    <td>{{facture.prix | currency:' '}} Ariary</td>
-                    <td [ngClass]="{'text-success': facture.etat.code === 10, 'text-danger': facture.etat.code !== 10}">
-                      {{facture.etat.libelle}}
+                    <td>{{facture.prix | currency:'MGA ':true}}</td>
+                    <td>
+                      <span class="badge"
+                            [ngClass]="{'bg-success': facture.etat.code === 10, 'bg-danger': facture.etat.code !== 10}">
+                        {{ facture.etat.libelle }}
+                      </span>
                     </td>
                     <td>
                       <button class="btn btn-dark btn-sm" (click)="showDetails(facture)">Détail</button>

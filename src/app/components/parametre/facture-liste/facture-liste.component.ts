@@ -9,10 +9,11 @@ import {FormsModule} from '@angular/forms';
 import {LoaderComponent} from '../../templates/loader/loader.component';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {ModeleInsertionComponent} from '../modele-dialog/modele-insertion/modele-insertion.component';
+import {MatTooltip} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-facture-liste',
-  imports: [CommonModule, MatIcon, FormsModule, LoaderComponent, MatPaginator],
+  imports: [CommonModule, MatIcon, FormsModule, LoaderComponent, MatPaginator, MatTooltip],
   templateUrl: './facture-liste.component.html',
   styleUrl: './facture-liste.component.css'
 })
@@ -95,7 +96,6 @@ export class FactureListeComponent implements OnInit {
     this.apiService.getWithData('api/factures/search', params).then(
       (response: any) => {
         this.factures = response.items;
-        console.log(this.factures);
         this.totalElement = response.totalItems;
         this.totalPages = Math.ceil(this.totalElement / this.searchCriteria.limit);
         this.loader = false;
