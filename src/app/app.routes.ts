@@ -324,7 +324,7 @@ export const routes: Routes = [
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
-        { label: 'Consommables', url: '' },
+        { label: 'Consommables', url: '/parametre/consommables' },
         { label: 'Stocks', url: '' }
       ],
       roles: [
@@ -381,7 +381,7 @@ export const routes: Routes = [
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
-        { label: 'Véhicule', url: '' },
+        { label: 'Véhicule', url: '/vehicules' },
         { label: 'Historiques', url: '' }
       ],
       roles: [
@@ -426,7 +426,7 @@ export const routes: Routes = [
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
-        { label: 'Statistiques', url: '' },
+        { label: 'Statistiques', url: '/statistiques/personnel-client' },
         { label: 'Finance', url: '' }
       ],
       roles: [
