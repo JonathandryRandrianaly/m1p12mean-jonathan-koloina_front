@@ -10,6 +10,9 @@ import {LoaderComponent} from '../../templates/loader/loader.component';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {ModeleInsertionComponent} from '../modele-dialog/modele-insertion/modele-insertion.component';
 import {MatTooltip} from '@angular/material/tooltip';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-facture-liste',
@@ -45,7 +48,7 @@ export class FactureListeComponent implements OnInit {
   showFilter: boolean = false;
   userConnected: string|null = null;
 
-  constructor(private dialog: MatDialog, private authService : AuthService,private router: Router, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private authService : AuthService,private router: Router, private apiService: ApiService) {
 
   }
 
@@ -69,8 +72,8 @@ export class FactureListeComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors du chargement des factures :', error);
       }
     );
   }
@@ -101,8 +104,8 @@ export class FactureListeComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors du chargement des factures :', error);
       }
     );
   }
@@ -166,6 +169,21 @@ export class FactureListeComponent implements OnInit {
     };
     this.loadFactures();
     this.showFilter = !this.showFilter;
+  }
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
   }
 
 }

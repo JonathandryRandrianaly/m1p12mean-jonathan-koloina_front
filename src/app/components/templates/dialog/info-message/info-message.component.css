@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   background-color: transparent !important;
-  color: red !important;
+  color: green !important;
   border-radius: 4px;
   font-size: 14px;
   min-width: 250px;
@@ -15,5 +15,5 @@
 
 .custom-snackbar-container .close-btn {
   margin-left: auto;
-  color: red;
+  color: green;
 }

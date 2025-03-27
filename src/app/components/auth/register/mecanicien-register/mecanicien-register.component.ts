@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {ActivatedRoute, Router} from '@angular/router';
 import { ApiService } from '../../../../services/api/api.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-mecanicien-register',
@@ -19,6 +20,7 @@ export class MecanicienRegisterComponent implements OnInit {
   token : string = '';
 
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private router: Router,
     private apiService: ApiService,

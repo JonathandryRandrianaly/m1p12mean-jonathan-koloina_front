@@ -19,6 +19,9 @@ import {
 import {MatButton} from '@angular/material/button';
 import {CommonModule} from '@angular/common';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {ErrorMessageComponent} from '../../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../../templates/dialog/info-message/info-message.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-employee-role-attribution',
@@ -42,6 +45,7 @@ export class EmployeeRoleAttributionComponent {
   usr_form: FormGroup;
 
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private apiService: ApiService,
     @Inject(MAT_DIALOG_DATA) public user: any,
@@ -63,7 +67,7 @@ export class EmployeeRoleAttributionComponent {
         this.setPreselectedRoles();
       },
       (error) => {
-        console.error('Erreur lors de loadRoles :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -103,5 +107,21 @@ export class EmployeeRoleAttributionComponent {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
   }
 }

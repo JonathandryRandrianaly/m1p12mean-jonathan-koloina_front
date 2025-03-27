@@ -17,6 +17,9 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatTableModule} from '@angular/material/table';
 import { VehiculeInsertionComponent } from '../vehicule-dialog/vehicule-insertion/vehicule-insertion.component';
 import { AuthService } from '../../../services/auth/auth-service.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-vehicule-parametre',
@@ -58,7 +61,7 @@ export class VehiculeParametreComponent {
   showFilter: boolean = false;
   decodedToken: any;
   isManager!: Promise<boolean>;
-  constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService, private authService: AuthService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private router: Router, private apiService: ApiService, private authService: AuthService) {
 
   }
   ngOnInit() {
@@ -72,8 +75,8 @@ export class VehiculeParametreComponent {
     });
     this.loadModeles();
     this.selectedEtats = {
-      '10': true, 
-      '-10': true 
+      '10': true,
+      '-10': true
     };
   }
 
@@ -93,8 +96,8 @@ export class VehiculeParametreComponent {
   }
 
   onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1; 
-    this.searchCriteria.limit = event.pageSize; 
+    this.currentPage = event.pageIndex + 1;
+    this.searchCriteria.limit = event.pageSize;
     this.loadVehicules();
   }
 
@@ -104,7 +107,7 @@ export class VehiculeParametreComponent {
         this.decodedToken= response;
       },
       (error) => {
-        console.error('Erreur recup token :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -120,8 +123,8 @@ export class VehiculeParametreComponent {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadModeles :', error);
       }
     );
   }
@@ -140,8 +143,8 @@ export class VehiculeParametreComponent {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadVehicules :', error);
       }
     );
   }
@@ -168,7 +171,7 @@ export class VehiculeParametreComponent {
     this.loader = true;
     const data = {
       userId: id,
-      statut: isChecked ? 10 : -10  
+      statut: isChecked ? 10 : -10
     };
     this.apiService.insert('api/vehicule/' + id, data).then(
       (response) => {
@@ -176,12 +179,12 @@ export class VehiculeParametreComponent {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de l\'insertion :', error);
       }
     );
   }
-  
+
 
   openVehiculeInsertionDialog() {
     const dialogRef = this.dialog.open(VehiculeInsertionComponent, {
@@ -202,8 +205,8 @@ export class VehiculeParametreComponent {
             }
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
@@ -216,7 +219,7 @@ export class VehiculeParametreComponent {
 
   applyFilters() {
     this.loadVehicules();
-    this.toggleFilter(); 
+    this.toggleFilter();
   }
 
   resetSearchCriteria() {
@@ -233,8 +236,8 @@ export class VehiculeParametreComponent {
       modeles: []
     };
     this.selectedEtats = {
-      '10': true, 
-      '-10': true 
+      '10': true,
+      '-10': true
     };
     Object.keys(this.selectedModeles).forEach(key => {
       this.selectedModeles[key] = true;
@@ -244,7 +247,23 @@ export class VehiculeParametreComponent {
   }
 
   viewHistoriques(id: any) {
-    this.router.navigate(['/historiques/vehicule', id]); 
+    this.router.navigate(['/historiques/vehicule', id]);
+  }
+
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
   }
 
 }

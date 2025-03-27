@@ -15,6 +15,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {CommonModule} from '@angular/common';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { ApiService } from '../../../../services/api/api.service';
+import {ErrorMessageComponent} from '../../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../../templates/dialog/info-message/info-message.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-vehicule-insertion',
@@ -38,10 +41,11 @@ export class VehiculeInsertionComponent {
   modeles: any[]= [];
 
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private apiService: ApiService,
     private dialogRef: MatDialogRef<VehiculeInsertionComponent>
-  ) 
+  )
   {
       this.loadModeles();
       this.vehicule_form = this.fb.group({
@@ -57,7 +61,7 @@ export class VehiculeInsertionComponent {
         this.modeles = response;
       },
       (error) => {
-        console.error('Erreur lors de loadModeles :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -70,5 +74,21 @@ export class VehiculeInsertionComponent {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
   }
 }
