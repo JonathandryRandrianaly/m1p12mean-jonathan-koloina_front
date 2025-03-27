@@ -49,14 +49,13 @@
               <img
                 [src]="getFullImagePath(justificatif.name)"
                 class="image"
-                (click)="previsualise(justificatif.name)"
                 alt="Aperçu fichier"
               />
             </ng-container>
   
             <ng-template #notImage>
               <div class="file-preview">
-                <mat-icon (click)="previsualise(justificatif.name)">{{ getFileIcon(justificatif.name) }}</mat-icon>
+                <mat-icon >{{ getFileIcon(justificatif.name) }}</mat-icon>
                 <div class="file-name">
                   <p>{{ justificatif.name }}</p>
                 </div>
