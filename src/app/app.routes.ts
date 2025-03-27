@@ -20,9 +20,6 @@ import { UniteParametreComponent } from './components/parametre/unite-parametre/
 import { MotriciteParametreComponent } from './components/parametre/motricite-parametre/motricite-parametre.component';
 import { SpecialisationParametreComponent } from './components/parametre/specialisation-parametre/specialisation-parametre.component';
 import {TacheMecanicienComponent} from './components/mecanicien/tache-mecanicien/tache-mecanicien.component';
-import {
-  HistoriqueMecanicienComponent
-} from './components/mecanicien/historique-mecanicien/historique-mecanicien.component';
 import { RoleParametreComponent } from './components/parametre/role-parametre/role-parametre.component';
 import { ConsommableParametreComponent } from './components/parametre/consommable-parametre/consommable-parametre.component';
 import { ModeleParametreComponent } from './components/parametre/modele-parametre/modele-parametre.component';
@@ -204,20 +201,6 @@ export const routes: Routes = [
         { label: 'Accueil', url: '/' },
         { label: 'Mécanicien', url: '' },
         { label: 'Tâches', url: '' }
-      ],
-      roles: [
-        'mecanicien'
-      ]
-    }
-  },
-  {
-    path:"mecanicien/historiques",component:HistoriqueMecanicienComponent,
-    canActivate:[authGuard],
-    data:{
-      breadcrumb : [
-        { label: 'Accueil', url: '/' },
-        { label: 'Mécanicien', url: '/mecanicien/tasks' },
-        { label: 'Historiques', url: '' }
       ],
       roles: [
         'mecanicien'

@@ -5,3 +5,11 @@
   ::ng-deep mat-paginator {
     background-color: #fff !important;
   }
+@media (max-width: 576px) {
+  .filtre {
+    width: 90vw !important;
+    right: 50% !important;
+    transform: translateX(50%);
+    top: 10px !important;
+  }
+}
