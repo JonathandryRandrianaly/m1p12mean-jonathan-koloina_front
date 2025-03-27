@@ -8,12 +8,12 @@ import {MatTooltip} from '@angular/material/tooltip';
   selector: 'app-error-message',
   standalone: true,
   imports: [MatIcon, MatIconButton, MatTooltip],
-  templateUrl: './error-message.component.html',
-  styleUrls: ['./error-message.component.css']
+  templateUrl: './info-message.component.html',
+  styleUrls: ['./info-message.component.css']
 })
-export class ErrorMessageComponent{
+export class InfoMessageComponent {
   constructor(
-    public snackBarRef: MatSnackBarRef<ErrorMessageComponent>,
+    public snackBarRef: MatSnackBarRef<InfoMessageComponent>,
     @Inject(MAT_SNACK_BAR_DATA) public data: { message: string }
   ) {}
 

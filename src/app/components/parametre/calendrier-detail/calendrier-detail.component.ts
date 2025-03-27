@@ -10,6 +10,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CalendrierAttributionComponent} from '../calendrier-attribution/calendrier-attribution.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../../../services/api/api.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-calendrier-detail',
@@ -36,7 +39,7 @@ export class CalendrierDetailComponent implements OnInit {
 
   rowData: any[] = [];
 
-  constructor(private route: ActivatedRoute, private router: Router,private dialog: MatDialog, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private route: ActivatedRoute, private router: Router,private dialog: MatDialog, private apiService: ApiService) {
 
   }
 
@@ -83,9 +86,8 @@ export class CalendrierDetailComponent implements OnInit {
           etatCode: Number(newStatus),
           etatLibelle: this.getEtatLibelle(Number(newStatus))
         }).then(response => {
-          console.log(response);
         }).catch(error => {
-          console.error('Erreur lors de la mise à jour du statut:', error);
+          this.showErrorMessage(error.response.data.message);
         });
       }
     }
@@ -95,7 +97,7 @@ export class CalendrierDetailComponent implements OnInit {
     this.apiService.getAll('api/getDateOccupe/'+this.selectedDate).then((response:boolean) => {
       this.isFreeDate = !response;
     }).catch(error => {
-      console.error('Erreur lors de la mise à jour du statut:', error);
+      this.showErrorMessage(error.response.data.message);
     });
   }
 
@@ -103,7 +105,7 @@ export class CalendrierDetailComponent implements OnInit {
     this.apiService.insert(`api/setDateOccupe/${this.selectedDate}`, {}).then((response) => {
       this.isFreeDate = !this.isFreeDate;
     }).catch(error => {
-      console.error('Erreur lors de la mise à jour du statut:', error);
+      this.showErrorMessage(error.response.data.message);
     });
   }
 
@@ -175,8 +177,8 @@ export class CalendrierDetailComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadUsers :', error);
       }
     );
   }
@@ -189,10 +191,25 @@ export class CalendrierDetailComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de l\'annulation :', error);
       }
     );
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }

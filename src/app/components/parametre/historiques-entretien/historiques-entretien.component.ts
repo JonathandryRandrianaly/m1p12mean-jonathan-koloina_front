@@ -14,6 +14,9 @@ import {MatMenu, MatMenuItem, MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule, MatIconButton} from "@angular/material/button";
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTableModule} from '@angular/material/table';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-historiques-entretien',
@@ -52,7 +55,7 @@ export class HistoriquesEntretienComponent {
   totalPages: number = 0;
   totalElement: number = 0;
   showFilter: boolean = false;
-  constructor( private route: ActivatedRoute , private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private route: ActivatedRoute , private apiService: ApiService) {
 
   }
   ngOnInit() {
@@ -60,7 +63,7 @@ export class HistoriquesEntretienComponent {
     this.loadTypes();
     this.loadHistoriquesEntretien();
     this.selectedEtats = {
-      '-10': true, 
+      '-10': true,
       '0': true ,
       '10': true ,
       '20': true ,
@@ -68,8 +71,8 @@ export class HistoriquesEntretienComponent {
   }
 
   onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1; 
-    this.searchCriteria.limit = event.pageSize; 
+    this.currentPage = event.pageIndex + 1;
+    this.searchCriteria.limit = event.pageSize;
     this.loadHistoriquesEntretien();
   }
 
@@ -84,8 +87,8 @@ export class HistoriquesEntretienComponent {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadType :', error);
       }
     );
   }
@@ -103,8 +106,8 @@ export class HistoriquesEntretienComponent {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadHistoriques :', error);
       }
     );
   }
@@ -133,7 +136,7 @@ export class HistoriquesEntretienComponent {
 
   applyFilters() {
     this.loadHistoriquesEntretien();
-    this.toggleFilter(); 
+    this.toggleFilter();
   }
 
   resetSearchCriteria() {
@@ -147,7 +150,7 @@ export class HistoriquesEntretienComponent {
       dateMax: '',
     };
     this.selectedEtats = {
-      '-10': true, 
+      '-10': true,
       '0': true ,
       '10': true ,
       '20': true ,
@@ -157,5 +160,20 @@ export class HistoriquesEntretienComponent {
     });
     this.loadHistoriquesEntretien();
     this.showFilter = !this.showFilter;
+  }
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
   }
 }

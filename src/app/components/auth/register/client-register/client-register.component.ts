@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {ApiService} from '../../../../services/api/api.service';
 import {CommonModule} from '@angular/common';
 import {Genre} from '../../../../models/Genre';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-client-register',
@@ -17,7 +18,7 @@ export class ClientRegisterComponent implements OnInit {
   usr_form: any;
   genres: Genre[] = [];
 
-  constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) { }
+  constructor(private snackBar: MatSnackBar,private fb: FormBuilder, private router: Router, private apiService: ApiService) { }
 
   ngOnInit() {
     this.loadGenre();

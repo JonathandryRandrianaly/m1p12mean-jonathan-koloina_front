@@ -15,6 +15,9 @@ import {MatButtonModule, MatIconButton} from "@angular/material/button";
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTableModule} from '@angular/material/table';
 import { AuthService } from '../../../services/auth/auth-service.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-rendez-vous',
@@ -31,7 +34,7 @@ export class RendezVousComponent {
   rdvs : any[] = [];
   userConnected: string|null = null;
   today: any;
-  constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService, private authService: AuthService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private router: Router, private apiService: ApiService, private authService: AuthService) {
 
   }
   ngOnInit() {
@@ -50,8 +53,8 @@ export class RendezVousComponent {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadRDV :', error);
       }
     );
   }
@@ -64,9 +67,24 @@ export class RendezVousComponent {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de l\'annulation :', error);
       }
     );
+  }
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
   }
 }

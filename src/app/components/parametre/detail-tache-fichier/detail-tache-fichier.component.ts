@@ -9,6 +9,9 @@ import {CommonModule} from '@angular/common';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIcon} from '@angular/material/icon';
 import { Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-detail-tache-fichier',
@@ -38,6 +41,7 @@ export class DetailTacheFichierComponent {
   justificatifs_form: FormGroup;
 
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<DetailTacheFichierComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -68,8 +72,8 @@ export class DetailTacheFichierComponent {
           this.dialogRef.close(true);
         },
         (error) => {
+          this.showErrorMessage(error.response.data.message);
           this.dialogRef.close();
-          console.error('Erreur lors de l\'insertion :', error);
         }
       );
   }
@@ -80,15 +84,15 @@ export class DetailTacheFichierComponent {
 
 getFileIcon(filename: string): string {
   if (filename.endsWith('.pdf')) {
-    return 'picture_as_pdf'; 
+    return 'picture_as_pdf';
   } else if (filename.endsWith('.doc') || filename.endsWith('.docx')) {
-    return 'description'; 
+    return 'description';
   } else if (filename.endsWith('.xls') || filename.endsWith('.xlsx')) {
-    return 'table_chart'; 
+    return 'table_chart';
   } else if (filename.endsWith('.png') || filename.endsWith('.jpg') || filename.endsWith('.jpeg')) {
-    return 'image'; 
+    return 'image';
   } else {
-    return 'insert_drive_file'; 
+    return 'insert_drive_file';
   }
 }
 
@@ -136,7 +140,7 @@ getFileIcon(filename: string): string {
           this.dialogRef.close(true);
         },
         (error) => {
-          console.error('Erreur lors de l\'insertion :', error);
+          this.showErrorMessage(error.response.data.message);
         }
       );
   }
@@ -147,5 +151,21 @@ getFileIcon(filename: string): string {
 
   closeDialog(): void {
     this.dialogRef.close();
+  }
+
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
   }
 }

@@ -19,6 +19,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSelectModule} from '@angular/material/select';
 import {MatStepperModule} from '@angular/material/stepper';
 import {ApiService} from '../../../../services/api/api.service';
+import {ErrorMessageComponent} from '../../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../../templates/dialog/info-message/info-message.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-employee-insertion',
@@ -46,6 +49,7 @@ export class EmployeeInsertionComponent {
   specialisations: any[] = [];
 
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private apiService: ApiService,
     private dialogRef: MatDialogRef<EmployeeInsertionComponent>
@@ -94,7 +98,7 @@ export class EmployeeInsertionComponent {
         this.specialisations = response;
       },
       (error) => {
-        console.error('Erreur lors de loadSpecialisations :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -109,5 +113,20 @@ export class EmployeeInsertionComponent {
     this.dialogRef.close();
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
   protected readonly Array = Array;
 }

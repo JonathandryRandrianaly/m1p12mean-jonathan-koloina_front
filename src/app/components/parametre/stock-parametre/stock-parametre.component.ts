@@ -15,6 +15,9 @@ import {MatButtonModule, MatIconButton} from "@angular/material/button";
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTableModule} from '@angular/material/table';
 import { StockInsertionComponent } from '../stock-dialog/stock-insertion/stock-insertion.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-stock-parametre',
@@ -41,7 +44,7 @@ export class StockParametreComponent implements OnInit {
   totalElement: number = 0;
   consommableId: any;
   consommable: any;
-  constructor(private dialog: MatDialog, private route: ActivatedRoute, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private route: ActivatedRoute, private apiService: ApiService) {
 
   }
   ngOnInit() {
@@ -57,8 +60,8 @@ export class StockParametreComponent implements OnInit {
   }
 
   onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1; 
-    this.searchCriteria.limit = event.pageSize; 
+    this.currentPage = event.pageIndex + 1;
+    this.searchCriteria.limit = event.pageSize;
     this.loadHistoriquesMouvements();
   }
 
@@ -70,8 +73,8 @@ export class StockParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de getConsommable :', error);
       }
     );
   }
@@ -88,11 +91,11 @@ export class StockParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadStocks :', error);
       }
     );
-  }  
+  }
 
   openStockDialog(consommable: any) {
     const dialogRef = this.dialog.open(StockInsertionComponent, {
@@ -109,17 +112,32 @@ export class StockParametreComponent implements OnInit {
             if (response.data.success == true) {
               this.loadHistoriquesMouvements();
             }else{
+              this.showErrorMessage("Mouvement impossible");
               this.loader=false;
-              alert('⚠️ Mouvement impossible');
             }
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
     });
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }

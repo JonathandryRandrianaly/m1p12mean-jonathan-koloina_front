@@ -17,6 +17,9 @@ import {MatDialog, MatDialogContent} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {ApiService} from '../../../services/api/api.service';
 import {AuthService} from '../../../services/auth/auth-service.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-demande-service-client',
@@ -58,7 +61,7 @@ export class DemandeServiceClientComponent implements OnInit {
 
   entretien_form: any;
 
-  constructor(private fb: FormBuilder,private dialog: MatDialog, private router: Router, private apiService: ApiService
+  constructor(private snackBar: MatSnackBar,private fb: FormBuilder,private dialog: MatDialog, private router: Router, private apiService: ApiService
   ,private authService: AuthService, private cdr: ChangeDetectorRef) {
   }
 
@@ -93,8 +96,8 @@ export class DemandeServiceClientComponent implements OnInit {
         (response) => {
         },
         (error) => {
+          this.showErrorMessage(error.response.data.message);
           this.loader = false;
-          console.error('Erreur lors de l\'insertion :', error);
         }
       );
       this.currentStep = 4;
@@ -121,7 +124,7 @@ export class DemandeServiceClientComponent implements OnInit {
         this.cdr.detectChanges();
       },
       (error) => {
-        console.error('Erreur lors de loadSpecialisations :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -134,7 +137,7 @@ export class DemandeServiceClientComponent implements OnInit {
         }
       },
       (error) => {
-        console.error('Erreur lors du chargement des dates :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -156,7 +159,7 @@ export class DemandeServiceClientComponent implements OnInit {
         this.cdr.detectChanges();
       },
       (error) => {
-        console.error('Erreur lors de loadTypeEntretien :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -170,7 +173,7 @@ export class DemandeServiceClientComponent implements OnInit {
         this.cdr.detectChanges();
       },
       (error) => {
-        console.error('Erreur lors de loadTypeEntretien :', error);
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
       }
     );
@@ -272,4 +275,19 @@ export class DemandeServiceClientComponent implements OnInit {
     this.router.navigate(['/rendez-vous']);
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }

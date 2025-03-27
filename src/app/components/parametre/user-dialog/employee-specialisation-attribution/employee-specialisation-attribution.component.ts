@@ -12,6 +12,9 @@ import {
 import {MatButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
 import {CommonModule} from '@angular/common';
+import {ErrorMessageComponent} from '../../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../../templates/dialog/info-message/info-message.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-employee-specialisation-attribution',
@@ -35,6 +38,7 @@ export class EmployeeSpecialisationAttributionComponent {
   specialisationUsers: any[] = [];
 
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private apiService: ApiService,
     private dialogRef: MatDialogRef<EmployeeSpecialisationAttributionComponent>,
@@ -67,7 +71,7 @@ export class EmployeeSpecialisationAttributionComponent {
         this.specialisations = response;
       },
       (error) => {
-        console.error('Erreur lors de loadSpecialisations :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -88,7 +92,7 @@ export class EmployeeSpecialisationAttributionComponent {
         this.setPreselectedSpecialisations();
       },
       (error) => {
-        console.error('Erreur lors de loadSpecialisations :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -103,4 +107,19 @@ export class EmployeeSpecialisationAttributionComponent {
     this.dialogRef.close();
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }
