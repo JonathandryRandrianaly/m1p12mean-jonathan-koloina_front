@@ -19,16 +19,22 @@
                     </button>
                 </div>
 
-                <div class="card" *ngIf="showFilter" #filterCard style="width: 400px; position: absolute; right: 20px; top: 20px; z-index: 1000; animation: slideIn 0.3s;">
+                <div class="filtre card" *ngIf="showFilter" #filterCard style="width: 400px; position: absolute; right: 20px; top: 20px; z-index: 1000; animation: slideIn 0.3s;">
                     <div class="card-body">
                         <h5 class="card-title">Filtrer les Résultats</h5>
-                
+                        <button type="button" class="btn btn-close position-absolute top-0 end-0 m-2"
+                                style="width: 32px; height: 32px; font-size: 32px;"
+                                aria-label="Fermer"
+                                #tooltip="matTooltip" matTooltip="Fermer"
+                                (click)="toggleFilter()">
+                        </button>
+
                         <!-- Recherche Type -->
                         <div class="mb-3">
                             <label for="vehicule" class="form-label">Type</label>
                             <input matInput id="vehicule" placeholder="Rechercher un modèle..." [(ngModel)]="searchCriteria.nom" class="form-control">
                         </div>
-                
+
                         <div class="d-flex flex-wrap gap-3 mb-3">
                             <!-- Categ entretien -->
                             <div class="dropdown">
@@ -58,7 +64,7 @@
                               </li>
                               </ul>
                           </div>
-                
+
                             <!-- Categ Modele -->
                             <div class="dropdown">
                                 <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -73,7 +79,7 @@
                                     </li>
                                 </ul>
                             </div>
-                
+
                             <!-- Specialisations -->
                             <div class="dropdown">
                                 <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -88,11 +94,11 @@
                                     </li>
                                 </ul>
                             </div>
-                
-                             
+
+
                         </div>
-                
-               
+
+
                         <div class="d-flex gap-3 mb-3">
                           <div class="w-50">
                             <label for="prixMin" class="form-label">Prix Min</label>
@@ -102,27 +108,24 @@
                             <label for="prixMax" class="form-label">Prix Max</label>
                             <input matInput type="number" id="prixMax" [(ngModel)]="searchCriteria.prixMax" class="form-control" placeholder="(Ariary)">
                         </div>
-                           
+
                         </div>
-                
+
                         <!-- Boutons -->
                         <div class="d-flex gap-2 mt-2">
-                            
+
                             <button class="btn btn-secondary" (click)="resetSearchCriteria()" #tooltip="matTooltip" matTooltip="Réinitialiser">
                                 <i class="bi bi-arrow-clockwise"></i>
                             </button>
                             <button class="btn btn-dark" (click)="applyFilters()" #tooltip="matTooltip" matTooltip="Rechercher">
                                 <i class="bi bi-search"></i>
                             </button>
-                            <button class="btn btn-danger" (click)="toggleFilter()" #tooltip="matTooltip" matTooltip="Fermer">
-                                <i class="bi bi-x-circle"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
-                
 
-  
+
+
                 <div class="table-responsive">
                   <table class="table table-hover">
                     <thead class="table-light">
@@ -170,8 +173,8 @@
                         </span>
                       </td>
                       <td>
-                        <mat-slide-toggle 
-                            [checked]="type.etat.code === 10" 
+                        <mat-slide-toggle
+                            [checked]="type.etat.code === 10"
                             (change)="changeStatut(type._id, $event.checked)">
                         </mat-slide-toggle>
                       </td>
@@ -194,14 +197,14 @@
                     </tbody>
                   </table>
                 </div>
-  
+
                 <mat-paginator [length]="totalElement"
                                [pageSize]="searchCriteria.limit"
                                [pageSizeOptions]="[5, 10, 25, 100]"
                                (page)="onPageChange($event)"
                                aria-label="Select page">
                 </mat-paginator>
-  
+
               </div>
             </div>
           </div>
@@ -210,4 +213,3 @@
     </section>
   </main>
   <app-loader *ngIf="loader"></app-loader>
-  

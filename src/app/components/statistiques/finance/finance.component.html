@@ -12,15 +12,15 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                   <div class="p-4 bg-white shadow rounded-lg">
                     <h2 class="text-lg font-semibold">Chiffre d'Affaires Total</h2>
-                    <p class="text-2xl font-bold text-blue-600">{{ factureTotal | number: '1.2-2' }} Ariary</p>
+                    <p class="text-2xl font-bold text-blue-600">{{ factureTotal  | currency:'MGA ':true }}</p>
                   </div>
                   <div class="p-4 bg-white shadow rounded-lg">
                     <h2 class="text-lg font-semibold">Factures Impayées</h2>
-                    <p class="text-2xl font-bold text-red-600">{{ factureImpayee | number: '1.2-2' }} Ariary</p>
+                    <p class="text-2xl font-bold text-red-600">{{ factureImpayee  | currency:'MGA ':true }}</p>
                   </div>
                   <div class="p-4 bg-white shadow rounded-lg">
                     <h2 class="text-lg font-semibold">Factures Payées</h2>
-                    <p class="text-2xl font-bold text-green-600">{{ facturePayee | number: '1.2-2' }} Ariary</p>
+                    <p class="text-2xl font-bold text-green-600">{{ facturePayee  | currency:'MGA ':true }} </p>
                   </div>
                 </div>
 

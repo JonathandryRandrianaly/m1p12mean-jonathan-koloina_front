@@ -102,24 +102,7 @@ export class TacheMecanicienComponent {
   }
 
   viewDetails(task: any) {
-    console.log('Détails de la tâche:', task);
-  }
-
-  setAs(task: any) {
-    console.log('Définir cette tâche comme:', task);
-  }
-  setTaskTo(task: any) {
-    const dialogRef = this.dialog.open(CalendrierAttributionComponent, {
-      width: '800px',
-      disableClose: true,
-      data: task
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-
-      }
-    });
+    this.router.navigate(['/tache', task.id]);
   }
 
   loadEntretienDetails(){

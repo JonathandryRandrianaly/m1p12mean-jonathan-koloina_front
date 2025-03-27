@@ -110,7 +110,6 @@ export class CalendrierAttributionComponent {
     this.apiService.getAll(`api/entretien/mecaniciens/${this.task.id}`).then(
       (response) => {
         this.employees = response;
-        console.log(this.employees);
         this.filteredEmployees = [...this.employees];
 
         this.filteredEmployees.forEach(employee => {
