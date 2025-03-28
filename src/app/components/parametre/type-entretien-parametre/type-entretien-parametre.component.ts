@@ -253,6 +253,7 @@ export class TypeEntretienParametreComponent implements OnInit {
               this.showErrorMessage("Ce type d'entretien existe déjà !");
               this.loader = false;
             }else{
+                this.showAlertMessage('Type d\'entretien créé avec succès');
                 this.loadTypes();
             }
           },
@@ -277,6 +278,7 @@ export class TypeEntretienParametreComponent implements OnInit {
         this.loader = true;
         this.apiService.insert('api/type-entretien/update', result).then(
           (response) => {
+            this.showAlertMessage('Type d\'entretien modifié avec succès');
             this.loadTypes();
             this.loader = false;
           },

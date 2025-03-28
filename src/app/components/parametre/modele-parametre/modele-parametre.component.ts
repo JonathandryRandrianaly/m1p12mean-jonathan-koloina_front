@@ -297,6 +297,7 @@ export class ModeleParametreComponent implements OnInit {
         this.apiService.insert('api/modele', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Modèle créé avec succès');
               this.loadModeles();
             }
           },

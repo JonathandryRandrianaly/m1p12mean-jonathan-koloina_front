@@ -142,6 +142,7 @@ export class MarqueParametreComponent implements OnInit {
         this.apiService.insert('api/marque', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Marque créée avec succès');
               this.loadMarques();
             }
           },

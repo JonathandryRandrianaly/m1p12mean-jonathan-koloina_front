@@ -72,6 +72,7 @@ export class FactureDetailComponent implements OnInit {
       etatCode: Number(10),
       etatLibelle: 'Payer'
     }).then(response => {
+      this.showAlertMessage('Paiement effectué avec succès');
       this.loadFacture();
     }).catch(error => {
       this.showErrorMessage(error.response.data.message);

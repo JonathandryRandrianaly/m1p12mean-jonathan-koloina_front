@@ -176,6 +176,7 @@ export class ConsommableParametreComponent implements OnInit {
         this.apiService.insert('api/consommable', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Consommable créé avec succès');
               this.loadConsommables();
             }
           },

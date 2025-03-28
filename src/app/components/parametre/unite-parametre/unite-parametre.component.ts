@@ -141,6 +141,7 @@ export class UniteParametreComponent implements OnInit  {
         this.apiService.insert('api/unite', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Unité créée avec succès');
               this.loadUnites();
             }
           },

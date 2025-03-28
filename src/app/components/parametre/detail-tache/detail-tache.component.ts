@@ -226,6 +226,7 @@ export class DetailTacheComponent implements OnInit{
         this.apiService.insert('api/entretien/consommable/stock', result).then(
           (response) => {
             if (response.data.success == true) {
+              this.showAlertMessage('Ajout effectué');
               this.getDetailsEntretien();
             }else{
               this.showErrorMessage("Mouvement impossible");

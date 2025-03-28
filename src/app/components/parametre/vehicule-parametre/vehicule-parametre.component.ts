@@ -20,6 +20,7 @@ import { AuthService } from '../../../services/auth/auth-service.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
 import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
+import { VehiculeDetailsComponent } from '../vehicule-dialog/vehicule-details/vehicule-details.component';
 
 @Component({
   selector: 'app-vehicule-parametre',
@@ -201,6 +202,7 @@ export class VehiculeParametreComponent {
             if (!response.data.success) {
               this.loader = false;
             }else{
+              this.showAlertMessage('Vehicule ajouté avec succès');
                 this.loadVehicules();
             }
           },
@@ -263,6 +265,20 @@ export class VehiculeParametreComponent {
       data: { message },
       duration: 3000,
       panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  openDetailsDialog(vehiculeId: any) {
+    const dialogRef = this.dialog.open(VehiculeDetailsComponent, {
+      width: '800px',
+      data: vehiculeId,
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
     });
   }
 

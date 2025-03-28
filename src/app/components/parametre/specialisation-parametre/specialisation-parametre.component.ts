@@ -141,6 +141,7 @@ export class SpecialisationParametreComponent implements OnInit{
         this.apiService.insert('api/specialisation', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Spécialisation créée avec succès');
               this.loadSpecialisations();
             }
           },

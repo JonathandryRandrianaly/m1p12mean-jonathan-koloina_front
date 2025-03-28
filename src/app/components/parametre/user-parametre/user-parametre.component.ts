@@ -171,6 +171,7 @@ export class UserParametreComponent implements OnInit {
               }
               this.apiService.insert('api/specialisations-personnel', dataSpecialisation).then(
                 () => {
+                    this.showAlertMessage('Employé ajouté avec succès');
                     this.loadUsers();
                     this.loader = false;
                 },
@@ -205,6 +206,7 @@ export class UserParametreComponent implements OnInit {
         }
         this.apiService.insert('api/updateRoles', dataRoles).then(
           () => {
+            this.showAlertMessage('Rôle(s) attribué(s) avec succès');
             this.loadUsers();
             this.loader = false;
           },
@@ -233,6 +235,7 @@ export class UserParametreComponent implements OnInit {
         }
         this.apiService.insert('api/specialisations-personnel', dataSpecialisation).then(
           () => {
+            this.showAlertMessage('Spécialisation(s) attribuée(s) avec succès');
             this.loadUsers();
             this.loader = false;
           },
