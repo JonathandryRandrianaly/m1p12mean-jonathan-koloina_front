@@ -39,6 +39,7 @@ import {FactureDetailComponent} from './components/parametre/facture-detail/fact
 import { HistoriquesEntretienComponent } from './components/parametre/historiques-entretien/historiques-entretien.component';
 import {FinanceComponent} from './components/statistiques/finance/finance.component';
 import {PersonnelClientComponent} from './components/statistiques/personnel-client/personnel-client.component';
+import { ProfilParametreComponent } from './components/parametre/profil-parametre/profil-parametre.component';
 
 export const routes: Routes = [
   {
@@ -445,6 +446,19 @@ export const routes: Routes = [
       ],
       roles: [
         'manager'
+      ]
+    }
+  },
+  {
+    path:"accueil/profil/:id",component:ProfilParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Profil', url: '' }
+      ],
+      roles: [
+        'manager','client','mecanicien'
       ]
     }
   },
