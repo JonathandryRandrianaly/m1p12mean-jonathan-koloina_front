@@ -1,0 +1,54 @@
+<main>
+    <section class="section">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="card mb-3">
+                        <div class="card-body">
+
+                            <div class="max-w-lg mx-auto bg-white p-6 shadow-lg rounded-lg border border-gray-200">
+                                <h2 class="text-2xl font-semibold text-gray-800 text-center mb-4">Profil</h2>
+
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between border-b pb-2">
+                                        <span class="text-gray-600">Nom :</span>
+                                        <span class="font-medium text-gray-800">{{ user?.nom }}</span>
+                                    </div>
+
+                                    <div class="flex items-center justify-between border-b pb-2">
+                                        <span class="text-gray-600">Email :</span>
+                                        <span class="font-medium text-gray-800">{{ user?.email }}</span>
+                                    </div>
+
+                                    <div class="flex items-center justify-between border-b pb-2">
+                                        <span class="text-gray-600">Date de naissance :</span>
+                                        <span class="font-medium text-gray-800">{{ user?.dateNaissance | date:'dd/MM/yyyy' }}</span>
+                                    </div>
+
+                                    <div class="flex items-center justify-between border-b pb-2">
+                                        <span class="text-gray-600">Téléphone :</span>
+                                        <span class="font-medium text-gray-800">{{ user?.telephone }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 flex flex-col sm:flex-row sm:justify-between gap-3">
+                                    <button (click)="openUpdateInfo(user)" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition w-full sm:w-auto">
+                                        Modifier les informations
+                                    </button>
+                                    
+                                    <button (click)="openUpdateMdp(user)" class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow hover:bg-gray-700 transition w-full sm:w-auto">
+                                        Modifier le mot de passe
+                                    </button>
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<app-loader *ngIf="loader"></app-loader>

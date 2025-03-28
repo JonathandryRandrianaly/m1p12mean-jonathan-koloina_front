@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>Modifier le mot de passe</h2>
+<mat-dialog-content>
+    <form [formGroup]="user_form" novalidate>
+        <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input 
+                type="password" 
+                id="password" 
+                class="form-control" 
+                formControlName="password"
+                [ngClass]="{'is-invalid': user_form.get('password')?.invalid && user_form.get('password')?.touched}"
+                required
+            >
+            <div class="invalid-feedback" *ngIf="user_form.get('password')?.invalid && user_form.get('password')?.touched">
+                Longueur minimale: 6 caractères.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirmer votre mot de passe</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              class="form-control"
+              [ngClass]="{'is-invalid': passwordMatchValidator(user_form) && user_form.get('confirmPassword')?.touched}"
+              placeholder="Mot de passe"
+              required>
+            <div class="invalid-feedback" *ngIf="passwordMatchValidator(user_form) && user_form.get('confirmPassword')?.touched">
+              Les mots de passe ne correspondent pas.
+            </div>
+          </div>
+        
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="user_form.invalid">
+    Modifier
+  </button>
+</mat-dialog-actions>
+
+
