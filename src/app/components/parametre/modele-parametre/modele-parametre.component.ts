@@ -11,6 +11,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { ModeleInsertionComponent } from '../modele-dialog/modele-insertion/modele-insertion.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-modele-parametre',
@@ -67,7 +70,7 @@ export class ModeleParametreComponent implements OnInit {
   totalPages: number = 0;
   totalElement: number = 0;
   showFilter: boolean = false;
-  constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private router: Router, private apiService: ApiService) {
 
   }
   ngOnInit() {
@@ -78,8 +81,8 @@ export class ModeleParametreComponent implements OnInit {
     this.loadCategories();
     this.loadModeles();
     this.selectedEtats = {
-      '10': true, 
-      '-10': true 
+      '10': true,
+      '-10': true
     };
   }
 
@@ -99,8 +102,8 @@ export class ModeleParametreComponent implements OnInit {
   }
 
   onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1; 
-    this.searchCriteria.limit = event.pageSize; 
+    this.currentPage = event.pageIndex + 1;
+    this.searchCriteria.limit = event.pageSize;
     this.loadModeles();
   }
 
@@ -115,8 +118,8 @@ export class ModeleParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadMarques :', error);
       }
     );
   }
@@ -132,8 +135,8 @@ export class ModeleParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadEnergies :', error);
       }
     );
   }
@@ -149,8 +152,8 @@ export class ModeleParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadTransmissions :', error);
       }
     );
   }
@@ -166,8 +169,8 @@ export class ModeleParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadMotricite :', error);
       }
     );
   }
@@ -183,8 +186,8 @@ export class ModeleParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadCategories :', error);
       }
     );
   }
@@ -202,8 +205,8 @@ export class ModeleParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadModeles :', error);
       }
     );
   }
@@ -266,7 +269,7 @@ export class ModeleParametreComponent implements OnInit {
     this.loader = true;
     const data = {
       userId: id,
-      statut: isChecked ? 10 : -10  
+      statut: isChecked ? 10 : -10
     };
     this.apiService.insert('api/modele/' + id, data).then(
       (response) => {
@@ -274,12 +277,12 @@ export class ModeleParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de l\'insertion :', error);
       }
     );
   }
-  
+
 
   openModeleDialog() {
     const dialogRef = this.dialog.open(ModeleInsertionComponent, {
@@ -294,12 +297,13 @@ export class ModeleParametreComponent implements OnInit {
         this.apiService.insert('api/modele', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Modèle créé avec succès');
               this.loadModeles();
             }
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
@@ -312,7 +316,7 @@ export class ModeleParametreComponent implements OnInit {
 
   applyFilters() {
     this.loadModeles();
-    this.toggleFilter(); 
+    this.toggleFilter();
   }
 
   resetSearchCriteria() {
@@ -333,8 +337,8 @@ export class ModeleParametreComponent implements OnInit {
       anneeMax: '',
     };
     this.selectedEtats = {
-      '10': true, 
-      '-10': true 
+      '10': true,
+      '-10': true
     };
     Object.keys(this.selectedMarques).forEach(key => {
       this.selectedMarques[key] = true;
@@ -354,6 +358,21 @@ export class ModeleParametreComponent implements OnInit {
     this.loadModeles();
     this.showFilter = !this.showFilter;
   }
-  
 
+
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }

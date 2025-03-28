@@ -8,3 +8,26 @@
   top: 85px;
 }
 
+.button-container {
+  display: flex;
+  margin-top: 10px;
+  float: right;
+}
+
+.action-button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.paid {
+  background-color: #2D8C55;
+  color: white;
+}
+
+.paid:hover {
+  background-color: #226B42;
+}

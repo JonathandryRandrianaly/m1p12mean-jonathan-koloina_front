@@ -26,6 +26,9 @@ import {
 } from '@angular/material/table';
 import {MatCheckbox} from '@angular/material/checkbox';
 import { ApiService } from '../../../services/api/api.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-calendrier-attribution',
@@ -65,6 +68,7 @@ export class CalendrierAttributionComponent {
   detailEntretien: any ;
 
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<CalendrierAttributionComponent>,
     @Inject(MAT_DIALOG_DATA) public task: any,
@@ -110,7 +114,6 @@ export class CalendrierAttributionComponent {
     this.apiService.getAll(`api/entretien/mecaniciens/${this.task.id}`).then(
       (response) => {
         this.employees = response;
-        console.log(this.employees);
         this.filteredEmployees = [...this.employees];
 
         this.filteredEmployees.forEach(employee => {
@@ -119,7 +122,7 @@ export class CalendrierAttributionComponent {
 
       },
       (error) => {
-        console.error('Erreur lors de loadMecaniciens :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -143,7 +146,7 @@ export class CalendrierAttributionComponent {
 
       },
       (error) => {
-        console.error('Erreur lors de getDetail :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -158,10 +161,10 @@ export class CalendrierAttributionComponent {
       };
        this.apiService.insert('api/entretien/mecanicien/assigner', values).then(
           (response) => {
-            alert('Assignation effectué');
+            this.showAlertMessage("Assignation effectué");
           },
           (error) => {
-            console.error('Erreur lors de l\'insertion :', error);
+            this.showErrorMessage(error.response.data.message);
           }
         );
       this.dialogRef.close(this.task_form.value);
@@ -172,4 +175,19 @@ export class CalendrierAttributionComponent {
     this.dialogRef.close();
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }

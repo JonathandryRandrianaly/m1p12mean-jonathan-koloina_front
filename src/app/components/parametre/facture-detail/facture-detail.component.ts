@@ -5,6 +5,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../../services/auth/auth-service.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '../../../services/api/api.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-facture-detail',
@@ -21,7 +24,7 @@ export class FactureDetailComponent implements OnInit {
   detailFactures: any[] = [];
   facture: any;
 
-  constructor(private route: ActivatedRoute, private dialog: MatDialog, private authService : AuthService,private router: Router, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private route: ActivatedRoute, private dialog: MatDialog, private authService : AuthService,private router: Router, private apiService: ApiService) {
 
   }
 
@@ -40,12 +43,11 @@ export class FactureDetailComponent implements OnInit {
     this.apiService.getAll('api/factures/details/'+this.factureId).then(
       (response: any) => {
         this.detailFactures = response;
-        console.log(this.detailFactures);
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors du chargement des factures :', error);
       }
     );
   }
@@ -55,12 +57,11 @@ export class FactureDetailComponent implements OnInit {
     this.apiService.getAll('api/factures/'+this.factureId).then(
       (response: any) => {
         this.facture = response;
-        console.log(this.facture);
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors du chargement des factures :', error);
       }
     );
   }
@@ -71,12 +72,28 @@ export class FactureDetailComponent implements OnInit {
       etatCode: Number(10),
       etatLibelle: 'Payer'
     }).then(response => {
+      this.showAlertMessage('Paiement effectué avec succès');
       this.loadFacture();
     }).catch(error => {
-      console.error('Erreur lors de la mise à jour du statut:', error);
+      this.showErrorMessage(error.response.data.message);
     });
   }
   retour(){
     this.router.navigate(['/factures']);
+  }
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
   }
 }

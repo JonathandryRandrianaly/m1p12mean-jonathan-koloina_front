@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Détails du véhicule</h2>
+<mat-dialog-content class="dialog-content">
+  <p><strong>Modèle:</strong> {{ vehicule?.modele?.nom }}</p>
+  <p><strong>Immatriculation: </strong> {{ vehicule?.immatriculation}}</p>
+  <p><strong>Année de fabrication:</strong> {{ vehicule?.modele?.anneeFabrication }}</p>
+  <p><strong>Marque: </strong> {{ vehicule?.modele?.marque?.nom}}</p>
+  <p><strong>Energie du moteur: </strong> {{ vehicule?.modele?.energieMoteur?.nom}}</p>
+  <p><strong>Transmission: </strong> {{ vehicule?.modele?.transmission?.nom}}</p>
+  <p><strong>Motricité: </strong> {{ vehicule?.modele?.motricite?.nom}}</p>
+  <p><strong>Catégorie du modèle: </strong> {{ vehicule?.modele?.categorie?.nom}}</p>
+  <p><strong>État: </strong>
+    <mat-chip>
+      <span [ngClass]="{'active': vehicule?.etat?.code == 10, 'inactive': vehicule?.etat?.code == -10}">
+        {{ vehicule?.etat?.libelle }}
+      </span>
+    </mat-chip>
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button class="btn btn-dark" mat-button (click)="onNoClick()">Fermer</button>
+</mat-dialog-actions>
+
+<app-loader *ngIf="loader"></app-loader>

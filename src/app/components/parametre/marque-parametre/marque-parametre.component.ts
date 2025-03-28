@@ -10,6 +10,9 @@ import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 
 @Component({
@@ -47,14 +50,14 @@ export class MarqueParametreComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 0;
   totalElement: number = 0;
-  constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private router: Router, private apiService: ApiService) {
 
   }
   ngOnInit() {
     this.loadMarques();
     this.selectedEtats = {
-      '10': true, 
-      '-10': true 
+      '10': true,
+      '-10': true
     };
   }
 
@@ -74,8 +77,8 @@ export class MarqueParametreComponent implements OnInit {
   }
 
   onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1; 
-    this.searchCriteria.limit = event.pageSize; 
+    this.currentPage = event.pageIndex + 1;
+    this.searchCriteria.limit = event.pageSize;
     this.loadMarques();
   }
 
@@ -92,8 +95,8 @@ export class MarqueParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadMarques :', error);
       }
     );
   }
@@ -112,7 +115,7 @@ export class MarqueParametreComponent implements OnInit {
     this.loader = true;
     const data = {
       userId: id,
-      statut: isChecked ? 10 : -10  
+      statut: isChecked ? 10 : -10
     };
     this.apiService.insert('api/marque/' + id, data).then(
       (response) => {
@@ -120,12 +123,12 @@ export class MarqueParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de l\'insertion :', error);
       }
     );
   }
-  
+
 
   openMarqueDialog() {
     const dialogRef = this.dialog.open(MarqueInsertionComponent, {
@@ -139,16 +142,32 @@ export class MarqueParametreComponent implements OnInit {
         this.apiService.insert('api/marque', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Marque créée avec succès');
               this.loadMarques();
             }
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
     });
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }

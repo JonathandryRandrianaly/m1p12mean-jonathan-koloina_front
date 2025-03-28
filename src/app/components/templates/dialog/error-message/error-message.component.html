@@ -1,5 +1,8 @@
 <div class="custom-snackbar-container">
     <mat-icon>error</mat-icon>
-    <span>{{ data.message }}</span>
+    <span class="mb-1">{{ data.message }}</span>
+    <button mat-icon-button (click)="closeSnackbar()" class="close-btn"
+            #tooltip="matTooltip" matTooltip="Fermer">
+      <mat-icon>close</mat-icon>
+    </button>
 </div>
-  

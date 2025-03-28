@@ -19,6 +19,9 @@ import {
 } from '../energie-moteur-dialog/energie-moteur-insertion/energie-moteur-insertion.component';
 import {DetailTacheFichierComponent} from '../detail-tache-fichier/detail-tache-fichier.component';
 import { DetailTacheConsommableComponent } from '../detail-tache-consommable/detail-tache-consommable.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 interface Report {
   label: string;
@@ -69,7 +72,7 @@ export class DetailTacheComponent implements OnInit{
   rapportForm: FormGroup;
   justificatifs: File[] = [];
 
-  constructor(private dialog: MatDialog,private route: ActivatedRoute, private apiService: ApiService, private fb: FormBuilder) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog,private route: ActivatedRoute, private apiService: ApiService, private fb: FormBuilder) {
       this.dateForm = this.fb.group(
       {
         detailEntretienId: ['', Validators.required],
@@ -114,8 +117,8 @@ export class DetailTacheComponent implements OnInit{
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de getDetails :', error);
       }
     );
   }
@@ -127,17 +130,17 @@ export class DetailTacheComponent implements OnInit{
         (response) => {
           const success= response.data;
           if(success === true){
-            alert('Ajout effectué');
+            this.showAlertMessage("Ajout effectué");
             this.loader= false;
           }else{
-            alert('Ajout impossible');
+            this.showErrorMessage("Ajout impossible");
             this.loader= false;
           }
           this.getDetailsEntretien();
         },
         (error) => {
+          this.showErrorMessage(error.response.data.message);
           this.loader = false;
-          console.error('Erreur lors de l\'insertion :', error);
         }
       );
   }
@@ -164,7 +167,7 @@ export class DetailTacheComponent implements OnInit{
         (response) => {
           const success= response.data;
           if(success === true){
-            alert('Ajout effectué');
+            this.showAlertMessage("Ajout effectué");
             this.loader= false;
           }
           this.rapportForm = this.fb.group({
@@ -176,8 +179,8 @@ export class DetailTacheComponent implements OnInit{
          this.getDetailsEntretien();
         },
         (error) => {
+          this.showErrorMessage(error.response.data.message);
           this.loader = false;
-          console.error('Erreur lors de l\'insertion :', error);
         }
       );
   }
@@ -188,7 +191,7 @@ export class DetailTacheComponent implements OnInit{
             this.getDetailsEntretien();
         },
         (error) => {
-          console.error('Erreur lors de remove rapport:', error);
+          this.showErrorMessage(error.response.data.message);
         }
       );
   }
@@ -223,18 +226,35 @@ export class DetailTacheComponent implements OnInit{
         this.apiService.insert('api/entretien/consommable/stock', result).then(
           (response) => {
             if (response.data.success == true) {
+              this.showAlertMessage('Ajout effectué');
               this.getDetailsEntretien();
             }else{
+              this.showErrorMessage("Mouvement impossible");
               this.loader=false;
-              alert('⚠️ Mouvement impossible');
             }
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
+    });
+  }
+
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
     });
   }
 

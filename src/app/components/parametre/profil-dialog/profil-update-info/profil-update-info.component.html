@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Modifier le profil</h2>
+<mat-dialog-content>
+    <form [formGroup]="user_form" novalidate>
+        <div class="mb-3">
+            <label for="nom" class="form-label">Nom</label>
+            <input 
+                type="text" 
+                id="nom" 
+                class="form-control" 
+                formControlName="nom"
+                [ngClass]="{'is-invalid': user_form.get('nom')?.invalid && user_form.get('nom')?.touched}"
+                required
+            >
+            <div class="invalid-feedback" *ngIf="user_form.get('nom')?.invalid && user_form.get('nom')?.touched">
+                Nom requis.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="date" class="form-label">Date de naissance</label>
+            <input 
+                type="date" 
+                id="date" 
+                class="form-control" 
+                formControlName="dateNaissance"
+                [ngClass]="{'is-invalid': user_form.get('dateNaissance')?.invalid && user_form.get('dateNaissance')?.touched}"
+                required
+            >
+            <div class="invalid-feedback" *ngIf="user_form.get('dateNaissance')?.invalid && user_form.get('dateNaissance')?.touched">
+                Date de naissance requise.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="telephone" class="form-label">Télephone</label>
+            <input 
+                type="number" 
+                id="telephone" 
+                class="form-control" 
+                formControlName="telephone"
+                [ngClass]="{'is-invalid': user_form.get('telephone')?.invalid && user_form.get('telephone')?.touched}"
+                required
+            >
+            <div class="invalid-feedback" *ngIf="user_form.get('telephone')?.invalid && user_form.get('telephone')?.touched">
+                Numéro de télephone requis.
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Annuler</button>
+  <button
+    mat-raised-button color="primary" (click)="onSubmit()" [disabled]="user_form.invalid">
+    Modifier
+  </button>
+</mat-dialog-actions>
+
+

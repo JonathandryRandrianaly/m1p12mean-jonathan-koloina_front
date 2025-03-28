@@ -25,6 +25,7 @@ import {UserInfoComponent} from '../user-dialog/user-info/user-info.component';
 import {ConfirmationComponent} from '../../templates/dialog/confirmation/confirmation.component';
 import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-user-parametre',
@@ -59,8 +60,6 @@ export class UserParametreComponent implements OnInit {
   totalPages: number = 0;
   totalElement: number = 0;
   constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private router: Router, private apiService: ApiService) {
-
-
   }
   ngOnInit() {
     this.loadUsers();
@@ -172,6 +171,7 @@ export class UserParametreComponent implements OnInit {
               }
               this.apiService.insert('api/specialisations-personnel', dataSpecialisation).then(
                 () => {
+                    this.showAlertMessage('Employé ajouté avec succès');
                     this.loadUsers();
                     this.loader = false;
                 },
@@ -206,6 +206,7 @@ export class UserParametreComponent implements OnInit {
         }
         this.apiService.insert('api/updateRoles', dataRoles).then(
           () => {
+            this.showAlertMessage('Rôle(s) attribué(s) avec succès');
             this.loadUsers();
             this.loader = false;
           },
@@ -234,6 +235,7 @@ export class UserParametreComponent implements OnInit {
         }
         this.apiService.insert('api/specialisations-personnel', dataSpecialisation).then(
           () => {
+            this.showAlertMessage('Spécialisation(s) attribuée(s) avec succès');
             this.loadUsers();
             this.loader = false;
           },
@@ -261,9 +263,18 @@ export class UserParametreComponent implements OnInit {
   }
 
   showErrorMessage(message: string) {
-    this.snackBar.open(message, 'Fermer', {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
       duration: 3000,
-      panelClass: ['error-snackbar'],
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
     });
   }
 

@@ -20,14 +20,6 @@
                     (change)="onDateChange()"
                     [value]="selectedDateString">
                 </div>
-                <div class="col-sm-4">
-                  <input
-                    type="text"
-                    placeholder="Rechercher tâche"
-                    class="form-control w-100"
-                    [(ngModel)]="searchQuery"
-                    (change)="onDateChange()">
-                </div>
               </div>
               <hr>
               <div class="task-board" cdkDropListGroup>
@@ -55,12 +47,9 @@
                         <div class="task-card-footer">
                           <mat-menu #menu="matMenu">
                             <button mat-menu-item (click)="viewDetails(task)">Détails</button>
-                            <button mat-menu-item (click)="setTaskTo(task)">Assignation</button>
+                            <button *ngIf="task.etatCode!=20" mat-menu-item (click)="setTaskTo(task)">Assignation</button>
                             <button *ngIf="task.etatCode==-10" mat-menu-item (click)="annulerRdv(task.id)">Annuler</button>
                           </mat-menu>
-                          <button mat-icon-button (click)="viewDetails(task)">
-                            <mat-icon style="color: white">info</mat-icon>
-                          </button>
                           <button mat-icon-button [matMenuTriggerFor]="menu">
                             <mat-icon style="color: white">more_horiz</mat-icon>
                           </button>

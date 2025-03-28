@@ -17,6 +17,9 @@ import {MatTableModule} from '@angular/material/table';
 import { TypeEntretienInsertionComponent } from '../type-entretien-dialog/type-entretien-insertion/type-entretien-insertion.component';
 import { TypeEntretienUpdateComponent } from '../type-entretien-dialog/type-entretien-update/type-entretien-update.component';
 import { TypeEntretienDetailsComponent } from '../type-entretien-dialog/type-entretien-details/type-entretien-details.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-type-entretien-parametre',
@@ -62,7 +65,7 @@ export class TypeEntretienParametreComponent implements OnInit {
   totalPages: number = 0;
   totalElement: number = 0;
   showFilter: boolean = false;
-  constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private router: Router, private apiService: ApiService) {
 
   }
   ngOnInit() {
@@ -71,8 +74,8 @@ export class TypeEntretienParametreComponent implements OnInit {
     this.loadSpecialisations();
     this.loadTypes();
     this.selectedEtats = {
-      '10': true, 
-      '-10': true 
+      '10': true,
+      '-10': true
     };
   }
 
@@ -92,8 +95,8 @@ export class TypeEntretienParametreComponent implements OnInit {
   }
 
   onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1; 
-    this.searchCriteria.limit = event.pageSize; 
+    this.currentPage = event.pageIndex + 1;
+    this.searchCriteria.limit = event.pageSize;
     this.loadTypes();
   }
 
@@ -108,8 +111,8 @@ export class TypeEntretienParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadCategEntretien :', error);
       }
     );
   }
@@ -125,8 +128,8 @@ export class TypeEntretienParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadCategModeles :', error);
       }
     );
   }
@@ -142,8 +145,8 @@ export class TypeEntretienParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadSpecialisations :', error);
       }
     );
   }
@@ -155,7 +158,7 @@ export class TypeEntretienParametreComponent implements OnInit {
         this.specialisations = response;
       },
       (error) => {
-        console.error('Erreur lors de loadSpecialisations :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -174,8 +177,8 @@ export class TypeEntretienParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadTypes :', error);
       }
     );
   }
@@ -220,7 +223,7 @@ export class TypeEntretienParametreComponent implements OnInit {
     this.loader = true;
     const data = {
       userId: id,
-      statut: isChecked ? 10 : -10  
+      statut: isChecked ? 10 : -10
     };
     this.apiService.insert('api/type-entretien/' + id, data).then(
       (response) => {
@@ -228,12 +231,12 @@ export class TypeEntretienParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de l\'insertion :', error);
       }
     );
   }
-  
+
 
   openTypeEntretienInsertionDialog() {
     const dialogRef = this.dialog.open(TypeEntretienInsertionComponent, {
@@ -247,15 +250,16 @@ export class TypeEntretienParametreComponent implements OnInit {
         this.apiService.insert('api/type-entretien', result).then(
           (response) => {
             if (!response.data.success) {
+              this.showErrorMessage("Ce type d'entretien existe déjà !");
               this.loader = false;
-              alert('⚠️ Ce type d\'entretien existe déjà !');
             }else{
+                this.showAlertMessage('Type d\'entretien créé avec succès');
                 this.loadTypes();
             }
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
@@ -274,12 +278,13 @@ export class TypeEntretienParametreComponent implements OnInit {
         this.loader = true;
         this.apiService.insert('api/type-entretien/update', result).then(
           (response) => {
+            this.showAlertMessage('Type d\'entretien modifié avec succès');
             this.loadTypes();
             this.loader = false;
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
@@ -306,7 +311,7 @@ export class TypeEntretienParametreComponent implements OnInit {
 
   applyFilters() {
     this.loadTypes();
-    this.toggleFilter(); 
+    this.toggleFilter();
   }
 
   resetSearchCriteria() {
@@ -325,8 +330,8 @@ export class TypeEntretienParametreComponent implements OnInit {
       prixMax: '',
     };
     this.selectedEtats = {
-      '10': true, 
-      '-10': true 
+      '10': true,
+      '-10': true
     };
     Object.keys(this.selectedCategEntretiens).forEach(key => {
       this.selectedCategEntretiens[key] = true;
@@ -341,4 +346,19 @@ export class TypeEntretienParametreComponent implements OnInit {
     this.showFilter = !this.showFilter;
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }

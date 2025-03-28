@@ -16,6 +16,9 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatTableModule} from '@angular/material/table';
 import { ConsommableInsertionComponent } from '../consommable-dialog/consommable-insertion/consommable-insertion.component';
 import { ConsommableUpdateComponent } from '../consommable-dialog/consommable-update/consommable-update.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-consommable-parametre',
@@ -53,15 +56,15 @@ export class ConsommableParametreComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 0;
   totalElement: number = 0;
-  constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private router: Router, private apiService: ApiService) {
 
   }
   ngOnInit() {
     this.loadUnites();
     this.loadConsommables();
     this.selectedEtats = {
-      '10': true, 
-      '-10': true 
+      '10': true,
+      '-10': true
     };
   }
 
@@ -81,8 +84,8 @@ export class ConsommableParametreComponent implements OnInit {
   }
 
   onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1; 
-    this.searchCriteria.limit = event.pageSize; 
+    this.currentPage = event.pageIndex + 1;
+    this.searchCriteria.limit = event.pageSize;
     this.loadConsommables();
   }
 
@@ -97,8 +100,8 @@ export class ConsommableParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadUnites :', error);
       }
     );
   }
@@ -116,8 +119,8 @@ export class ConsommableParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadConsommables :', error);
       }
     );
   }
@@ -146,7 +149,7 @@ export class ConsommableParametreComponent implements OnInit {
     this.loader = true;
     const data = {
       userId: id,
-      statut: isChecked ? 10 : -10  
+      statut: isChecked ? 10 : -10
     };
     this.apiService.insert('api/consommable/' + id, data).then(
       (response) => {
@@ -154,12 +157,12 @@ export class ConsommableParametreComponent implements OnInit {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de l\'insertion :', error);
       }
     );
   }
-  
+
 
   openConsommableDialog() {
     const dialogRef = this.dialog.open(ConsommableInsertionComponent, {
@@ -173,12 +176,13 @@ export class ConsommableParametreComponent implements OnInit {
         this.apiService.insert('api/consommable', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Consommable créé avec succès');
               this.loadConsommables();
             }
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
@@ -201,8 +205,8 @@ export class ConsommableParametreComponent implements OnInit {
             this.loader = false;
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
@@ -210,7 +214,23 @@ export class ConsommableParametreComponent implements OnInit {
   }
 
   openStocks(consommableId: string){
-      this.router.navigate(['/stocks', consommableId]); 
+      this.router.navigate(['/stocks', consommableId]);
+  }
+
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
   }
 
 }

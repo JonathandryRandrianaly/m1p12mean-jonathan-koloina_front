@@ -10,6 +10,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { SpecialisationInsertionComponent } from '../specialisation-dialog/specialisation-insertion/specialisation-insertion.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-specialisation-parametre',
@@ -46,14 +49,14 @@ export class SpecialisationParametreComponent implements OnInit{
   currentPage: number = 1;
   totalPages: number = 0;
   totalElement: number = 0;
-  constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private router: Router, private apiService: ApiService) {
 
   }
   ngOnInit() {
     this.loadSpecialisations();
     this.selectedEtats = {
-      '10': true, 
-      '-10': true 
+      '10': true,
+      '-10': true
     };
   }
 
@@ -73,8 +76,8 @@ export class SpecialisationParametreComponent implements OnInit{
   }
 
   onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1; 
-    this.searchCriteria.limit = event.pageSize; 
+    this.currentPage = event.pageIndex + 1;
+    this.searchCriteria.limit = event.pageSize;
     this.loadSpecialisations();
   }
 
@@ -91,8 +94,8 @@ export class SpecialisationParametreComponent implements OnInit{
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadMotricites :', error);
       }
     );
   }
@@ -111,7 +114,7 @@ export class SpecialisationParametreComponent implements OnInit{
     this.loader = true;
     const data = {
       userId: id,
-      statut: isChecked ? 10 : -10  
+      statut: isChecked ? 10 : -10
     };
     this.apiService.insert('api/specialisation/' + id, data).then(
       (response) => {
@@ -119,12 +122,12 @@ export class SpecialisationParametreComponent implements OnInit{
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de l\'insertion :', error);
       }
     );
   }
-  
+
 
   openSpecialisationDialog() {
     const dialogRef = this.dialog.open(SpecialisationInsertionComponent, {
@@ -138,16 +141,32 @@ export class SpecialisationParametreComponent implements OnInit{
         this.apiService.insert('api/specialisation', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Spécialisation créée avec succès');
               this.loadSpecialisations();
             }
           },
           (error) => {
+            this.showErrorMessage(error.response.data.message);
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
           }
         );
       }
     });
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }

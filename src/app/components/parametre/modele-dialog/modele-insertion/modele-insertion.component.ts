@@ -8,6 +8,9 @@ import {CommonModule} from '@angular/common';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { ApiService } from '../../../../services/api/api.service';
 import { min } from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-modele-insertion',
@@ -35,10 +38,11 @@ export class ModeleInsertionComponent {
   categories: any[]= [];
 
   constructor(
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private apiService: ApiService,
     private dialogRef: MatDialogRef<ModeleInsertionComponent>
-  ) 
+  )
   {
       const currentYear = new Date().getFullYear();
       this.loadMarques();
@@ -53,7 +57,7 @@ export class ModeleInsertionComponent {
         transmission: ['', Validators.required],
         motricite: ['', Validators.required],
         anneeFabrication: [
-          '', 
+          '',
           [
             Validators.required,
             Validators.min(1900),
@@ -71,7 +75,7 @@ export class ModeleInsertionComponent {
         this.marques = response;
       },
       (error) => {
-        console.error('Erreur lors de loadMarques :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -83,7 +87,7 @@ export class ModeleInsertionComponent {
         this.energies = response;
       },
       (error) => {
-        console.error('Erreur lors de loadEnergies :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -95,7 +99,7 @@ export class ModeleInsertionComponent {
         this.transmissions = response;
       },
       (error) => {
-        console.error('Erreur lors de loadTransmissions :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -107,7 +111,7 @@ export class ModeleInsertionComponent {
         this.motricites = response;
       },
       (error) => {
-        console.error('Erreur lors de loadMotricites :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -119,7 +123,7 @@ export class ModeleInsertionComponent {
         this.categories = response;
       },
       (error) => {
-        console.error('Erreur lors de loadCategories :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -134,4 +138,19 @@ export class ModeleInsertionComponent {
     this.dialogRef.close();
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }

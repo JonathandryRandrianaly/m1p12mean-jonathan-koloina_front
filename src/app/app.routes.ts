@@ -20,9 +20,6 @@ import { UniteParametreComponent } from './components/parametre/unite-parametre/
 import { MotriciteParametreComponent } from './components/parametre/motricite-parametre/motricite-parametre.component';
 import { SpecialisationParametreComponent } from './components/parametre/specialisation-parametre/specialisation-parametre.component';
 import {TacheMecanicienComponent} from './components/mecanicien/tache-mecanicien/tache-mecanicien.component';
-import {
-  HistoriqueMecanicienComponent
-} from './components/mecanicien/historique-mecanicien/historique-mecanicien.component';
 import { RoleParametreComponent } from './components/parametre/role-parametre/role-parametre.component';
 import { ConsommableParametreComponent } from './components/parametre/consommable-parametre/consommable-parametre.component';
 import { ModeleParametreComponent } from './components/parametre/modele-parametre/modele-parametre.component';
@@ -42,6 +39,7 @@ import {FactureDetailComponent} from './components/parametre/facture-detail/fact
 import { HistoriquesEntretienComponent } from './components/parametre/historiques-entretien/historiques-entretien.component';
 import {FinanceComponent} from './components/statistiques/finance/finance.component';
 import {PersonnelClientComponent} from './components/statistiques/personnel-client/personnel-client.component';
+import { ProfilParametreComponent } from './components/parametre/profil-parametre/profil-parametre.component';
 
 export const routes: Routes = [
   {
@@ -211,20 +209,6 @@ export const routes: Routes = [
     }
   },
   {
-    path:"mecanicien/historiques",component:HistoriqueMecanicienComponent,
-    canActivate:[authGuard],
-    data:{
-      breadcrumb : [
-        { label: 'Accueil', url: '/' },
-        { label: 'Mécanicien', url: '/mecanicien/tasks' },
-        { label: 'Historiques', url: '' }
-      ],
-      roles: [
-        'mecanicien'
-      ]
-    }
-  },
-  {
     path:"parametre/roles",component:RoleParametreComponent,
     canActivate:[authGuard],
     data:{
@@ -341,7 +325,7 @@ export const routes: Routes = [
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
-        { label: 'Consommables', url: '' },
+        { label: 'Consommables', url: '/parametre/consommables' },
         { label: 'Stocks', url: '' }
       ],
       roles: [
@@ -398,7 +382,7 @@ export const routes: Routes = [
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
-        { label: 'Véhicule', url: '' },
+        { label: 'Véhicule', url: '/vehicules' },
         { label: 'Historiques', url: '' }
       ],
       roles: [
@@ -443,7 +427,7 @@ export const routes: Routes = [
     data:{
       breadcrumb : [
         { label: 'Accueil', url: '/' },
-        { label: 'Statistiques', url: '' },
+        { label: 'Statistiques', url: '/statistiques/personnel-client' },
         { label: 'Finance', url: '' }
       ],
       roles: [
@@ -462,6 +446,19 @@ export const routes: Routes = [
       ],
       roles: [
         'manager'
+      ]
+    }
+  },
+  {
+    path:"accueil/profil/:id",component:ProfilParametreComponent,
+    canActivate:[authGuard],
+    data:{
+      breadcrumb : [
+        { label: 'Accueil', url: '/' },
+        { label: 'Profil', url: '' }
+      ],
+      roles: [
+        'manager','client','mecanicien'
       ]
     }
   },

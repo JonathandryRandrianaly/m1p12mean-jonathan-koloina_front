@@ -10,6 +10,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { UniteInsertionComponent } from '../unite-dialog/unite-insertion/unite-insertion.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-unite-parametre',
@@ -46,14 +49,14 @@ export class UniteParametreComponent implements OnInit  {
   currentPage: number = 1;
   totalPages: number = 0;
   totalElement: number = 0;
-  constructor(private dialog: MatDialog, private router: Router, private apiService: ApiService) {
+  constructor(private snackBar: MatSnackBar,private dialog: MatDialog, private router: Router, private apiService: ApiService) {
 
   }
   ngOnInit() {
     this.loadUnites();
     this.selectedEtats = {
-      '10': true, 
-      '-10': true 
+      '10': true,
+      '-10': true
     };
   }
 
@@ -73,8 +76,8 @@ export class UniteParametreComponent implements OnInit  {
   }
 
   onPageChange(event: PageEvent) {
-    this.currentPage = event.pageIndex + 1; 
-    this.searchCriteria.limit = event.pageSize; 
+    this.currentPage = event.pageIndex + 1;
+    this.searchCriteria.limit = event.pageSize;
     this.loadUnites();
   }
 
@@ -92,7 +95,7 @@ export class UniteParametreComponent implements OnInit  {
       },
       (error) => {
         this.loader = false;
-        console.error('Erreur lors de loadTUnites :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
@@ -111,7 +114,7 @@ export class UniteParametreComponent implements OnInit  {
     this.loader = true;
     const data = {
       userId: id,
-      statut: isChecked ? 10 : -10  
+      statut: isChecked ? 10 : -10
     };
     this.apiService.insert('api/unite/' + id, data).then(
       (response) => {
@@ -120,11 +123,11 @@ export class UniteParametreComponent implements OnInit  {
       },
       (error) => {
         this.loader = false;
-        console.error('Erreur lors de l\'insertion :', error);
+        this.showErrorMessage(error.response.data.message);
       }
     );
   }
-  
+
 
   openUniteDialog() {
     const dialogRef = this.dialog.open(UniteInsertionComponent, {
@@ -138,15 +141,32 @@ export class UniteParametreComponent implements OnInit  {
         this.apiService.insert('api/unite', result).then(
           (response) => {
             if (response.status >= 200 && response.status <= 202) {
+              this.showAlertMessage('Unité créée avec succès');
               this.loadUnites();
             }
           },
           (error) => {
             this.loader = false;
-            console.error('Erreur lors de l\'insertion :', error);
+            this.showErrorMessage(error.response.data.message);
           }
         );
       }
+    });
+  }
+
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
     });
   }
 }

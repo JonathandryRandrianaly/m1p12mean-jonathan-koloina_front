@@ -11,6 +11,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {ApiService} from '../../../services/api/api.service';
 import {CalendrierAttributionComponent} from '../../parametre/calendrier-attribution/calendrier-attribution.component';
 import {AuthService} from '../../../services/auth/auth-service.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
+import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
 
 @Component({
   selector: 'app-tache-mecanicien',
@@ -38,7 +41,7 @@ export class TacheMecanicienComponent {
 
   rowData: any[] = [];
 
-  constructor(private route: ActivatedRoute, private router: Router,private dialog: MatDialog, private apiService: ApiService, private  authService: AuthService) {
+  constructor(private snackBar: MatSnackBar,private route: ActivatedRoute, private router: Router,private dialog: MatDialog, private apiService: ApiService, private  authService: AuthService) {
 
   }
 
@@ -83,9 +86,8 @@ export class TacheMecanicienComponent {
           etatCode: Number(newStatus),
           etatLibelle: this.getEtatLibelle(Number(newStatus))
         }).then(response => {
-          console.log(response);
         }).catch(error => {
-          console.error('Erreur lors de la mise à jour du statut:', error);
+          this.showErrorMessage(error.response.data.message);
         });
       }
     }
@@ -102,24 +104,7 @@ export class TacheMecanicienComponent {
   }
 
   viewDetails(task: any) {
-    console.log('Détails de la tâche:', task);
-  }
-
-  setAs(task: any) {
-    console.log('Définir cette tâche comme:', task);
-  }
-  setTaskTo(task: any) {
-    const dialogRef = this.dialog.open(CalendrierAttributionComponent, {
-      width: '800px',
-      disableClose: true,
-      data: task
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-
-      }
-    });
+    this.router.navigate(['/tache', task.id]);
   }
 
   loadEntretienDetails(){
@@ -159,10 +144,25 @@ export class TacheMecanicienComponent {
         this.loader = false;
       },
       (error) => {
+        this.showErrorMessage(error.response.data.message);
         this.loader = false;
-        console.error('Erreur lors de loadUsers :', error);
       }
     );
   }
 
+  showErrorMessage(message: string) {
+    this.snackBar.openFromComponent(ErrorMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
+
+  showAlertMessage(message: string) {
+    this.snackBar.openFromComponent(InfoMessageComponent, {
+      data: { message },
+      duration: 3000,
+      panelClass: ['custom-snackbar-panel'],
+    });
+  }
 }
