@@ -36,10 +36,10 @@
                     <thead class="table-light">
                     <tr>
                       <th scope="col" class="text-nowrap">Id</th>
-                      <th (click)="sortData('nom')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                      <th (click)="sortData('libelle')" scope="col" class="text-nowrap" style="cursor: pointer;">
                         Nom
-                        <mat-icon *ngIf="isSorted('nom', 'asc')" class="sort-icon">arrow_upward</mat-icon>
-                        <mat-icon *ngIf="isSorted('nom', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                        <mat-icon *ngIf="isSorted('libelle', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="isSorted('libelle', 'desc')" class="sort-icon">arrow_downward</mat-icon>
                       </th>
                       <th scope="col" class="text-nowrap">Statut</th>
                     </tr>
