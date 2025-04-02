@@ -5,7 +5,7 @@
           <div class="col-lg-12">
             <div class="card mb-3">
               <div class="card-body">
-  
+
                 <h5 class="card-title m-0">
                   Historiques des entretiens pour le véhicule: {{vehicule?.modele?.nom}} - {{vehicule?.immatriculation}}
                 </h5>
@@ -21,9 +21,15 @@
                 <div class="card" *ngIf="showFilter" #filterCard style="width: 400px; position: absolute; right: 20px; top: 20px; z-index: 1000; animation: slideIn 0.3s;">
                     <div class="card-body">
                         <h5 class="card-title">Filtrer les Résultats</h5>
-                
+                        <button type="button" class="btn btn-close position-absolute top-0 end-0 m-2"
+                                style="width: 32px; height: 32px; font-size: 32px;"
+                                aria-label="Fermer"
+                                #tooltip="matTooltip" matTooltip="Fermer"
+                                (click)="toggleFilter()">
+                        </button>
+
                         <!-- Recherche Type -->
-                       
+
                         <div class="d-flex flex-wrap gap-3 mb-3">
 
                             <div>
@@ -43,10 +49,10 @@
                               </li>
                               </ul>
                           </div>
-                             
+
                         </div>
-                
-               
+
+
                         <div class="d-flex gap-3 mb-3">
                           <div class="w-50">
                             <label for="dateDebut" class="form-label">Date debut minimum</label>
@@ -56,20 +62,17 @@
                             <label for="dateFin" class="form-label">Date fin maximum</label>
                             <input matInput type="date" id="dateFin" [(ngModel)]="searchCriteria.dateMax" class="form-control">
                         </div>
-                           
+
                         </div>
-                
+
                         <!-- Boutons -->
                         <div class="d-flex gap-2 mt-2">
-                            
+
                             <button class="btn btn-secondary" (click)="resetSearchCriteria()" #tooltip="matTooltip" matTooltip="Réinitialiser">
                                 <i class="bi bi-arrow-clockwise"></i>
                             </button>
                             <button class="btn btn-dark" (click)="applyFilters()" #tooltip="matTooltip" matTooltip="Rechercher">
                                 <i class="bi bi-search"></i>
-                            </button>
-                            <button class="btn btn-danger" (click)="toggleFilter()" #tooltip="matTooltip" matTooltip="Fermer">
-                                <i class="bi bi-x-circle"></i>
                             </button>
                         </div>
                     </div>
@@ -111,7 +114,7 @@
                     </div>
                   </div>
                 </div>
-  
+
                 <mat-paginator [length]="totalElement"
                     [pageSize]="searchCriteria.limit"
                     [pageSizeOptions]="[5, 10, 25, 100]"
