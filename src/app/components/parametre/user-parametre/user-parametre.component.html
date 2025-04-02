@@ -128,12 +128,12 @@
                 </table>
               </div>
 
-              <mat-paginator
+              <mat-paginator 
                 [length]="totalElement"
-                [pageSize]="10"
+                [pageSize]="searchCriteria.limit"
                 [pageSizeOptions]="[5, 10, 25, 100]"
-                (page)="loadUsers()"
-              aria-label="Select page">
+                (page)="onPageChange($event)"
+                aria-label="Select page">
               </mat-paginator>
 
             </div>

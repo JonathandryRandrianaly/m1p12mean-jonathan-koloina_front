@@ -172,7 +172,11 @@
                         <mat-icon *ngIf="isSorted('categorie', 'asc')" class="sort-icon">arrow_upward</mat-icon>
                         <mat-icon *ngIf="isSorted('categorie', 'desc')" class="sort-icon">arrow_downward</mat-icon>
                       </th>
-                      <th scope="col" class="text-nowrap">Année de fabrication</th>
+                      <th (click)="sortData('anneeFabrication')" scope="col" class="text-nowrap" style="cursor: pointer;">
+                        Année de fabrication
+                        <mat-icon *ngIf="isSorted('anneeFabrication', 'asc')" class="sort-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="isSorted('anneeFabrication', 'desc')" class="sort-icon">arrow_downward</mat-icon>
+                      </th>
                       <th (click)="sortData('energieMoteur')" scope="col" class="text-nowrap" style="cursor: pointer;">
                         Energie moteur
                         <mat-icon *ngIf="isSorted('energieMoteur', 'asc')" class="sort-icon">arrow_upward</mat-icon>

@@ -38,7 +38,7 @@ export class HistoriquesEntretienComponent {
     { id: -10, libelle: 'A faire' },
     { id: 0, libelle: 'En cours' },
     { id: 10, libelle: 'Attente de validation' },
-    { id: 20, libelle: 'Valider' },
+    { id: 20, libelle: 'Validé' },
   ];
   selectedEtats: { [key: string]: boolean } = {};
   selectedTypes: { [key: string]: boolean } = {};
@@ -46,7 +46,7 @@ export class HistoriquesEntretienComponent {
     vehiculeId: '',
     page: 1,
     limit: 5,
-    typesEntretien: [],
+    typeEntretien: '',
     etats: [],
     dateMin: '',
     dateMax: '',
