@@ -26,18 +26,8 @@
                        
                         <div class="d-flex flex-wrap gap-3 mb-3">
 
-                            <div class="dropdown">
-                                <button class="btn btn-outline-dark" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-filter"></i> Types d'entretien
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-                                    <li *ngFor="let type of types">
-                                        <label class="dropdown-item">
-                                            <input type="checkbox" [(ngModel)]="selectedTypes[type._id]" (ngModelChange)="updateTypes()">
-                                            {{ type.nom }}
-                                        </label>
-                                    </li>
-                                </ul>
+                            <div>
+                                <input matInput type="text" name="type" [(ngModel)]="searchCriteria.typeEntretien"  class="form-control" placeholder="Type d'entretien">
                             </div>
 
                             <div class="dropdown">
@@ -88,32 +78,32 @@
 
                 <div class="max-w-6xl mt-3 flex" *ngFor="let historique of historiques">
                   <div class="w-1/6 pr-1 text-left">
-                    <p class="text-gray-500 text-sm">{{historique.entretien.date | date:'dd/MM/yyyy'}}</p>
+                    <p class="text-gray-500 text-sm">{{historique?.entretien?.date | date:'dd/MM/yyyy'}}</p>
                   </div>
                   <div class="w-5/6 border-l-4 border-dark-500 pl-4">
                     <div>
                       <p class="text-gray-500 text-sm flex justify-between w-full">
-                        <span *ngIf="historique.dateDebut == null && historique.dateFin == null">À définir</span>
-                        <span *ngIf="historique.dateDebut != null && historique.dateFin != null">{{historique.dateDebut | date:'dd/MM/yyyy HH:mm'}} - {{historique.Fin | date:'dd/MM/yyyy HH:mm'}}</span>
-                        <span *ngIf="historique.dateDebut != null && historique.dateFin == null">{{historique.dateDebut | date:'dd/MM/yyyy HH:mm'}} - ... </span>
-                        <span class="text-purple-500 font-semibold" *ngIf="historique.etat.code === -10">Confirmé</span>
-                        <span class="text-blue-500 font-semibold" *ngIf="historique.etat.code === 0">En cours</span>
-                        <span class="text-yellow-500 font-semibold" *ngIf="historique.etat.code === 10">Attente de validation</span>
-                        <span class="text-green-500 font-semibold" *ngIf="historique.etat.code === 20">Terminé</span>
+                        <span *ngIf="historique?.dateDebut == null && historique?.dateFin == null">À définir</span>
+                        <span *ngIf="historique?.dateDebut != null && historique?.dateFin != null">{{historique?.dateDebut | date:'dd/MM/yyyy HH:mm'}} - {{historique?.Fin | date:'dd/MM/yyyy HH:mm'}}</span>
+                        <span *ngIf="historique?.dateDebut != null && historique?.dateFin == null">{{historique?.dateDebut | date:'dd/MM/yyyy HH:mm'}} - ... </span>
+                        <span class="text-purple-500 font-semibold" *ngIf="historique?.etat?.code === -10">Confirmé</span>
+                        <span class="text-blue-500 font-semibold" *ngIf="historique?.etat?.code === 0">En cours</span>
+                        <span class="text-yellow-500 font-semibold" *ngIf="historique?.etat?.code === 10">Attente de validation</span>
+                        <span class="text-green-500 font-semibold" *ngIf="historique?.etat?.code === 20">Terminé</span>
 
                       </p>
                       <h3 class="font-bold text-lg flex justify-between w-full">
-                        <span>{{historique.typeEntretien.nom}}</span>
-                        <span class="text-gray-700 font-semibold">{{historique.typeEntretien.prix | number:'1.2-2'}} Ar</span>
+                        <span>{{historique?.typeEntretien?.nom}}</span>
+                        <span class="text-gray-700 font-semibold">{{historique?.typeEntretien?.prix | number:'1.2-2'}} Ar</span>
                       </h3>
                       <p class="text-gray-700">
-                        {{historique.typeEntretien.description}}
+                        {{historique?.typeEntretien?.description}}
                       </p>
                       <div class="flex items-center mt-4">
                         <div class="ml-3">
-                          <div *ngIf="historique.users && historique.users.length>0">
-                            <span class="text-sm text-gray-500" *ngFor="let user of historique.users; let last = last">
-                              {{ user.nom }}<span *ngIf="!last">, </span>
+                          <div *ngIf="historique?.users && historique?.users.length>0">
+                            <span class="text-sm text-gray-500" *ngFor="let user of historique?.users; let last = last">
+                              {{ user?.nom }}<span *ngIf="!last">, </span>
                             </span>
                           </div>
                         </div>

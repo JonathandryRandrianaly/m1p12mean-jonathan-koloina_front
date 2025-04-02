@@ -26,6 +26,7 @@ import {ConfirmationComponent} from '../../templates/dialog/confirmation/confirm
 import {ErrorMessageComponent} from '../../templates/dialog/error-message/error-message.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {InfoMessageComponent} from '../../templates/dialog/info-message/info-message.component';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-user-parametre',
@@ -74,6 +75,13 @@ export class UserParametreComponent implements OnInit {
       this.sortedColumn = column;
       this.sortDirection = 'asc';
     }
+    this.loadUsers();
+  }
+
+  
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex + 1;
+    this.searchCriteria.limit = event.pageSize;
     this.loadUsers();
   }
 
