@@ -225,18 +225,35 @@ export class VehiculeParametreComponent {
   }
 
   resetSearchCriteria() {
-    this.searchCriteria = {
-      immatriculation: '',
-      etat: '',
-      proprietaire: '',
-      proprietaireId: '',
-      page: 1,
-      limit: 10,
-      sortedColumn : '',
-      sortDirection : '',
-      etats: [],
-      modeles: []
-    };
+    this.isManager.then(isManager => {
+      if (!isManager) {
+        this.searchCriteria = {
+          immatriculation: '',
+          etat: '',
+          proprietaire: '',
+          proprietaireId: this.decodedToken.userId,
+          page: 1,
+          limit: 10,
+          sortedColumn : '',
+          sortDirection : '',
+          etats: [],
+          modeles: []
+        };
+      }else{
+        this.searchCriteria = {
+          immatriculation: '',
+          etat: '',
+          proprietaire: '',
+          proprietaireId: '',
+          page: 1,
+          limit: 10,
+          sortedColumn : '',
+          sortDirection : '',
+          etats: [],
+          modeles: []
+        };
+      }
+    });
     this.selectedEtats = {
       '10': true,
       '-10': true
