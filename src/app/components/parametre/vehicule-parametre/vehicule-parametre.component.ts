@@ -253,16 +253,16 @@ export class VehiculeParametreComponent {
           modeles: []
         };
       }
+      this.selectedEtats = {
+        '10': true,
+        '-10': true
+      };
+      Object.keys(this.selectedModeles).forEach(key => {
+        this.selectedModeles[key] = true;
+      });
+      this.loadVehicules();
+      this.showFilter = !this.showFilter;
     });
-    this.selectedEtats = {
-      '10': true,
-      '-10': true
-    };
-    Object.keys(this.selectedModeles).forEach(key => {
-      this.selectedModeles[key] = true;
-    });
-    this.loadVehicules();
-    this.showFilter = !this.showFilter;
   }
 
   viewHistoriques(id: any) {
