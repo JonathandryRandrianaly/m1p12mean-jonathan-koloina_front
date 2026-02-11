@@ -1,7 +1,0 @@
-.container-fluid {
-    position: relative;
-    top: 85px;
-  }
-  ::ng-deep mat-paginator {
-    background-color: #fff !important;
-  }
